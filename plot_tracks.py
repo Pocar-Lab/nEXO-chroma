@@ -1,9 +1,7 @@
 
 import pandas as pd
 import numpy as np
-#from chroma.stl import mesh_from_stl as mesh
-#import stl.mesh as mesh
-from chroma.stl import mesh
+from stl import mesh
 from mpl_toolkits import mplot3d
 import matplotlib.pyplot as plt
 
