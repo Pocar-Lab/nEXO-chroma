@@ -29,26 +29,26 @@ class analysis_manager:
 		# self.plot_refl_multiplicity(density = True)
 		# self.photon_shooting_angle(num_tracks = None, detected_only = True, reflected_only = False)		
 		# self.photon_incident_angle_emission_angle_correlation(num_tracks = None, detected_only = True, reflected_specular_only = False, reflected_diffuse_only = False)
-		# histogramfilename = '/home/chroma/chroma_fresh_start/results/data/Sebastian_teflon_05.23.2023/histogram_teflon/spec_tef_histogram_' + str(self.run_id) + '.csv'
-		histogramfilename = '/home/chroma/chroma_fresh_start/results/data/Sebastian_FS_06.08.2023_correctedSiPM/histogram_teflon/diff_spec_histogram_'+ str(self.run_id) + '.csv'
-		# histogramfilename ='/home/chroma/chroma_fresh_start/results/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/histogramPd_histogram_0.csv'
+		# histogramfilename = '/workspace/results/data/Sebastian_teflon_05.23.2023/histogram_teflon/spec_tef_histogram_' + str(self.run_id) + '.csv'
+		histogramfilename = '/workspace/results/data/Sebastian_FS_06.08.2023_correctedSiPM/histogram_teflon/diff_spec_histogram_'+ str(self.run_id) + '.csv'
+		# histogramfilename ='/workspace/results/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/histogramPd_histogram_0.csv'
 		self.plot_angle_hist(histogramfilename)
 		self.plot_refl_angle(low_angle = 12, do_log = False)
 		self.plot_position_hist()
 		#self.plot_efficiency_R_I()                        #uncommenting this leads to error
-		# filename = '/home/chroma/chroma_fresh_start/results/data/copperplates_06.23.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/home/chroma/chroma_fresh_start/results/data/copperplates_06.23.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/home/chroma/chroma_fresh_start/results/data/beam_direction_06.30.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/home/chroma/chroma_fresh_start/results/data/silica_window_07.18.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/home/chroma/chroma_fresh_start/results/data/source_copperholder_08.16.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/home/chroma/chroma_fresh_start/results/data/copper_gasket_08.29.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/home/chroma/chroma_fresh_start/results/data/Al_filler_02.07.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/home/chroma/chroma_fresh_start/results/data/sourcepart_05.11.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/home/chroma/chroma_fresh_start/results/data/Sebastian_teflon_05.23.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/home/chroma/chroma_fresh_start/results/data/Sebastian_woteflon_05.23.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/home/chroma/chroma_fresh_start/results/data/Sebastian_flippedsource_06.06.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'		
-		# filename = '/home/chroma/chroma_fresh_start/results/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		filename = '/home/chroma/chroma_fresh_start/results/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/results/data/copperplates_06.23.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/results/data/copperplates_06.23.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/results/data/beam_direction_06.30.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/results/data/silica_window_07.18.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/results/data/source_copperholder_08.16.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/results/data/copper_gasket_08.29.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/results/data/Al_filler_02.07.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/results/data/sourcepart_05.11.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/results/data/Sebastian_teflon_05.23.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/results/data/Sebastian_woteflon_05.23.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/results/data/Sebastian_flippedsource_06.06.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'		
+		# filename = '/workspace/results/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		filename = '/workspace/results/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
 		self.save_detected(filename)
 		# self.temperory_histogram(filename)
 
@@ -151,7 +151,7 @@ class analysis_manager:
 
 
 	def temperory_histogram(self,filename):
-		exclude_incidentangle_file = '/home/chroma/chroma_fresh_start/results/data/Sebastian_teflon_05.23.2023/datapoints/exclude_incident_angle_' + str(self.run_id) + '.csv'
+		exclude_incidentangle_file = '/workspace/results/data/Sebastian_teflon_05.23.2023/datapoints/exclude_incident_angle_' + str(self.run_id) + '.csv'
 		colume_incidentangle = ['angle']
 		colume_y = ['y (mm)']
 		incident_angle = pd.read_csv(filename, usecols=colume_incidentangle).to_numpy()
@@ -231,7 +231,7 @@ class analysis_manager:
 		plt.title('Photon Tracks, Run ' + str(self.run_id))
 		plt.show()
 		save_tracks = np.array(save_tracks)
-		# np.save('/home/chroma/chroma_fresh_start/results/testing/[INSERT FILE NAME HERE]', filtered_tracks)
+		# np.save('/workspace/results/testing/[INSERT FILE NAME HERE]', filtered_tracks)
 
 	def photon_shooting_angle(self, num_tracks = None, detected_only = True, reflected_only = False, diffuse_only = False):
 		if num_tracks == None:
@@ -419,7 +419,7 @@ class analysis_manager:
 		ax.set_zlabel('z position (mm)')
 		plt.title('Undetected Photon Tracks, Run ' + str(self.run_id))
 		plt.show()
-		np.save('/home/chroma/chroma_fresh_start/results/testing/hd3_filtered_undetected_tracks_test_' + str(self.run_id),save_tracks)
+		np.save('/workspace/results/testing/hd3_filtered_undetected_tracks_test_' + str(self.run_id),save_tracks)
 
 
 	#This function gives the right plot but doesn't save the right number of tracks. Not gonna use it; 
@@ -475,9 +475,9 @@ class analysis_manager:
 		plt.title('Photon Tracks, Run ' + str(self.run_id))
 		plt.show()
 		# print(self.photon_tracks[0,:,1]) #print the initial position of all tracks
-		# np.save('/home/chroma/chroma_fresh_start/results/testing/hd3_tracks_test_' + str(self.run_id),all_tracks)
-		np.save('/home/chroma/chroma_fresh_start/results/testing/hd3_detrefl_tracks_test_' + str(self.run_id),detected_reflected_tracks)
-		np.save('/home/chroma/chroma_fresh_start/results/testing/hd3_det_tracks_test_' + str(self.run_id),detected_tracks)
+		# np.save('/workspace/results/testing/hd3_tracks_test_' + str(self.run_id),all_tracks)
+		np.save('/workspace/results/testing/hd3_detrefl_tracks_test_' + str(self.run_id),detected_reflected_tracks)
+		np.save('/workspace/results/testing/hd3_det_tracks_test_' + str(self.run_id),detected_tracks)
 
 	def plot_angle_hist(self,histogramfilename):
 		lxe_refractive_index = self.gm.mat_manager.material_props['liquid xenon']['refractive_index']
@@ -566,7 +566,7 @@ class analysis_manager:
 		plt.title('Filtered Photon Tracks from Reflection, Run ' + str(self.run_id))
 		plt.show()
 
-		np.save('/home/chroma/chroma_fresh_start/results/testing/hd3_filtered_tracks_test_' + str(self.run_id),filtered_tracks)
+		np.save('/workspace/results/testing/hd3_filtered_tracks_test_' + str(self.run_id),filtered_tracks)
 
 	#Filter out path with only scattering without reflection. Intended to study why there is no scattering from angle 7 to 21 and 60 to 67 degree
 	def plot_filtered_scattered_tracks(self, num_tracks = None):
@@ -601,7 +601,7 @@ class analysis_manager:
 		plt.title('Undetected Filtered Photon Tracks from just Scattering, Run ' + str(self.run_id))
 		plt.show()
 
-		np.save('/home/chroma/chroma_fresh_start/results/testing/hd3_filtered_scatter_tracks_test_' + str(self.run_id),filtered_tracks)
+		np.save('/workspace/results/testing/hd3_filtered_scatter_tracks_test_' + str(self.run_id),filtered_tracks)
 
 	def plot_refl_angle(self, do_log = True, low_angle = 0, high_angle = 91):
 		bins_refl = [x for x in range(10)]
@@ -624,6 +624,7 @@ class analysis_manager:
 		plt.colorbar()
 		plt.tight_layout()
 		plt.show()
+
 
 
 

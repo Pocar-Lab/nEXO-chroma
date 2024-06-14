@@ -43,3 +43,4 @@ print(meshes[2])
 # 		print('the number of vector in the mesh is',data_try[i][j])
 # 		print('the y value for each vector is',data_try[i][j][1])
 # print(data_try[:][:][1])
+
