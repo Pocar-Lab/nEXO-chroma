@@ -17,37 +17,39 @@ import random
 		# self.surfaces = {} #
 		# self.surfaces[sipm_name] = sipm #
 class surface_manager:
-	def __init__(self, material_manager,run_id):
+	def __init__(self, material_manager, experiment_name, run_id):
 		# self.surface_data_path = '/workspace/data_files/surface_props.csv'
-		# self.surface_data_path = '/workspace/results/data/copperplates_06.23.2022/surface_props_copperplates_06232022.csv'
-		# self.surface_data_path = '/workspace/results/data/beam_direction_06.30.2022/surface_props_copperplates_06302022.csv'
-		# self.surface_data_path = '/workspace/results/data/silica_window_07.18.2022/surface_props_silica_window_07182022.csv'
-		# self.surface_data_path = '/workspace/results/data/source_copperholder_08.16.2022/surface_props_sourceCu_holder_08162022.csv'
-		# self.surface_data_path = '/workspace/results/data/copper_gasket_08.29.2022/surface_props_coppergasket_08292022.csv'
-		# self.surface_data_path = '/workspace/results/data/Al_filler_02.07.2023/surface_props__Alfiller_02072023.csv'
-		# self.surface_data_path ='/workspace/results/data/sourcepart_05.11.2023/surface_props__sourcepart_05112023.csv'
-		# self.surface_data_path ='/workspace/results/data/Sebastian_teflon_05.12 .2023/surface_props__Sebastian_teflon_0512.csv'
-		# self.surface_data_path = '/workspace/results/data/Sebastian_teflon_05.23.2023/surface_props__Sebastian_teflon_0523.csv'
-		# self.surface_data_path = '/workspace/results/data/Sebastian_teflon_upperlimit_06.05.2023/surface_props__Sebastian_teflon_upper_0605.csv'
-		# self.surface_data_path = '/workspace/results/data/Sebastian_flippedsource_06.06.2023/surface_props__Sebastian_teflon_FS_0606.csv'
-		# self.surface_data_path = '/workspace/results/data/Sebastian_FS_06.08.2023_correctedSiPM/surface_props__Sebastian_teflon_FS_0608_corrected.csv'
-		# self.surface_data_path = '/workspace/results/data/Sebastian_03.31.2023(liquefaction_corrrectedSiPM)/surface_props__Sebastian_03312023_corrected.csv'
-		# self.surface_data_path = '/workspace/results/data/Sebastian_05.18.2023(liquefaction)_correctedSiPM/surface_props__Sebastian_teflon_0518_corrected.csv'
-		# self.surface_data_path = '/workspace/results/data/Sebastian_07.20.2022(liquefaction)_corrrectedSiPM/surface_props__Sebastian_07202022_corrected.csv'
-		self.surface_data_path = '/workspace/results/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/surface_props__Sebastian_Pdreflector_0801_corrected.csv'
-
+		# self.surface_data_path = '/workspace/data_files/data/copperplates_06.23.2022/surface_props_copperplates_06232022.csv'
+		# self.surface_data_path = '/workspace/data_files/data/beam_direction_06.30.2022/surface_props_copperplates_06302022.csv'
+		# self.surface_data_path = '/workspace/data_files/data/silica_window_07.18.2022/surface_props_silica_window_07182022.csv'
+		# self.surface_data_path = '/workspace/data_files/data/source_copperholder_08.16.2022/surface_props_sourceCu_holder_08162022.csv'
+		# self.surface_data_path = '/workspace/data_files/data/copper_gasket_08.29.2022/surface_props_coppergasket_08292022.csv'
+		# self.surface_data_path = '/workspace/data_files/data/Al_filler_02.07.2023/surface_props__Alfiller_02072023.csv'
+		# self.surface_data_path ='/workspace/data_files/data/sourcepart_05.11.2023/surface_props__sourcepart_05112023.csv'
+		# self.surface_data_path ='/workspace/data_files/data/Sebastian_teflon_05.12 .2023/surface_props__Sebastian_teflon_0512.csv'
+		# self.surface_data_path = '/workspace/data_files/data/Sebastian_teflon_05.23.2023/surface_props__Sebastian_teflon_0523.csv'
+		# self.surface_data_path = '/workspace/data_files/data/Sebastian_teflon_upperlimit_06.05.2023/surface_props__Sebastian_teflon_upper_0605.csv'
+		# self.surface_data_path = '/workspace/data_files/data/Sebastian_flippedsource_06.06.2023/surface_props__Sebastian_teflon_FS_0606.csv'
+		# self.surface_data_path = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/surface_props__Sebastian_teflon_FS_0608_corrected.csv'
+		# self.surface_data_path = '/workspace/data_files/data/Sebastian_03.31.2023(liquefaction_corrrectedSiPM)/surface_props__Sebastian_03312023_corrected.csv'
+		# self.surface_data_path = '/workspace/data_files/data/Sebastian_05.18.2023(liquefaction)_correctedSiPM/surface_props__Sebastian_teflon_0518_corrected.csv'
+		# self.surface_data_path = '/workspace/data_files/data/Sebastian_07.20.2022(liquefaction)_corrrectedSiPM/surface_props__Sebastian_07202022_corrected.csv'
+		# self.surface_data_path = '/workspace/data_files/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/surface_props__Sebastian_Pdreflector_0801_corrected.csv'
+  
+		self.surface_data_path = '/workspace/data_files/data/' + experiment_name + '/surface_props_' + experiment_name + '.csv'
+  
 		self.SiPMAOIref_path = '/workspace/data_files/FBK.csv'
 		# self.SiPMAOIref_path = '/workspace/data_files/FBK reflectivity_upper_bound.csv'
 		# self.SiPMAOIref_path ='/workspace/data_files/FBK reflectivity_lower_bound.csv'
 		# self.SiPMAOIref_path = '/workspace/data_files/FBK _origin.csv'
 		self.run_id = run_id
-		# filename = '/workspace/results/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/copper_spec_coefficient' + str(self.run_id) + '.csv'
+		# filename = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/copper_spec_coefficient' + str(self.run_id) + '.csv'
 		# self.save_detected(filename)
 		self.mat_manager = material_manager
 		self.wavelengths = chroma.geometry.standard_wavelengths		
 		self.num_wavelengths = len(self.wavelengths)
 		# print(self.wavelengths)
-		self.savedata_path = '/workspace/results/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/Cu_spec_Cu_eta.csv'
+		#self.savedata_path = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/Cu_spec_Cu_eta.csv'
 		self.build_surfaces()
 
 	def build_surfaces(self):

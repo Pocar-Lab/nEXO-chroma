@@ -14,7 +14,7 @@ from chroma import gpu
 from analysis_manager import analysis_manager
 
 class run_manager:
-	def __init__(self, geometry_manager, random_seed, num_particles, run_id):
+	def __init__(self, geometry_manager, experiment_name, random_seed, num_particles, run_id):
 		self.num_steps = 100
 		self.run_id = run_id
 		self.seed = random_seed
@@ -24,7 +24,7 @@ class run_manager:
 		self.sim = Simulation(self.gm.global_geometry, seed = random_seed, geant4_processes = 0)
 		self.pg = primary_generator(self.num_particles, run_id = self.run_id, center_pos = self.center_pos)
 		self.propagate_photon()
-		self.ana_man = analysis_manager(self.gm, self.photons, self.photon_tracks, self.run_id, self.seed, self.particle_histories)
+		self.ana_man = analysis_manager(self.gm, experiment_name, self.photons,  self.photon_tracks, self.run_id, self.seed, self.particle_histories)
 
 
 

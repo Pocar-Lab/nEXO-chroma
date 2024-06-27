@@ -9,28 +9,30 @@ import random
 # randomize functionality
 
 class material_manager:
-	def __init__(self,run_id):
+	def __init__(self, experiment_name, run_id):
 		# self.material_data_path = '/workspace/data_files/bulk_materials.csv'
-		# self.material_data_path = '/workspace/results/data/copperplates_06.23.2022/bulk_materials _copperplates_06232022.csv'
-		# self.material_data_path = '/workspace/results/data/beam_direction_06.30.2022/bulk_materials _copperplates_06302022.csv'
-		# self.material_data_path = '/workspace/results/data/silica_window_07.18.2022/bulk_materials _silica_window_07182022.csv'
-		# self.material_data_path = '/workspace/results/data/source_copperholder_08.16.2022/bulk_materials __sourceCu_holder_08162022.csv'
-		# self.material_data_path = '/workspace/results/data/copper_gasket_08.29.2022/bulk_materials _coppergasket_08292022.csv'
-		# self.material_data_path = '/workspace/results/data/Al_filler_02.07.2023/bulk_materials _Alfiller_02072023.csv'
-		# self.material_data_path = '/workspace/results/data/sourcepart_05.11.2023/bulk_materials _sourcepart_05112023.csv'
-		# self.material_data_path ='/workspace/results/data/Sebastian_teflon_05.12 .2023/bulk_materials _Sebastian_teflon_0512.csv'
-		# self.material_data_path = '/workspace/results/data/Sebastian_teflon_05.23.2023/bulk_materials _Sebastian_teflon_0523.csv'
-		# self.material_data_path = '/workspace/results/data/Sebastian_teflon_upperlimit_06.05.2023/bulk_materials _Sebastian_teflon_upper_0605.csv'
-		# self.material_data_path = '/workspace/results/data/Sebastian_flippedsource_06.06.2023/bulk_materials _Sebastian_teflon_FS_0606.csv'
-		# self.material_data_path = '/workspace/results/data/Sebastian_FS_06.08.2023_correctedSiPM/bulk_materials _Sebastian_teflon_FS_0608_corrected.csv'
-		# self.material_data_path = '/workspace/results/data/Sebastian_03.31.2023(liquefaction_corrrectedSiPM)/bulk_materials _Sebastian_03312023_corrected.csv'
-		# self.material_data_path ='/workspace/results/data/Sebastian_05.18.2023(liquefaction)_correctedSiPM/bulk_materials _Sebastian_teflon_0518_corrected.csv'
-		# self.material_data_path ='/workspace/results/data/Sebastian_07.20.2022(liquefaction)_corrrectedSiPM/bulk_materials _Sebastian_07202022_corrected.csv'
-		self.material_data_path = '/workspace/results/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/bulk_materials _Sebastian_Pdreflector_0801_corrected.csv'
-
+		# self.material_data_path = '/workspace/data_files/data/copperplates_06.23.2022/bulk_materials _copperplates_06232022.csv'
+		# self.material_data_path = '/workspace/data_files/data/beam_direction_06.30.2022/bulk_materials _copperplates_06302022.csv'
+		# self.material_data_path = '/workspace/data_files/data/silica_window_07.18.2022/bulk_materials _silica_window_07182022.csv'
+		# self.material_data_path = '/workspace/data_files/data/source_copperholder_08.16.2022/bulk_materials __sourceCu_holder_08162022.csv'
+		# self.material_data_path = '/workspace/data_files/data/copper_gasket_08.29.2022/bulk_materials _coppergasket_08292022.csv'
+		# self.material_data_path = '/workspace/data_files/data/Al_filler_02.07.2023/bulk_materials _Alfiller_02072023.csv'
+		# self.material_data_path = '/workspace/data_files/data/sourcepart_05.11.2023/bulk_materials _sourcepart_05112023.csv'
+		# self.material_data_path ='/workspace/data_files/data/Sebastian_teflon_05.12 .2023/bulk_materials _Sebastian_teflon_0512.csv'
+		# self.material_data_path = '/workspace/data_files/data/Sebastian_teflon_05.23.2023/bulk_materials _Sebastian_teflon_0523.csv'
+		# self.material_data_path = '/workspace/data_files/data/Sebastian_teflon_upperlimit_06.05.2023/bulk_materials _Sebastian_teflon_upper_0605.csv'
+		# self.material_data_path = '/workspace/data_files/data/Sebastian_flippedsource_06.06.2023/bulk_materials _Sebastian_teflon_FS_0606.csv'
+		# self.material_data_path = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/bulk_materials _Sebastian_teflon_FS_0608_corrected.csv'
+		# self.material_data_path = '/workspace/data_files/data/Sebastian_03.31.2023(liquefaction_corrrectedSiPM)/bulk_materials _Sebastian_03312023_corrected.csv'
+		# self.material_data_path ='/workspace/data_files/data/Sebastian_05.18.2023(liquefaction)_correctedSiPM/bulk_materials _Sebastian_teflon_0518_corrected.csv'
+		# self.material_data_path ='/workspace/data_files/data/Sebastian_07.20.2022(liquefaction)_corrrectedSiPM/bulk_materials _Sebastian_07202022_corrected.csv'
+		#self.material_data_path = '/workspace/data_files/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/bulk_materials _Sebastian_Pdreflector_0801_corrected.csv'
+	
+		self.material_data_path = '/workspace/data_files/data/' + experiment_name + '/bulk_materials_' + experiment_name + '.csv'
+	
 		self.run_id = run_id
-		# self.savedata_path = '/workspace/results/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/Cu_reflector_etal_vary_Cu_eta_LXe_eta.csv'
-		self.savedata_path ='/workspace/results/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/datapoints/Si_reflector_vary_Si_eta_LXe_eta.csv'
+		# self.savedata_path = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/Cu_reflector_etal_vary_Cu_eta_LXe_eta.csv'
+		# self.savedata_path ='/workspace/data_files/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/datapoints/Si_reflector_vary_Si_eta_LXe_eta.csv'
 		self.build_materials(run_id)
 		self.global_material = self.materials['liquid xenon']
 

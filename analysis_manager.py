@@ -10,17 +10,40 @@ from array import array
 
 
 class analysis_manager:
-	def __init__(self, geometry_manager, photons, photon_tracks = 1000, run_id = 0, seed = 0, histories = None):
+	def __init__(self, geometry_manager, experiment_name, selected_plot, photons, photon_tracks = 1000, run_id = 0, seed = 0, histories = None):
 		self.gm = geometry_manager
+		self.experiment_name = experiment_name
 		self.photons = photons
 		self.photon_tracks = photon_tracks
 		self.num_particles = len(self.photons)
 		self.run_id = run_id
 		self.seed = seed
 		self.particle_histories = histories
+		self.selected_plot = selected_plot
 		self.get_tallies()
 		num_tracks = 100000
 
+		# histogramfilename = '/workspace/data_files/data/Sebastian_teflon_05.23.2023/histogram_teflon/spec_tef_histogram_' + str(self.run_id) + '.csv'
+		# histogramfilename = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/histogram_teflon/diff_spec_histogram_'+ str(self.run_id) + '.csv'
+		# histogramfilename ='/workspace/data_files/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/histogramPd_histogram_0.csv'
+		histogram_file_name = '/workspace/results/' + self.experiment_name + '/histogram_seed' + str(self.seed) 
+
+		# filename = '/workspace/data_files/data/copperplates_06.23.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/data_files/data/copperplates_06.23.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/data_files/data/beam_direction_06.30.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/data_files/data/silica_window_07.18.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/data_files/data/source_copperholder_08.16.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/data_files/data/copper_gasket_08.29.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/data_files/data/Al_filler_02.07.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/data_files/data/sourcepart_05.11.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/data_files/data/Sebastian_teflon_05.23.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/data_files/data/Sebastian_woteflon_05.23.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		# filename = '/workspace/data_files/data/Sebastian_flippedsource_06.06.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'		
+		# filename = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+		filename = '/workspace/results/' + self.experiment_name + '/' '/datapoints/hd3_data_test_' + str(self.seed) + '.csv'
+  
+		#lines 46-lines 56 are different plots to run. get all those to work -> everything works
+  
 		# self.plot_tracks(num_tracks = num_tracks, detected_only = True, reflected_only = True)
 		# self.plot_tracks_reed_rewrite(num_tracks = None, detected_only = True, reflected_only = False)
 		# self.plot_undetected_tracks(num_tracks = 10000)
@@ -29,26 +52,11 @@ class analysis_manager:
 		# self.plot_refl_multiplicity(density = True)
 		# self.photon_shooting_angle(num_tracks = None, detected_only = True, reflected_only = False)		
 		# self.photon_incident_angle_emission_angle_correlation(num_tracks = None, detected_only = True, reflected_specular_only = False, reflected_diffuse_only = False)
-		# histogramfilename = '/workspace/results/data/Sebastian_teflon_05.23.2023/histogram_teflon/spec_tef_histogram_' + str(self.run_id) + '.csv'
-		histogramfilename = '/workspace/results/data/Sebastian_FS_06.08.2023_correctedSiPM/histogram_teflon/diff_spec_histogram_'+ str(self.run_id) + '.csv'
-		# histogramfilename ='/workspace/results/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/histogramPd_histogram_0.csv'
-		self.plot_angle_hist(histogramfilename)
+		self.plot_angle_hist(histogram_file_name)
 		self.plot_refl_angle(low_angle = 12, do_log = False)
 		self.plot_position_hist()
 		#self.plot_efficiency_R_I()                        #uncommenting this leads to error
-		# filename = '/workspace/results/data/copperplates_06.23.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/results/data/copperplates_06.23.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/results/data/beam_direction_06.30.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/results/data/silica_window_07.18.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/results/data/source_copperholder_08.16.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/results/data/copper_gasket_08.29.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/results/data/Al_filler_02.07.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/results/data/sourcepart_05.11.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/results/data/Sebastian_teflon_05.23.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/results/data/Sebastian_woteflon_05.23.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/results/data/Sebastian_flippedsource_06.06.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'		
-		# filename = '/workspace/results/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		filename = '/workspace/results/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
+
 		self.save_detected(filename)
 		# self.temperory_histogram(filename)
 
@@ -151,7 +159,7 @@ class analysis_manager:
 
 
 	def temperory_histogram(self,filename):
-		exclude_incidentangle_file = '/workspace/results/data/Sebastian_teflon_05.23.2023/datapoints/exclude_incident_angle_' + str(self.run_id) + '.csv'
+		exclude_incidentangle_file = '/workspace/data_files/data/Sebastian_teflon_05.23.2023/datapoints/exclude_incident_angle_' + str(self.run_id) + '.csv'
 		colume_incidentangle = ['angle']
 		colume_y = ['y (mm)']
 		incident_angle = pd.read_csv(filename, usecols=colume_incidentangle).to_numpy()
@@ -435,17 +443,21 @@ class analysis_manager:
 		reflected_tracks = [] #list of inds of reflected photons
 		detected_reflected_tracks = []
 		filtered_tracks = []
+  
 		# filter out all detected tracks, reflected track and reflected and detected/reflected tracks and save them to a file
 		for idx in range(num_tracks):
 			curr_positions = self.photon_tracks[:, idx, :] #select track of photon idx
 			# ax.plot(curr_positions[:, 0], curr_positions[:, 1], curr_positions[:, 2], color = 'tab:blue', linewidth = 1)
+   
 			unique_ind = curr_positions[:-1, :] != curr_positions[1:, :] 
 			unique_ind = list(np.sum(unique_ind, axis = 1) > 0)
 			unique_ind = [True] + unique_ind
+   
 			curr_positions = curr_positions[unique_ind]
 			all_tracks.append(curr_positions)
 			did_detect = self.tallies['SURFACE_DETECT'][idx]
 			did_reflect = self.particle_histories['REFLECT_SPECULAR'][idx].astype(bool) or self.particle_histories['REFLECT_DIFFUSE'][idx].astype(bool)
+   
 			if did_detect:
 				detected_tracks.append(curr_positions)
 			if did_reflect:
@@ -480,13 +492,13 @@ class analysis_manager:
 		np.save('/workspace/results/testing/hd3_det_tracks_test_' + str(self.run_id),detected_tracks)
 
 	def plot_angle_hist(self,histogramfilename):
+     
 		lxe_refractive_index = self.gm.mat_manager.material_props['liquid xenon']['refractive_index']
 		fig = plt.figure()
 		plt.hist(self.detected_angles, bins = [theta for theta in range(91)])
 		# hist is the height of the historgram
 		hist, bin_edges = np.histogram(self.detected_angles, bins = [theta for theta in range(91)])
 		print(hist)
-
 		save_data = {
 				'Incident Angle': np.array(list(range(0,90))),
 				'Detected number': hist,

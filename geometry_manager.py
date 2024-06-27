@@ -16,39 +16,41 @@ from material_manager import material_manager
 from surface_manager import surface_manager
 # all components, general geometry, manage surface and material
 class geometry_manager:
-    def __init__(self,run_id,visualize = False):
+    def __init__(self, experiment_name, run_id,visualize = False):
 
-        self.mat_manager = material_manager(run_id)
-        self.surf_manager = surface_manager(self.mat_manager,run_id)
+        self.experiment_name = experiment_name
+        self.mat_manager = material_manager(self.experiment_name, run_id)
+        self.surf_manager = surface_manager(self.mat_manager, self.experiment_name, run_id)
         self.run_id = run_id
         # print("run_id in gm init",run_id)
         # define chroma simulation
         self.global_geometry = Detector(self.mat_manager.global_material)
         #A Detector is a subclass of Geometry that allows some Solids to be marked as photon detectors, which we will suggestively call "PMTs
         # self.geometry_data_path = '/workspace/data_files/geometry_components.csv'
-        # self.geometry_data_path = '/workspace/results/data/copperplates_06.23.2022/geometry_components _copper_plate.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/copperplates_06.23.2022/geometry_components _copper_plate.csv'
         # # starting from 06/30/2022, try the beam direction by moving the source displacement
-        # self.geometry_data_path = '/workspace/results/data/beam_direction_06.30.2022/geometry_components _copper_plate0630.csv'     
-        # self.geometry_data_path = '/workspace/results/data/silica_window_07.18.2022/geometry_components _silica_window_07182022.csv'        
-        # self.geometry_data_path = '/workspace/results/data/source_copperholder_08.16.2022/geometry_components _sourceCu_holder_08162022.csv'
-        # self.geometry_data_path = '/workspace/results/data/copper_gasket_08.29.2022/geometry_components _coppergasket_08292022.csv'
-        # self.geometry_data_path = '/workspace/results/data/Al_filler_02.07.2023/geometry_components __Alfiller_02072023.csv'
-        # self.geometry_data_path = '/workspace/results/data/sourcepart_05.11.2023/geometry_components __sourcepart_05112023.csv'
-        # self.geometry_data_path = '/workspace/results/data/Sebastian_woteflon_05.12.2023/geometry_components __Sebastian_woteflon_0512.csv.csv'
-        # self.geometry_data_path = '/workspace/results/data/Sebastian_teflon_05.12 .2023/geometry_components __Sebastian_teflon_0512.csv'
-        # self.geometry_data_path ='/workspace/results/data/Sebastian_teflon_05.23.2023/geometry_components __Sebastian_teflon_0523.csv'
-        # self.geometry_data_path = '/workspace/results/data/Sebastian_woteflon_05.23.2023/geometry_components __Sebastian_woteflon_0523.csv'
-        # self.geometry_data_path = '/workspace/results/data/Sebastian_woteflon_upper_06.05.2023/geometry_components __Sebastian_woteflon_upper_0605.csv'
-        # self.geometry_data_path = '/workspace/results/data/Sebastian_teflon_upperlimit_06.05.2023/geometry_components __Sebastian_teflon__upper_0605.csv'
-        # self.geometry_data_path = '/workspace/results/data/Sebastian_teflon_lowerlimit_06.05.2023/geometry_components __Sebastian_teflon__lower_0605.csv'
-        # self.geometry_data_path = '/workspace/results/data/Sebastian_flippedsource_06.06.2023/geometry_components __Sebastian_teflon__FS_0606.csv'
-        # self.geometry_data_path = '/workspace/results/data/Sebastian_woteflon_geom_07.22.2022/geometry_components __Sebastian_woteflon_0722_2022.csv'
-        # self.geometry_data_path = '/workspace/results/data/Sebastian_FS_06.08.2023_correctedSiPM/geometry_components __Sebastian_teflon__FS_0608_corrected.csv'
-        # self.geometry_data_path = '/workspace/results/data/Sebastian_03.31.2023(liquefaction_corrrectedSiPM)/geometry_components __Sebastian_03312023_corrected.csv'
-        # self.geometry_data_path ='/workspace/results/data/Sebastian_05.18.2023(liquefaction)_correctedSiPM/geometry_components __Sebastian_teflon__0518_corrected.csv'
-        # self.geometry_data_path ='/workspace/results/data/Sebastian_07.20.2022(liquefaction)_corrrectedSiPM/geometry_components __Sebastian_07202022_corrected.csv'
-        self.geometry_data_path = '/workspace/results/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/geometry_components __Sebastian_Pdreflector__0801_corrected.csv'
-        # self.geometry_data_path = '/workspace/results/data/Sebastian_FS_06.08.2023_correctedSiPM/geometry_components __Sebastian_teflon__FS_0608_corrected (FusionTest).csv'
+        # self.geometry_data_path = '/workspace/data_files/data/beam_direction_06.30.2022/geometry_components _copper_plate0630.csv'     
+        # self.geometry_data_path = '/workspace/data_files/data/silica_window_07.18.2022/geometry_components _silica_window_07182022.csv'        
+        # self.geometry_data_path = '/workspace/data_files/data/source_copperholder_08.16.2022/geometry_components _sourceCu_holder_08162022.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/copper_gasket_08.29.2022/geometry_components _coppergasket_08292022.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Al_filler_02.07.2023/geometry_components __Alfiller_02072023.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/sourcepart_05.11.2023/geometry_components __sourcepart_05112023.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_woteflon_05.12.2023/geometry_components __Sebastian_woteflon_0512.csv.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_teflon_05.12 .2023/geometry_components __Sebastian_teflon_0512.csv'
+        # self.geometry_data_path ='/workspace/data_files/data/Sebastian_teflon_05.23.2023/geometry_components __Sebastian_teflon_0523.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_woteflon_05.23.2023/geometry_components __Sebastian_woteflon_0523.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_woteflon_upper_06.05.2023/geometry_components __Sebastian_woteflon_upper_0605.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_teflon_upperlimit_06.05.2023/geometry_components __Sebastian_teflon__upper_0605.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_teflon_lowerlimit_06.05.2023/geometry_components __Sebastian_teflon__lower_0605.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_flippedsource_06.06.2023/geometry_components __Sebastian_teflon__FS_0606.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_woteflon_geom_07.22.2022/geometry_components __Sebastian_woteflon_0722_2022.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/geometry_components __Sebastian_teflon__FS_0608_corrected.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_03.31.2023(liquefaction_corrrectedSiPM)/geometry_components __Sebastian_03312023_corrected.csv'
+        # self.geometry_data_path ='/workspace/data_files/data/Sebastian_05.18.2023(liquefaction)_correctedSiPM/geometry_components __Sebastian_teflon__0518_corrected.csv'
+        # self.geometry_data_path ='/workspace/data_files/data/Sebastian_07.20.2022(liquefaction)_corrrectedSiPM/geometry_components __Sebastian_07202022_corrected.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/geometry_components __Sebastian_Pdreflector__0801_corrected.csv'
+        # self.geometry_data_path = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/geometry_components __Sebastian_teflon__FS_0608_corrected (FusionTest).csv'
+        self.geometry_data_path = '/workspace/data_files/data/'+ experiment_name + '/geometry_components_' + experiment_name + '.csv'
         self.build_geometry()
 
         self.global_geometry.flatten()
@@ -57,7 +59,7 @@ class geometry_manager:
         self.global_geometry.bvh = load_bvh(self.global_geometry)
 
     def build_geometry(self):
-        print('run_id in build_geometry',self.run_id)
+        #print('run_id in build_geometry',self.run_id)
         # read in the csv file into dataframe
         self.geometry_df = pd.read_csv(self.geometry_data_path)
 
@@ -74,7 +76,8 @@ class geometry_manager:
             color = int(colors.cnames[row['color']][1:], 16)
 
             curr_displacement = (row['displacement x'], row['displacement y'], row['displacement z'])
-            print(curr_displacement)           
+            print(curr_displacement)       
+                
             # #below shift the vertical displacement
             # if curr_name == "silica gasket 1" or curr_name == "silica gasket 2" or curr_name == "silica window":
             #     curr_displacement = (row['displacement x'], row['displacement y']+self.run_id*0.01, row['displacement z'])
