@@ -9,7 +9,26 @@ import random
 # randomize functionality
 
 class material_manager:
+	"""
+    Manages materials by reading their properties from a CSV file and creating Material objects.
+    
+    Attributes:
+        experiment_name (str): Name of the experiment.
+        run_id (int): Identifier for the run.
+        material_data_path (str): Path to the CSV file with material properties.
+        materials_df (pd.DataFrame): DataFrame containing the material properties.
+        materials (dict): Dictionary of Material objects.
+        material_props (dict): Dictionary of material properties.
+        global_material (Material): The global material used in the experiment.
+    """
 	def __init__(self, experiment_name, run_id):
+		"""
+        Initializes the material_manager with the given experiment name and run ID.
+        
+        Args:
+            experiment_name (str): Name of the experiment.
+            run_id (int): Identifier for the run.
+        """
 		# self.material_data_path = '/workspace/data_files/bulk_materials.csv'
 		# self.material_data_path = '/workspace/data_files/data/copperplates_06.23.2022/bulk_materials _copperplates_06232022.csv'
 		# self.material_data_path = '/workspace/data_files/data/beam_direction_06.30.2022/bulk_materials _copperplates_06302022.csv'
@@ -42,6 +61,16 @@ class material_manager:
 				absorption_length = None,
 				scattering_length = None,
 				density = 0.0):
+		"""
+        Sets the optical properties for a given material.
+        
+        Args:
+            curr_material (Material): The Material object to which attributes are added.
+            refractive_index (float): Refractive index of the material.
+            absorption_length (float): Absorption length of the material.
+            scattering_length (float): Scattering length of the material.
+            density (float): Density of the material.
+        """
 		#set the optical index grabbed from csv file for simulation
 		curr_material.set('refractive_index', refractive_index) 
 		curr_material.set('absorption_length', absorption_length) 
@@ -52,6 +81,12 @@ class material_manager:
 		# return refractive_index
 
 	def build_materials(self,run_id):
+		"""
+        Reads material properties from a CSV file and creates Material objects.
+        
+        Args:
+            run_id (int): Identifier for the run.
+        """
 		# read in the csv file into dataframe
 		self.materials_df = pd.read_csv(self.material_data_path)
 		#print(self.materials_df)
@@ -116,6 +151,18 @@ class material_manager:
 
 
 	def get_material(self, material_name):
+		"""
+        Retrieves the Material object for a given material name.
+        
+        Args:
+            material_name (str): The name of the material.
+        
+        Returns:
+            Material: The Material object.
+        
+        Raises:
+            Exception: If the material does not exist.
+        """
 		# check to see if material exists. if not, throw exception
 		if material_name in self.materials:
 			return self.materials[material_name]

@@ -16,7 +16,29 @@ from material_manager import material_manager
 from surface_manager import surface_manager
 # all components, general geometry, manage surface and material
 class geometry_manager:
+    """
+        Manages the geometry of an experiment by reading component data from a CSV file,
+        creating solid objects, and organizing them into a detector geometry.
+        
+        Attributes:
+            experiment_name (str): Name of the experiment.
+            run_id (int): Identifier for the run.
+            mat_manager (material_manager): Manager for materials.
+            surf_manager (surface_manager): Manager for surfaces.
+            global_geometry (Detector): The global detector geometry.
+            geometry_data_path (str): Path to the CSV file with geometry component data.
+            geometry_df (pd.DataFrame): DataFrame containing the geometry component data.
+            solids (dict): Dictionary of solid objects.
+        """
     def __init__(self, experiment_name, run_id,visualize = False):
+        """
+        Initializes the geometry_manager with the given experiment name and run ID.
+        
+        Args:
+            experiment_name (str): Name of the experiment.
+            run_id (int): Identifier for the run.
+            visualize (bool): If True, visualize the geometry.
+        """
 
         self.experiment_name = experiment_name
         self.mat_manager = material_manager(self.experiment_name, run_id)
@@ -33,6 +55,10 @@ class geometry_manager:
         self.global_geometry.bvh = load_bvh(self.global_geometry)
 
     def build_geometry(self):
+        """
+        Builds the geometry by reading the CSV file and creating solid objects.
+        Adds the solids to the global geometry based on their type.
+        """
         # read in the csv file into dataframe
         self.geometry_df = pd.read_csv(self.geometry_data_path)
 
@@ -77,6 +103,15 @@ class geometry_manager:
                                             displacement = curr_displacement)       
 
     def get_solid_center(self, name):
+        """
+        Gets the center of a solid object.
+        
+        Args:
+            name (str): The name of the solid.
+        
+        Returns:
+            list: Coordinates of the center of the solid.
+        """
         #this solid center is to define the centre of the photon source? Use it later?
         curr_mesh_triangles = self.solids[name].mesh.get_triangle_centers()
         return [np.mean(curr_mesh_triangles[:, 0]),
