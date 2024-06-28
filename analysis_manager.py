@@ -55,9 +55,7 @@ class analysis_manager:
 		
 		histogram_file_name = f'/workspace/results/{self.experiment_name}/histogram_data_seed_{self.seed}'
 		filename = f'/workspace/results/{self.experiment_name}/datapoints/hd3_data_test_seed_{self.seed}.csv'
-    
-		# self.plot_tracks(num_tracks = num_tracks, detected_only = True, reflected_only = True)
-		#self.plot_efficiency_R_I()                        #uncommenting this leads to error
+
 		self.preprocess_tracks()
 		self.execute_plots()
 		self.save_detected(filename)
@@ -239,7 +237,6 @@ class analysis_manager:
 				# 'Cu k': np.array([cu_k for _ in range(len(self.detected_angles))]),
 				# 'Al eta': np.array([al_eta for _ in range(len(self.detected_angles))]),
 				# 'Al k': np.array([al_k for _ in range(len(self.detected_angles))])
-		# print(len(save_data))
 		df = pd.DataFrame(save_data)
 		df.to_csv(filename)
 
