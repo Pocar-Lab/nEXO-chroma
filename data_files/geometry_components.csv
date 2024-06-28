@@ -1,0 +1,16 @@
+name,stl_filepath,inner_mat,outer_mat,surface,color,displacement x,displacement y,displacement z,solid_type
+copper plate upper,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - APD Disk_wdrill_1-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+copper plate lower,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - APD Disk_wdrill_1-2.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+sipm,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - sipm2-1 thin_sipm-1.STL,silicon,liquid xenon,FBK HD3,black,0,0,0,pmt
+source,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - Am-241_source-1 source_Am-241_part3-1.STL,steel,liquid xenon,None,red,0,0,0,none
+silica window,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - silica-1.STL,silica,liquid xenon,None,cyan,0,0,0,solid
+silica gasket1,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - silica_window-1 silica_gasket-1.STL,steel,liquid xenon,Steel-Xe,yellow,0,0,0,solid
+silica gasket2,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - silica_window-1 silica_gasket-2.STL,steel,liquid xenon,Steel-Xe,yellow,0,0,0,solid
+thread1,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - threadedrod_4-1.STL,steel,liquid xenon,Steel-Xe,black,0,0,0,solid
+thread2,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - threadedrod_4-3.STL,steel,liquid xenon,Steel-Xe,black,0,0,0,solid
+thread3,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - threadedrod_4-4.STL,steel,liquid xenon,Steel-Xe,black,0,0,0,solid
+thread4,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - threadedrod_4-5.STL,steel,liquid xenon,Steel-Xe,black,0,0,0,solid
+Al_filler,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - Al_filler-1.STL,aluminum,liquid xenon,Al-Xe,red,0,0,0,solid
+Alu_disk,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - Alu_disk_Am-241-1.STL,aluminum,liquid xenon,Al-Xe,green,0,0,0,solid
+
+

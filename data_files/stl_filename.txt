@@ -1,0 +1,21 @@
+newassemblystart_25.6_trianglesipm - Al_filler-1.STL (in)
+newassemblystart_25.6_trianglesipm - Alu_disk_Am-241-1.STL 
+newassemblystart_25.6_trianglesipm - Am-241_holder-1.STL (in)
+newassemblystart_25.6_trianglesipm - Am-241_source-1 source_Am-241_part1-1.STL (a small cylindrical piece)
+newassemblystart_25.6_trianglesipm - Am-241_source-1 source_Am-241_part2-1.STL (a small ring)
+newassemblystart_25.6_trianglesipm - Am-241_source-1 source_Am-241_part3-1.STL (in)
+newassemblystart_25.6_trianglesipm - APD Disk_wdrill_1-1.STL (in)
+newassemblystart_25.6_trianglesipm - APD Disk_wdrill_1-2.STL (in)
+newassemblystart_25.6_trianglesipm - Assem2-1 Cu Holder-1.STL (in)
+newassemblystart_25.6_trianglesipm - Assem2-1 Pho S5-2.STL
+newassemblystart_25.6_trianglesipm - barnew-2.STL
+newassemblystart_25.6_trianglesipm - Cell-1.STL
+newassemblystart_25.6_trianglesipm - silica-1.STL (in)
+newassemblystart_25.6_trianglesipm - silica_window-1 silica_gasket-1.STL (in)
+newassemblystart_25.6_trianglesipm - silica_window-1 silica_gasket-2.STL (in)
+newassemblystart_25.6_trianglesipm - sipm2-1 sipm_quartz-1.STL
+newassemblystart_25.6_trianglesipm - sipm2-1 thin_sipm-1.STL(in)
+newassemblystart_25.6_trianglesipm - threadedrod_4-3.STL
+newassemblystart_25.6_trianglesipm - threadedrod_4-4.STL
+newassemblystart_25.6_trianglesipm - threadedrod_4-5.STL
+

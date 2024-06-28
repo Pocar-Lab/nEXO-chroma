@@ -1,0 +1,17 @@
+name,stl_filepath,inner_mat,outer_mat,surface,color,displacement x,displacement y,displacement z,solid_type
+
+copper plate 1,/workspace/data_files/stl_files/Sebastian/STL 3/Geometry for Simulation - SiPM-Disk-1.step-2.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+copper plate 2,//workspace/data_files/stl_files/Sebastian/STL 3/Geometry for Simulation - SiPM-Disk-2.step-3.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+SiPM,/workspace/data_files/stl_files/Sebastian/STL 3/Geometry for Simulation - SiPM.step-1.STL,silicon,liquid xenon,FBK HD3,black,0,0,0,pmt
+silica window,/workspace/data_files/stl_files/Sebastian/STL 3/Geometry for Simulation - SilicaWindow-1.STL,silica,liquid xenon,None,cyan,0,0,0,solid
+SiPM part1,/workspace/data_files/stl_files/Sebastian/STL 3/Geometry for Simulation - CuHolder.step-1.STL,copper,liquid xenon,Cu-Xe,green,0,0,0,solid
+SiPM 2,/workspace/data_files/stl_files/Sebastian/STL 3/Geometry for Simulation - Assem2_Pho_S5.step-2 Body.step-1.STL,copper,liquid xenon,Cu-Xe,green,0,0,0,solid
+rod1,/workspace/data_files/stl_files/Sebastian/STL 3/Geometry for Simulation - Assem2_Pho_S5.step-2 Rod1.step-1.STL,copper,liquid xenon,Cu-Xe,green,0,0,0,solid
+rod2,/workspace/data_files/stl_files/Sebastian/STL 3/Geometry for Simulation - Assem2_Pho_S5.step-2 Rod2.step-1.STL,copper,liquid xenon,Cu-Xe,green,0,0,0,solid
+source part 1,/workspace/data_files/stl_files/Sebastian/STL 3/Geometry for Simulation - Am-241_Source_Holder.step-1.STL,aluminum,liquid xenon,Al-Xe,green,0,0,0,solid
+source part 2,/workspace/data_files/stl_files/Sebastian/STL 3/Geometry for Simulation - Am-241_Source_part-1.step-2.STL,aluminum,liquid xenon,Al-Xe,green,0,0,0,solid
+silica gasket 1,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - silica_window-1 silica_gasket-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+silica gasket 2,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - silica_window-1 silica_gasket-2.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+
+
+

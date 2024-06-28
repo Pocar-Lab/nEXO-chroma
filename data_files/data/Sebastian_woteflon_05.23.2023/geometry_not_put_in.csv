@@ -1,0 +1,10 @@
+silica gasket 1,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflon/2023_5_23_WithTeflon - silicawindow-1 SilicaGasket.step-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+
+silica gasket 2,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflon/2023_5_23_WithTeflon - silicawindow-1 SilicaGasket.step-2.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+
+copper plate 1,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflon/2023_5_23_WithTeflon - SiPM-Disk-1-.15mm-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+
+copper plate 2,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflon/2023_5_23_WithTeflon - SiPM-Disk-2-.15mm.step-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+
+silica window,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflon/2023_5_23_WithTeflon - silicawindow-1 SilicaWindow-1.STL,silica,liquid xenon,None,cyan,0,0,0,solid
+

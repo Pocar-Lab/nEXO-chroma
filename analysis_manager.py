@@ -359,7 +359,7 @@ class analysis_manager:
 		plt.ylim(0,90)		
 		plt.show()
 
-	def plot_angle_hist(self,histogramfilename):
+	def plot_angle_hist(self,histogramfilename, showPlot = True):
      
 		lxe_refractive_index = self.gm.mat_manager.material_props['liquid xenon']['refractive_index']
 		fig = plt.figure()
@@ -378,7 +378,9 @@ class analysis_manager:
 		plt.xlabel('Incident Angle [deg]')
 		plt.title('Incident Angle Distribution, Run ' + str(self.run_id))
 		plt.tight_layout()
-		plt.show()
+		if showPlot:
+			plt.show()
+		return hist
 
 	def plot_position_hist(self):
 		fig = plt.figure()
@@ -471,9 +473,9 @@ class analysis_manager:
 	def photon_incident_angle_emission_angle_correlation_wrapper(self):
 		self.photon_incident_angle_emission_angle_correlation(num_tracks=None, detected_only=True, reflected_specular_only=False, reflected_diffuse_only=False)
 
-	def plot_angle_hist_wrapper(self):
+	def plot_angle_hist_wrapper(self, showPlot = True):
 		histogram_file_name = f'/workspace/results/{self.experiment_name}/histogram_seed:{self.seed}'
-		self.plot_angle_hist(histogram_file_name)
+		return self.plot_angle_hist(histogram_file_name, showPlot)
 
 	def plot_refl_angle_wrapper(self):
 		self.plot_refl_angle(low_angle=12, do_log=False)

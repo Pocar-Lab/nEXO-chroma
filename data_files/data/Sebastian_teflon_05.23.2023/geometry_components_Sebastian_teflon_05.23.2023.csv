@@ -1,0 +1,14 @@
+name,stl_filepath,inner_mat,outer_mat,surface,color,displacement x,displacement y,displacement z,solid_type
+
+sipm,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflon/2023_5_23_WithTeflon - SipmSubAssembly-2 SiPM.step-1.STL,silicon,liquid xenon,FBK HD3,black,0,0,0,pmt
+
+source,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflon/2023_5_23_WithTeflon - source-3 sourcepart3-2.STL,steel,liquid xenon,None,red,0,0,0,none
+
+teflon,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflon/2023_5_23_WithTeflon - TeflonReflector-1.STL,teflon,liquid xenon,teflon-Xe,black,0,0,0,solid
+
+
+
+
+
+
+

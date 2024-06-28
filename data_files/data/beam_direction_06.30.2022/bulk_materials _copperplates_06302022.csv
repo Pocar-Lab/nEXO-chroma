@@ -1,0 +1,7 @@
+name,refractive_index,absorption_length,scattering_length,density,abs(r_i_error),eta,k,abs(eta_error),abs(k_error)
+liquid xenon,1.78,1000000,3500000,2.942,0.0,0,0,0,0
+copper,0.96,0.5,1000000,8.96,0,0.96,1.4735,0,0
+silicon,0.682,0.05,1000000,2.329,0,0,0,0,0
+steel,0,0,0,8.05,0,0,0,0,0
+
+

@@ -1,0 +1,6 @@
+name,outer_mat,inner_mat,model_id,reflect_specular,reflect_diffuse
+FBK HD3,liquid xenon,silicon,5,0,0
+Cu-Xe,liquid xenon,copper,4,0,1
+teflon-Xe,liquid xenon,teflon,9,0,1
+killing surface,None,None,8,0,0
+

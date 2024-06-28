@@ -1,0 +1,18 @@
+name,stl_filepath,inner_mat,outer_mat,surface,color,displacement x,displacement y,displacement z,solid_type
+
+sipm,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflonLower/CurrentWithTeflon(LOWERBOUND) - SipmSubAssembly-2 SiPM.step-1.STL,silicon,liquid xenon,FBK HD3,black,0,0,0,pmt
+
+source,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflonLower/CurrentWithTeflon(LOWERBOUND) - source-3 sourcepart3-2.STL,steel,liquid xenon,None,red,0,0,0,none
+
+teflon,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflonLower/CurrentWithTeflon(LOWERBOUND) - TeflonReflector-1.STL,teflon,liquid xenon,teflon-Xe,black,0,0,0,solid
+
+silica window,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflonLower/CurrentWithTeflon(LOWERBOUND) - silicawindow-1 SilicaWindow-1.STL,silica,liquid xenon,None,cyan,0,0,0,solid
+
+silica gasket 1,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflonLower/CurrentWithTeflon(LOWERBOUND) - silicawindow-1 SilicaGasket.step-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+
+silica gasket 2,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflonLower/CurrentWithTeflon(LOWERBOUND) - silicawindow-1 SilicaGasket.step-2.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+
+copper plate 1,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflonLower/CurrentWithTeflon(LOWERBOUND) - SiPM-Disk-1-.15mm-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+
+copper plate 2,/workspace/data_files/stl_files/Sebastian/2023_5_23_WithTeflonLower/CurrentWithTeflon(LOWERBOUND) - SiPM-Disk-2-.15mm.step-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+
