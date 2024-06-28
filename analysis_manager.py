@@ -4,62 +4,151 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+from stl import mesh
 from matplotlib import colors
 from mpl_toolkits import mplot3d
 from array import array
 
 
 class analysis_manager:
-	def __init__(self, geometry_manager, experiment_name, selected_plot, photons, photon_tracks = 1000, run_id = 0, seed = 0, histories = None):
+	def __init__(self, geometry_manager, experiment_name, selected_plots, photons, photon_tracks = 1000, run_id = 0, seed = 0, histories = None):
 		self.gm = geometry_manager
 		self.experiment_name = experiment_name
 		self.photons = photons
 		self.photon_tracks = photon_tracks
+		self.all_tracks = None
+		self.detected_tracks = None
+		self.undetected_tracks = None
+		self.reflected_tracks = None
+		self.filtered_scattered_tracks = None
+		self.detected_reflected_tracks = None
+		self.specular_reflected_tracks = None
+		self.diffuse_reflected_tracks = None	
 		self.num_particles = len(self.photons)
 		self.run_id = run_id
 		self.seed = seed
 		self.particle_histories = histories
-		self.selected_plot = selected_plot
+		self.selected_plots = selected_plots
 		self.get_tallies()
-		num_tracks = 100000
+		self.num_tracks = 100
+		self.plots = selected_plots
+		self.geometry_data_path = f'/workspace/data_files/data/{self.experiment_name}/geometry_components_{self.experiment_name}.csv'
 
-		# histogramfilename = '/workspace/data_files/data/Sebastian_teflon_05.23.2023/histogram_teflon/spec_tef_histogram_' + str(self.run_id) + '.csv'
-		# histogramfilename = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/histogram_teflon/diff_spec_histogram_'+ str(self.run_id) + '.csv'
-		# histogramfilename ='/workspace/data_files/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/histogramPd_histogram_0.csv'
-		histogram_file_name = '/workspace/results/' + self.experiment_name + '/histogram_seed' + str(self.seed) 
 
-		# filename = '/workspace/data_files/data/copperplates_06.23.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/data_files/data/copperplates_06.23.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/data_files/data/beam_direction_06.30.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/data_files/data/silica_window_07.18.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/data_files/data/source_copperholder_08.16.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/data_files/data/copper_gasket_08.29.2022/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/data_files/data/Al_filler_02.07.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/data_files/data/sourcepart_05.11.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/data_files/data/Sebastian_teflon_05.23.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/data_files/data/Sebastian_woteflon_05.23.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		# filename = '/workspace/data_files/data/Sebastian_flippedsource_06.06.2023/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'		
-		# filename = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/hd3_data_test_' + str(self.run_id) + '.csv'
-		filename = '/workspace/results/' + self.experiment_name + '/' '/datapoints/hd3_data_test_' + str(self.seed) + '.csv'
-  
-		#lines 46-lines 56 are different plots to run. get all those to work -> everything works
-  
+		self.plot_functions = {
+			'plot_all_tracks' : self.plot_all_tracks_wrapper,
+			'plot_detected_tracks' : self.plot_detected_tracks_wrapper,
+			'plot_undetected_tracks' : self.plot_undetected_tracks_wrapper,
+			'plot_reflected_tracks' : self.plot_reflected_tracks_wrapper,
+			'plot_filtered_scattered_tracks' : self.plot_filtered_scattered_tracks_wrapper,
+			'plot_detected_reflected_tracks' : self.plot_detected_reflected_tracks_wrapper,
+			'plot_specular_reflected_tracks' : self.plot_specular_reflected_tracks_wrapper,
+			'plot_diffuse_reflected_tracks' : self.plot_diffuse_reflected_tracks_wrapper,
+            'plot_refl_multiplicity': self.plot_refl_multiplicity_wrapper,
+            'photon_shooting_angle': self.photon_shooting_angle_wrapper,
+            'photon_incident_angle_emission_angle_correlation': self.photon_incident_angle_emission_angle_correlation_wrapper,
+            'plot_angle_hist': self.plot_angle_hist_wrapper,
+            'plot_refl_angle': self.plot_refl_angle_wrapper,
+            'plot_position_hist': self.plot_position_hist_wrapper
+        }
+
+		
+		histogram_file_name = f'/workspace/results/{self.experiment_name}/histogram_data_seed_{self.seed}'
+		filename = f'/workspace/results/{self.experiment_name}/datapoints/hd3_data_test_seed_{self.seed}.csv'
+    
 		# self.plot_tracks(num_tracks = num_tracks, detected_only = True, reflected_only = True)
-		# self.plot_tracks_reed_rewrite(num_tracks = None, detected_only = True, reflected_only = False)
-		# self.plot_undetected_tracks(num_tracks = 10000)
-		# self.plot_filtered_tracks(filter_by = 5, num_tracks = num_tracks)
-		# self.plot_filtered_scattered_tracks(num_tracks = num_tracks)
-		# self.plot_refl_multiplicity(density = True)
-		# self.photon_shooting_angle(num_tracks = None, detected_only = True, reflected_only = False)		
-		# self.photon_incident_angle_emission_angle_correlation(num_tracks = None, detected_only = True, reflected_specular_only = False, reflected_diffuse_only = False)
-		self.plot_angle_hist(histogram_file_name)
-		self.plot_refl_angle(low_angle = 12, do_log = False)
-		self.plot_position_hist()
 		#self.plot_efficiency_R_I()                        #uncommenting this leads to error
-
+		self.preprocess_tracks()
+		self.execute_plots()
 		self.save_detected(filename)
-		# self.temperory_histogram(filename)
 
+
+	def preprocess_tracks(self):
+		num_particles = self.num_particles
+		self.all_tracks = []
+		self.detected_tracks = []     			# tracks of photons detected
+		self.undetected_tracks = []				# tracks of photons not detected
+		self.reflected_tracks = []				# tracks of photons reflected
+		self.filtered_scattered_tracks = []		# tracks of photons scattered but not detected or speculrly reflected
+		self.detected_reflected_tracks = []		# tracks of photons both detected and reflected
+		self.specular_reflected_tracks = []		# tracks of photons specularly reflected
+		self.diffuse_reflected_tracks = []		# tracks of photons diffusively reflected
+
+		for idx in range(num_particles):
+			curr_positions = self.photon_tracks[:, idx, :]  # select track of photon idx
+
+			# Remove duplicate consecutive positions
+			unique_ind = curr_positions[:-1, :] != curr_positions[1:, :]
+			unique_ind = list(np.sum(unique_ind, axis=1) > 0)
+			unique_ind = [True] + unique_ind
+
+			curr_positions = curr_positions[unique_ind]
+			self.all_tracks.append(curr_positions)
+
+			did_detect = self.tallies['SURFACE_DETECT'][idx]
+			did_reflect_specular = self.particle_histories['REFLECT_SPECULAR'][idx].astype(bool)
+			did_reflect_diffuse = self.particle_histories['REFLECT_DIFFUSE'][idx].astype(bool)
+			did_scatter = self.particle_histories['RAYLEIGH_SCATTER'][idx] != 0
+
+			if did_detect:
+				self.detected_tracks.append(curr_positions)
+			else:
+				self.undetected_tracks.append(curr_positions)
+
+			if did_reflect_specular:
+				self.specular_reflected_tracks.append(curr_positions)
+				self.reflected_tracks.append(curr_positions)
+			if did_reflect_diffuse:
+				self.diffuse_reflected_tracks.append(curr_positions)
+				self.reflected_tracks.append(curr_positions)
+
+			if did_detect and (did_reflect_specular or did_reflect_diffuse):
+				self.detected_reflected_tracks.append(curr_positions)
+			if did_scatter and not did_detect and not did_reflect_specular:
+				self.filtered_scattered_tracks.append(curr_positions)
+
+
+	def plot_tracks(self, tracks, title, plot_geometry, color='tab:blue', linewidth=1):
+		# fig = plt.figure()
+		# ax = plt.axes(projection='3d')
+
+		figure = plt.figure()
+		axes = mplot3d.Axes3D(figure)
+
+		num_tracks = self.num_tracks if self.num_tracks < len(tracks) else len(tracks)
+		for i in range(num_tracks):
+			track = tracks[i]
+			#ax.plot(track[:, 0], track[:, 1], track[:, 2], color=color, linewidth=linewidth)
+			axes.plot(track[:, 0], track[:, 1], track[:, 2], color=color, linewidth=linewidth)
+
+		if plot_geometry:
+			geometry_df = pd.read_csv(self.geometry_data_path)
+			stl_names = geometry_df['stl_filepath']
+			colors = geometry_df['color']
+			y_displacement = geometry_df['displacement y']
+			z_displacement = geometry_df['displacement z']
+
+			for curr_filename, curr_color, current_y_displacement, current_z_displacement in zip(stl_names, colors, y_displacement, z_displacement):
+				your_mesh = mesh.Mesh.from_file(curr_filename)
+				mesh_dimension = np.shape(your_mesh.vectors)
+				for i in range(mesh_dimension[1]):
+					your_mesh.vectors[:,i,1] += current_y_displacement
+				for k in range(mesh_dimension[1]):
+					your_mesh.vectors[:,i,2] += current_z_displacement
+				poly3d = mplot3d.art3d.Poly3DCollection(your_mesh.vectors)
+				poly3d.set_alpha(0.2)
+				poly3d.set_edgecolor(None)
+				poly3d.set_facecolor(curr_color)
+				axes.add_collection3d(poly3d)
+			# Auto scale to the mesh size
+			scale = your_mesh.points.flatten()
+
+			axes.auto_scale_xyz(scale, scale, scale)
+		axes.set_xlabel('x position (mm)')
+		axes.set_ylabel('y position (mm)')
+		axes.set_zlabel('z position (mm)')
+		figure.suptitle(title)
+		plt.show()
 
 	def incident_angle(self, last_pos):
 		angles = np.arccos(np.fabs(last_pos[:,1])/np.sqrt((last_pos[:,0]**2 + last_pos[:,1]**2 + last_pos[:,2]**2)))*(180./np.pi)
@@ -117,9 +206,6 @@ class analysis_manager:
 		# al_k = self.gm.mat_manager.material_props['aluminum']['k']
 		# Cu_spec_coefficient = self.gm.surf_manager.surface_props['Cu-Xe']
 
-
-
-
 	    # store PTE for both 0 and non zero
 		self.emit_angle = self.run_id - 1
 		if self.efficiency != 0:
@@ -158,89 +244,6 @@ class analysis_manager:
 		df.to_csv(filename)
 
 
-	def temperory_histogram(self,filename):
-		exclude_incidentangle_file = '/workspace/data_files/data/Sebastian_teflon_05.23.2023/datapoints/exclude_incident_angle_' + str(self.run_id) + '.csv'
-		colume_incidentangle = ['angle']
-		colume_y = ['y (mm)']
-		incident_angle = pd.read_csv(filename, usecols=colume_incidentangle).to_numpy()
-		# print('incident angle saved?',len(incident_angle))
-		y_position = pd.read_csv(filename, usecols=colume_y).to_numpy()
-		print('min detected y',y_position.min())
-		print('max detected y',y_position.max())
-		# print('number of y position', len(y_position))
-		real_inc_angle=[]
-		exclude_inc_angle=[]
-		exclude_y=[]
-		for i in range(len(y_position)):
-			if y_position[i] <= 56.972675:
-				# print(incident_angle[i])
-				real_inc_angle.append(float(incident_angle[i]))
-			else:
-				exclude_inc_angle.append(float(incident_angle[i]))
-				exclude_y.append(float(y_position[i]))
-
-		# print(type(np.array(real_inc_angle)))
-		print(len(real_inc_angle))
-		print(len(exclude_inc_angle))
-		save_exclude_inc_angle = {
-							'y (mm)': np.array(exclude_y),
-							'incident angle': np.array(exclude_inc_angle)}
-		print(len(save_exclude_inc_angle))
-
-		df = pd.DataFrame(save_exclude_inc_angle)
-		df.to_csv(exclude_incidentangle_file)	
-
-		fig = plt.figure()
-		plt.hist(real_inc_angle, bins = [theta for theta in range(91)])
-
-		hist, bin_edges = np.histogram(real_inc_angle, bins = [theta for theta in range(91)])
-		print(hist)
-
-		plt.title('Incident angle histogram(corrected)')
-		plt.xlabel('Incident angle[degree]')
-		plt.ylabel('Counts')
-		plt.show()
-
-	def plot_tracks_reed_rewrite(self, num_tracks = None, detected_only = True, specular_only = False, diffuse_only = False):
-		if num_tracks == None:
-			num_tracks = self.num_particles
-
-		fig = plt.figure()
-		ax = plt.axes(projection = '3d')
-
-		mask = np.ones(self.num_particles, dtype=bool)
-
-		if detected_only:
-			mask &= self.tallies['SURFACE_DETECT']
-
-		if specular_only:
-			mask &= self.particle_histories['REFLECT_SPECULAR'].astype(bool) 
-				
-		if diffuse_only:
-			mask &= self.particle_histories['REFLECT_DIFFUSE'].astype(bool)
-
-		filtered_tracks = self.photon_tracks[:, mask, :]
-		print(np.shape(filtered_tracks))
-		save_tracks = []
-		_, num_good_tracks, _ = np.shape(filtered_tracks)
-		if num_good_tracks < num_tracks:
-			num_tracks = num_good_tracks
-		for i in range(num_tracks):
-			track = filtered_tracks[:, i, :]
-			unique_ind = track[:-1, :] != track[1:, :]
-			unique_ind = list(np.sum(unique_ind, axis = 1) > 0)
-			unique_ind = [True] + unique_ind
-			track = track[unique_ind, :]
-			save_tracks.append(track)
-			ax.plot(track[:, 0], track[:,1], track[:,2], color = 'tab:blue', linewidth = 1)
-		ax.set_xlabel('x position (mm)')
-		ax.set_ylabel('y position (mm)')
-		ax.set_zlabel('z position (mm)')
-		plt.title('Photon Tracks, Run ' + str(self.run_id))
-		plt.show()
-		save_tracks = np.array(save_tracks)
-		# np.save('/workspace/results/testing/[INSERT FILE NAME HERE]', filtered_tracks)
-
 	def photon_shooting_angle(self, num_tracks = None, detected_only = True, reflected_only = False, diffuse_only = False):
 		if num_tracks == None:
 			num_tracks = self.num_particles
@@ -277,44 +280,7 @@ class analysis_manager:
 		plt.title('Emission Angle Distribution, Run ' + str(self.run_id))
 		plt.tight_layout()
 		plt.show()
-
-		# the following is meant to reproduce the same incident histogram
-		# print('number of steps to reach the SiPM',len(filtered_tracks)) #len(filtered_tracks) is the number of steps
-		# last_x = []
-		# last_y = []
-		# last_z = []
-		# second_last_x = []
-		# second_last_y = []
-		# second_last_z = []
-		# for j in range(np.shape(filtered_tracks)[1]):
-		# 	for i in range(len(filtered_tracks)):
-		# 		# print(filtered_tracks[i,0,:])
-		# 		if (filtered_tracks[i,j,0] == filtered_tracks[i+1,j,0]) and (filtered_tracks[i,j,1] == filtered_tracks[i+1,j,1]) and (filtered_tracks[i,j,2] == filtered_tracks[i+1,j,2]):
-		# 			# print('the step where the position does not change is',i)
-		# 			last_x.append(filtered_tracks[i,j,0])
-		# 			second_last_x.append(filtered_tracks[i-1,j,0])
-		# 			last_y.append(filtered_tracks[i,j,1])
-		# 			second_last_y.append(filtered_tracks[i-1,j,1])
-		# 			last_z.append(filtered_tracks[i,j,2])
-		# 			second_last_z.append(filtered_tracks[i-1,j,2])
-		# 			break	
-		# # print(np.shape(last_z))
-		# angle_list = []
-		# for i in range(len(last_z)):
-		# 	angle = np.arccos(np.fabs(last_y[i]-second_last_y[i])/np.sqrt(((last_x[i]-second_last_x[i])**2 + (last_y[i]-second_last_y[i])**2 + (last_z[i]-second_last_z[i])**2)))*(180./np.pi)
-		# 	angle_list.append(angle)
-
-		# fig = plt.figure()
-		# plt.hist(angle_list, bins = [theta for theta in range(91)])
-		# # hist is the height of the historgram
-		# hist, bin_edges = np.histogram(angle_list, bins = [theta for theta in range(91)])
-		# print(hist, bin_edges)
-
-		# plt.ylabel('Counts')
-		# plt.xlabel('Incident Angle [deg]')
-		# plt.title('Incident Angle Distribution, Run ' + str(self.run_id))
-		# plt.tight_layout()
-		# plt.show()
+	
 
 #Sili: added on 02/07/2023 to plot the shooting angle and emission angle correlation of detected photons
 	def photon_incident_angle_emission_angle_correlation(self, num_tracks = None, detected_only = True, reflected_specular_only = True, reflected_diffuse_only = False):
@@ -396,101 +362,6 @@ class analysis_manager:
 		plt.ylim(0,90)		
 		plt.show()
 
-
-	def plot_undetected_tracks(self,num_tracks = None):
-		ax = plt.axes(projection = '3d')
-		mask = np.zeros(self.num_particles, dtype = bool)
-		for i in range(self.num_particles):
-			if self.tallies['SURFACE_DETECT'][i] == False:
-				mask[i] = True
-
-		ax = plt.axes(projection = '3d')
-		filtered_tracks = self.photon_tracks[:, mask, :]
-		# print(np.shape(filtered_tracks))
-		num_filtered_photon = len(filtered_tracks[1])
-		max_tracks_to_plot = 200
-		if num_filtered_photon > max_tracks_to_plot:
-			num_plot_tracks = max_tracks_to_plot
-		else:
-			num_plot_tracks = num_filtered_photon
-		save_tracks = []
-		for j in range(num_plot_tracks):
-			track = filtered_tracks[:,j,:]
-			unique_ind = track[:-1, :] != track[1:, :]
-			unique_ind = list(np.sum(unique_ind, axis = 1) > 0)
-			unique_ind = [True] + unique_ind
-			track = track[unique_ind, :]
-			save_tracks.append(track)
-			ax.plot(filtered_tracks[:, j, 0], filtered_tracks[:, j, 1], filtered_tracks[:, j, 2], color = 'green', linewidth = 1)
-		ax.set_xlabel('x position (mm)')
-		ax.set_ylabel('y position (mm)')
-		ax.set_zlabel('z position (mm)')
-		plt.title('Undetected Photon Tracks, Run ' + str(self.run_id))
-		plt.show()
-		np.save('/workspace/results/testing/hd3_filtered_undetected_tracks_test_' + str(self.run_id),save_tracks)
-
-
-	#This function gives the right plot but doesn't save the right number of tracks. Not gonna use it; 
-	def plot_tracks(self, num_tracks, detected_only = True, reflected_only = False, diffuse_only = False):
-		if num_tracks == None:
-			num_tracks = self.num_particles
-			print(num_tracks)
-
-		fig = plt.figure()
-		ax = plt.axes(projection = '3d')
-		all_tracks = []
-		detected_tracks = [] #list of inds of detected photons
-		reflected_tracks = [] #list of inds of reflected photons
-		detected_reflected_tracks = []
-		filtered_tracks = []
-  
-		# filter out all detected tracks, reflected track and reflected and detected/reflected tracks and save them to a file
-		for idx in range(num_tracks):
-			curr_positions = self.photon_tracks[:, idx, :] #select track of photon idx
-			# ax.plot(curr_positions[:, 0], curr_positions[:, 1], curr_positions[:, 2], color = 'tab:blue', linewidth = 1)
-   
-			unique_ind = curr_positions[:-1, :] != curr_positions[1:, :] 
-			unique_ind = list(np.sum(unique_ind, axis = 1) > 0)
-			unique_ind = [True] + unique_ind
-   
-			curr_positions = curr_positions[unique_ind]
-			all_tracks.append(curr_positions)
-			did_detect = self.tallies['SURFACE_DETECT'][idx]
-			did_reflect = self.particle_histories['REFLECT_SPECULAR'][idx].astype(bool) or self.particle_histories['REFLECT_DIFFUSE'][idx].astype(bool)
-   
-			if did_detect:
-				detected_tracks.append(curr_positions)
-			if did_reflect:
-				reflected_tracks.append(curr_positions)
-			if did_detect and did_reflect:
-				detected_reflected_tracks.append(curr_positions)
-			if detected_only:
-				if did_detect:
-					if reflected_only:
-						if did_reflect:
-							ax.plot(curr_positions[:, 0], curr_positions[:, 1], curr_positions[:, 2], color = 'tab:blue', linewidth = 1)
-					else:
-						ax.plot(curr_positions[:, 0], curr_positions[:, 1], curr_positions[:, 2], color = 'tab:blue', linewidth = 1)
-			else:
-				if reflected_only:
-					if did_reflect:
-						ax.plot(curr_positions[:, 0], curr_positions[:, 1], curr_positions[:, 2], color = 'tab:blue', linewidth = 1)
-				else:
-					ax.plot(curr_positions[:, 0], curr_positions[:, 1], curr_positions[:, 2], color = 'tab:blue', linewidth = 1)
-		print('the dimension for all tracks',np.shape(all_tracks))
-		print('the dimension for detected tracks',np.shape(detected_tracks))
-		print('the dimension for reflected tracks',np.shape(reflected_tracks))
-		print('the dimension for detected and reflected tracks',np.shape(detected_reflected_tracks))			
-		ax.set_xlabel('x position (mm)')
-		ax.set_ylabel('y position (mm)')
-		ax.set_zlabel('z position (mm)')
-		plt.title('Photon Tracks, Run ' + str(self.run_id))
-		plt.show()
-		# print(self.photon_tracks[0,:,1]) #print the initial position of all tracks
-		# np.save('/workspace/results/testing/hd3_tracks_test_' + str(self.run_id),all_tracks)
-		np.save('/workspace/results/testing/hd3_detrefl_tracks_test_' + str(self.run_id),detected_reflected_tracks)
-		np.save('/workspace/results/testing/hd3_det_tracks_test_' + str(self.run_id),detected_tracks)
-
 	def plot_angle_hist(self,histogramfilename):
      
 		lxe_refractive_index = self.gm.mat_manager.material_props['liquid xenon']['refractive_index']
@@ -506,11 +377,6 @@ class analysis_manager:
 		df = pd.DataFrame(save_data)
 		df.to_csv(histogramfilename)
 
-		# # anglecount = 0
-		# # for i in range(len(self.detected_angles)):
-		# # 	if self.detected_angles[i] >= 32 and self.detected_angles[i] <= 33:
-		# # 		anglecount = anglecount + 1
-		# # print(f"the number of 32 degree incidences is {anglecount}")
 		plt.ylabel('Counts')
 		plt.xlabel('Incident Angle [deg]')
 		plt.title('Incident Angle Distribution, Run ' + str(self.run_id))
@@ -548,81 +414,11 @@ class analysis_manager:
 		plt.tight_layout()
 		plt.show()
 
-		
-	#adding filter for specific number of reflections
-	def plot_filtered_tracks(self, filter_by, num_tracks = None):
-
-		mask = np.zeros(self.num_particles, dtype = bool)
-
-		for i in range(self.num_particles):
-			if self.particle_histories['REFLECT_SPECULAR'][i] == filter_by and self.tallies['SURFACE_DETECT'][i] == True:
-				mask[i] = True
-			elif self.particle_histories['REFLECT_DIFFUSE'][i] == filter_by and self.tallies['SURFACE_DETECT'][i] == True:
-				mask[i] = True
-
-
-		fig = plt.figure()
-		ax = plt.axes(projection = '3d')
-		filtered_tracks = self.photon_tracks[:, mask, :]
-		print("number of filtered tracks:", np.shape(filtered_tracks))
-
-		if num_tracks > len(filtered_tracks[0]):
-			num_tracks = len(filtered_tracks[0])
-
-		for j in range(num_tracks):
-			ax.plot(filtered_tracks[:, j, 0], filtered_tracks[:, j, 1], filtered_tracks[:, j, 2], color = 'tab:blue', linewidth = 1)
-
-		ax.set_xlabel('x position (mm)')
-		ax.set_ylabel('y position (mm)')
-		ax.set_zlabel('z position (mm)')
-		plt.title('Filtered Photon Tracks from Reflection, Run ' + str(self.run_id))
-		plt.show()
-
-		np.save('/workspace/results/testing/hd3_filtered_tracks_test_' + str(self.run_id),filtered_tracks)
-
-	#Filter out path with only scattering without reflection. Intended to study why there is no scattering from angle 7 to 21 and 60 to 67 degree
-	def plot_filtered_scattered_tracks(self, num_tracks = None):
-		mask = np.zeros(self.num_particles, dtype = bool)
-		for i in range(self.num_particles):
-			if self.particle_histories['RAYLEIGH_SCATTER'][i] != 0 and self.tallies['SURFACE_DETECT'][i] == False and self.particle_histories['REFLECT_SPECULAR'][i] == 0:
-				# print(self.particle_histories['RAYLEIGH_SCATTER'][i])
-				mask[i] = True
-
-
-		fig = plt.figure()
-		ax = plt.axes(projection = '3d')
-		filtered_tracks = self.photon_tracks[:, mask, :]		
-		print(len(filtered_tracks[1])) #number of photons that is scattered/detected 
-		# print(filtered_tracks[1])
-		# print(len(filtered_tracks)) #number of steps that a single photon propogate, usually the steps it take until being detected is much less than this number
-		# print(filtered_tracks.shape)
-		if num_tracks > len(filtered_tracks):
-			num_tracks = len(filtered_tracks)
-		# print(num_tracks)
-
-		# for j in range(2):
-		# 	plt.plot(filtered_tracks[j, 0, 0], filtered_tracks[j, 0, 1], filtered_tracks[j, 0, 2], 'o' ,color = 'green')
-		
-		#just select 100 photons to plot their tracks
-		for j in range(100):
-			ax.plot(filtered_tracks[:, j, 0], filtered_tracks[:, j, 1], filtered_tracks[:, j, 2], color = 'green', linewidth = 1)
-		# 	print(filtered_tracks[:, j, 0]) #for jth scatter/detected photon at all step, print the x position
-		ax.set_xlabel('x position (mm)')
-		ax.set_ylabel('y position (mm)')
-		ax.set_zlabel('z position (mm)')
-		plt.title('Undetected Filtered Photon Tracks from just Scattering, Run ' + str(self.run_id))
-		plt.show()
-
-		np.save('/workspace/results/testing/hd3_filtered_scatter_tracks_test_' + str(self.run_id),filtered_tracks)
-
 	def plot_refl_angle(self, do_log = True, low_angle = 0, high_angle = 91):
 		bins_refl = [x for x in range(10)]
 		bins_angle = [x for x in range(low_angle, high_angle)]
 		spec_reflection_data = self.particle_histories['REFLECT_SPECULAR']
 		spec_reflection_data_det = spec_reflection_data[self.tallies['SURFACE_DETECT']]
-		# print(bins_refl)
-		# print(bins_angle)
-		# print([bins_angle, bins_refl])
 
 		plt.figure()
 		if do_log:
@@ -637,7 +433,63 @@ class analysis_manager:
 		plt.tight_layout()
 		plt.show()
 
+	def plot_all_tracks_wrapper(self):
+		title = f'Photon Tracks, Seed {self.seed}, Run {self.run_id}'
+		self.plot_tracks(self.all_tracks, title, False)
 
+	def plot_detected_tracks_wrapper(self):
+		title = f'Detected Photon Tracks, Seed {self.seed}, Run {self.run_id}'
+		self.plot_tracks(self.detected_tracks, title, False)
+
+	def plot_undetected_tracks_wrapper(self):
+		title = f' Undetected Photon Tracks, Seed {self.seed}, Run {self.run_id}'
+		self.plot_tracks(self.undetected_tracks, title, False)
+
+	def plot_reflected_tracks_wrapper(self):
+		title = f'Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}'
+		self.plot_tracks(self.reflected_tracks, title, False)
+
+	def plot_filtered_scattered_tracks_wrapper(self):
+		title = f'Filtered Scattered Photon Tracks, Seed {self.seed}, Run {self.run_id}'
+		self.plot_tracks(self.filtered_scattered_tracks, title, False)
+
+	def plot_detected_reflected_tracks_wrapper(self):
+		title = f'Detected and Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}'
+		self.plot_tracks(self.detected_reflected_tracks, title, False)
+
+	def plot_specular_reflected_tracks_wrapper(self):
+		title = f'Specularly Refelcted Photon Tracks, Seed {self.seed}, Run {self.run_id}'
+		self.plot_tracks(self.specular_reflected_tracks, title, False)
+
+	def plot_diffuse_reflected_tracks_wrapper(self):
+		title = f' Diffusively Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}'
+		self.plot_tracks(self.diffuse_reflected_tracks, title, False)
+
+	def plot_refl_multiplicity_wrapper(self):
+		self.plot_refl_multiplicity(density=True)
+
+	def photon_shooting_angle_wrapper(self):
+		self.photon_shooting_angle(num_tracks=None, detected_only=True, reflected_only=False)
+
+	def photon_incident_angle_emission_angle_correlation_wrapper(self):
+		self.photon_incident_angle_emission_angle_correlation(num_tracks=None, detected_only=True, reflected_specular_only=False, reflected_diffuse_only=False)
+
+	def plot_angle_hist_wrapper(self):
+		histogram_file_name = f'/workspace/results/{self.experiment_name}/histogram_seed:{self.seed}'
+		self.plot_angle_hist(histogram_file_name)
+
+	def plot_refl_angle_wrapper(self):
+		self.plot_refl_angle(low_angle=12, do_log=False)
+
+	def plot_position_hist_wrapper(self):
+		self.plot_position_hist()
+
+	def execute_plots(self):
+		for plot_name in self.plots:
+			if plot_name in self.plot_functions:
+				self.plot_functions[plot_name]()
+			else:
+				print(f"Plot '{plot_name}' is not recognized. Available plots are: {', '.join(self.plot_functions.keys())}")
 
 
 
