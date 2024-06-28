@@ -10,7 +10,8 @@ Welcome to Chroma Analysis's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   modules
+   ../analysis_manager
 
 Indices and tables
 ==================
