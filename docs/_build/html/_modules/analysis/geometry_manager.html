@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>analysis.geometry_manager &mdash; Chroma Analysis 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Chroma Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">analysis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Chroma Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">analysis.geometry_manager</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for analysis.geometry_manager</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">from</span> <span class="nn">chroma.detector</span> <span class="kn">import</span> <span class="n">Detector</span>
+<span class="kn">from</span> <span class="nn">chroma.stl</span> <span class="kn">import</span> <span class="n">mesh_from_stl</span>
+<span class="kn">from</span> <span class="nn">chroma.geometry</span> <span class="kn">import</span> <span class="n">Solid</span>
+<span class="kn">from</span> <span class="nn">chroma</span> <span class="kn">import</span> <span class="n">view</span>
+<span class="kn">from</span> <span class="nn">chroma.loader</span> <span class="kn">import</span> <span class="n">load_bvh</span>
+
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">colors</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits</span> <span class="kn">import</span> <span class="n">mplot3d</span>
+
+<span class="kn">from</span> <span class="nn">.material_manager</span> <span class="kn">import</span> <span class="n">material_manager</span>
+<span class="kn">from</span> <span class="nn">.surface_manager</span> <span class="kn">import</span> <span class="n">surface_manager</span>
+<span class="c1"># all components, general geometry, manage surface and material</span>
+<div class="viewcode-block" id="geometry_manager">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.geometry_manager.geometry_manager">[docs]</a>
+<span class="k">class</span> <span class="nc">geometry_manager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Manages the geometry of an experiment by reading component data from a CSV file,</span>
+<span class="sd">        creating solid objects, and organizing them into a detector geometry.</span>
+<span class="sd">        </span>
+<span class="sd">        Attributes:</span>
+<span class="sd">            experiment_name (str): Name of the experiment.</span>
+<span class="sd">            run_id (int): Identifier for the run.</span>
+<span class="sd">            mat_manager (material_manager): Manager for materials.</span>
+<span class="sd">            surf_manager (surface_manager): Manager for surfaces.</span>
+<span class="sd">            global_geometry (Detector): The global detector geometry.</span>
+<span class="sd">            geometry_data_path (str): Path to the CSV file with geometry component data.</span>
+<span class="sd">            geometry_df (pd.DataFrame): DataFrame containing the geometry component data.</span>
+<span class="sd">            solids (dict): Dictionary of solid objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiment_name</span><span class="p">,</span> <span class="n">run_id</span><span class="p">,</span><span class="n">visualize</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the geometry_manager with the given experiment name and run ID.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            experiment_name (str): Name of the experiment.</span>
+<span class="sd">            run_id (int): Identifier for the run.</span>
+<span class="sd">            visualize (bool): If True, visualize the geometry.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">experiment_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mat_manager</span> <span class="o">=</span> <span class="n">material_manager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="n">run_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf_manager</span> <span class="o">=</span> <span class="n">surface_manager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_manager</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="n">run_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_id</span> <span class="o">=</span> <span class="n">run_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_geometry</span> <span class="o">=</span> <span class="n">Detector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_manager</span><span class="o">.</span><span class="n">global_material</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry_data_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;/workspace/data_files/data/</span><span class="si">{</span><span class="n">experiment_name</span><span class="si">}</span><span class="s1">/geometry_components_</span><span class="si">{</span><span class="n">experiment_name</span><span class="si">}</span><span class="s1">.csv&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">build_geometry</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_geometry</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">visualize</span><span class="p">:</span>
+            <span class="n">view</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_geometry</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_geometry</span><span class="o">.</span><span class="n">bvh</span> <span class="o">=</span> <span class="n">load_bvh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_geometry</span><span class="p">)</span>
+
+<div class="viewcode-block" id="geometry_manager.build_geometry">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.geometry_manager.geometry_manager.build_geometry">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds the geometry by reading the CSV file and creating solid objects.</span>
+<span class="sd">        Adds the solids to the global geometry based on their type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># read in the csv file into dataframe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_data_path</span><span class="p">)</span>
+
+        <span class="c1"># iterate through all geometries and create Solid object, store into dictionary of solids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solids</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">curr_name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+
+            <span class="n">mesh</span> <span class="o">=</span> <span class="n">mesh_from_stl</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;stl_filepath&#39;</span><span class="p">])</span><span class="c1">#convert the stl files to mesh used in Chroma?</span>
+            <span class="n">inner_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat_manager</span><span class="o">.</span><span class="n">get_material</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;inner_mat&#39;</span><span class="p">])</span>
+            <span class="n">outer_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat_manager</span><span class="o">.</span><span class="n">get_material</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;outer_mat&#39;</span><span class="p">])</span>
+            <span class="n">surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf_manager</span><span class="o">.</span><span class="n">get_surface</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;surface&#39;</span><span class="p">])</span>
+
+            <span class="n">color</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">colors</span><span class="o">.</span><span class="n">cnames</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]][</span><span class="mi">1</span><span class="p">:],</span> <span class="mi">16</span><span class="p">)</span>
+
+            <span class="n">curr_displacement</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;displacement x&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;displacement y&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;displacement z&#39;</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">curr_displacement</span><span class="p">)</span>       
+                
+            <span class="c1"># #below shift the vertical displacement</span>
+            <span class="c1"># if curr_name == &quot;silica gasket 1&quot; or curr_name == &quot;silica gasket 2&quot; or curr_name == &quot;silica window&quot;:</span>
+            <span class="c1">#     curr_displacement = (row[&#39;displacement x&#39;], row[&#39;displacement y&#39;]+self.run_id*0.01, row[&#39;displacement z&#39;])</span>
+            <span class="c1">#     print(curr_displacement)   </span>
+            <span class="c1">#     # print(type(row[&#39;displacement y&#39;]))        </span>
+            <span class="c1"># #Solid object attaches materials, surfaces, and colors to each triangle in a Mesh object</span>
+            <span class="c1"># else:</span>
+            <span class="c1">#     curr_displacement = (row[&#39;displacement x&#39;], row[&#39;displacement y&#39;], row[&#39;displacement z&#39;])</span>
+            <span class="c1">#     # print(curr_displacement)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">solids</span><span class="p">[</span><span class="n">curr_name</span><span class="p">]</span> <span class="o">=</span>  <span class="n">Solid</span><span class="p">(</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">,</span> 
+                                            <span class="n">material1</span> <span class="o">=</span> <span class="n">inner_mat</span><span class="p">,</span>
+                                            <span class="n">material2</span> <span class="o">=</span> <span class="n">outer_mat</span><span class="p">,</span>
+                                            <span class="n">surface</span> <span class="o">=</span> <span class="n">surface</span><span class="p">,</span>
+                                            <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="p">)</span>
+            <span class="c1"># check to see if it is a detecting volume, add to geometry, (pmt and other solid will be treated differently?)</span>
+            <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;solid_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pmt&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_geometry</span><span class="o">.</span><span class="n">add_pmt</span><span class="p">(</span><span class="n">pmt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solids</span><span class="p">[</span><span class="n">curr_name</span><span class="p">],</span>
+                                            <span class="n">rotation</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                            <span class="n">displacement</span> <span class="o">=</span> <span class="n">curr_displacement</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;solid_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;solid&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_geometry</span><span class="o">.</span><span class="n">add_solid</span><span class="p">(</span><span class="n">solid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solids</span><span class="p">[</span><span class="n">curr_name</span><span class="p">],</span>
+                                            <span class="n">rotation</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                            <span class="n">displacement</span> <span class="o">=</span> <span class="n">curr_displacement</span><span class="p">)</span>       </div>
+
+
+<div class="viewcode-block" id="geometry_manager.get_solid_center">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.geometry_manager.geometry_manager.get_solid_center">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_solid_center</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the center of a solid object.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): The name of the solid.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            list: Coordinates of the center of the solid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#this solid center is to define the centre of the photon source? Use it later?</span>
+        <span class="n">curr_mesh_triangles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solids</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">get_triangle_centers</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">curr_mesh_triangles</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">curr_mesh_triangles</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">curr_mesh_triangles</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])]</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, PocarLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

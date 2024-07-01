@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>analysis package &mdash; Chroma Analysis 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="analysis" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Chroma Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">analysis</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">analysis package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-analysis.analysis_manager">analysis.analysis_manager module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#analysis.analysis_manager.analysis_manager"><code class="docutils literal notranslate"><span class="pre">analysis_manager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-analysis.geometry_manager">analysis.geometry_manager module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#analysis.geometry_manager.geometry_manager"><code class="docutils literal notranslate"><span class="pre">geometry_manager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-analysis.material_manager">analysis.material_manager module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#analysis.material_manager.material_manager"><code class="docutils literal notranslate"><span class="pre">material_manager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-analysis.run_manager">analysis.run_manager module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#analysis.run_manager.primary_generator"><code class="docutils literal notranslate"><span class="pre">primary_generator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analysis.run_manager.run_manager"><code class="docutils literal notranslate"><span class="pre">run_manager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-analysis.surface_manager">analysis.surface_manager module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#analysis.surface_manager.surface_manager"><code class="docutils literal notranslate"><span class="pre">surface_manager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-analysis.test_chroma">analysis.test_chroma module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#analysis.test_chroma.test_Sebastian_08012023liquefaction_correctedSiPM"><code class="docutils literal notranslate"><span class="pre">test_Sebastian_08012023liquefaction_correctedSiPM()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analysis.test_chroma.test_Sebastian_FS_06082023_correctedSiPM"><code class="docutils literal notranslate"><span class="pre">test_Sebastian_FS_06082023_correctedSiPM()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-analysis">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Chroma Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">analysis</a></li>
+      <li class="breadcrumb-item active">analysis package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/analysis.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="analysis-package">
+<h1>analysis package<a class="headerlink" href="#analysis-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-analysis.analysis_manager">
+<span id="analysis-analysis-manager-module"></span><h2>analysis.analysis_manager module<a class="headerlink" href="#module-analysis.analysis_manager" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.analysis_manager.</span></span><span class="sig-name descname"><span class="pre">analysis_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geometry_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photon_tracks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">histories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages the analysis of photon tracks and generates various plots.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.gm">
+<span class="sig-name descname"><span class="pre">gm</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.gm" title="Link to this definition"></a></dt>
+<dd><p>Geometry manager.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.experiment_name">
+<span class="sig-name descname"><span class="pre">experiment_name</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.experiment_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.photons">
+<span class="sig-name descname"><span class="pre">photons</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.photons" title="Link to this definition"></a></dt>
+<dd><p>Array of photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.photon_tracks">
+<span class="sig-name descname"><span class="pre">photon_tracks</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.photon_tracks" title="Link to this definition"></a></dt>
+<dd><p>Number of photon tracks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.run_id">
+<span class="sig-name descname"><span class="pre">run_id</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.run_id" title="Link to this definition"></a></dt>
+<dd><p>ID of the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.seed" title="Link to this definition"></a></dt>
+<dd><p>Seed for random number generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.particle_histories">
+<span class="sig-name descname"><span class="pre">particle_histories</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.particle_histories" title="Link to this definition"></a></dt>
+<dd><p>Dictionary containing particle histories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.selected_plots">
+<span class="sig-name descname"><span class="pre">selected_plots</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.selected_plots" title="Link to this definition"></a></dt>
+<dd><p>List of selected plots to generate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.all_tracks">
+<span class="sig-name descname"><span class="pre">all_tracks</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.all_tracks" title="Link to this definition"></a></dt>
+<dd><p>List to store all photon tracks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.detected_tracks">
+<span class="sig-name descname"><span class="pre">detected_tracks</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.detected_tracks" title="Link to this definition"></a></dt>
+<dd><p>List to store detected photon tracks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.undetected_tracks">
+<span class="sig-name descname"><span class="pre">undetected_tracks</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.undetected_tracks" title="Link to this definition"></a></dt>
+<dd><p>List to store undetected photon tracks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.reflected_tracks">
+<span class="sig-name descname"><span class="pre">reflected_tracks</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.reflected_tracks" title="Link to this definition"></a></dt>
+<dd><p>List to store reflected photon tracks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.filtered_scattered_tracks">
+<span class="sig-name descname"><span class="pre">filtered_scattered_tracks</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.filtered_scattered_tracks" title="Link to this definition"></a></dt>
+<dd><p>List to store scattered but not detected or specularly reflected photon tracks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.detected_reflected_tracks">
+<span class="sig-name descname"><span class="pre">detected_reflected_tracks</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.detected_reflected_tracks" title="Link to this definition"></a></dt>
+<dd><p>List to store detected and reflected photon tracks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.specular_reflected_tracks">
+<span class="sig-name descname"><span class="pre">specular_reflected_tracks</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.specular_reflected_tracks" title="Link to this definition"></a></dt>
+<dd><p>List to store specularly reflected photon tracks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.diffuse_reflected_tracks">
+<span class="sig-name descname"><span class="pre">diffuse_reflected_tracks</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.diffuse_reflected_tracks" title="Link to this definition"></a></dt>
+<dd><p>List to store diffusely reflected photon tracks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.num_particles">
+<span class="sig-name descname"><span class="pre">num_particles</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.num_particles" title="Link to this definition"></a></dt>
+<dd><p>Number of particles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.num_tracks">
+<span class="sig-name descname"><span class="pre">num_tracks</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.num_tracks" title="Link to this definition"></a></dt>
+<dd><p>Number of tracks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plots">
+<span class="sig-name descname"><span class="pre">plots</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plots" title="Link to this definition"></a></dt>
+<dd><p>List of plots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.geometry_data_path">
+<span class="sig-name descname"><span class="pre">geometry_data_path</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.geometry_data_path" title="Link to this definition"></a></dt>
+<dd><p>Path to the geometry data file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_functions">
+<span class="sig-name descname"><span class="pre">plot_functions</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_functions" title="Link to this definition"></a></dt>
+<dd><p>Dictionary of plot functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.tallies">
+<span class="sig-name descname"><span class="pre">tallies</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.tallies" title="Link to this definition"></a></dt>
+<dd><p>Dictionary to store tallies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.efficiency">
+<span class="sig-name descname"><span class="pre">efficiency</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.efficiency" title="Link to this definition"></a></dt>
+<dd><p>Efficiency of photon detection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.detected_positions">
+<span class="sig-name descname"><span class="pre">detected_positions</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.detected_positions" title="Link to this definition"></a></dt>
+<dd><p>Positions of detected photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.detected_angles">
+<span class="sig-name descname"><span class="pre">detected_angles</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.detected_angles" title="Link to this definition"></a></dt>
+<dd><p>Angles of detected photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.emit_angle">
+<span class="sig-name descname"><span class="pre">emit_angle</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.emit_angle" title="Link to this definition"></a></dt>
+<dd><p>Emission angle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.execute_plots">
+<span class="sig-name descname"><span class="pre">execute_plots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.execute_plots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.execute_plots" title="Link to this definition"></a></dt>
+<dd><p>Executes the selected plot functions defined in self.plot_functions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.get_tallies">
+<span class="sig-name descname"><span class="pre">get_tallies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.get_tallies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.get_tallies" title="Link to this definition"></a></dt>
+<dd><p>Retrieves and prints tallies of different photon interactions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.incident_angle">
+<span class="sig-name descname"><span class="pre">incident_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_pos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.incident_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.incident_angle" title="Link to this definition"></a></dt>
+<dd><p>Calculates the incident angle of photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>last_pos</strong> (<em>ndarray</em>) – Array of last positions of the photons.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of incident angles in degrees.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.photon_incident_angle_emission_angle_correlation">
+<span class="sig-name descname"><span class="pre">photon_incident_angle_emission_angle_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_tracks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detected_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reflected_specular_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reflected_diffuse_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.photon_incident_angle_emission_angle_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.photon_incident_angle_emission_angle_correlation" title="Link to this definition"></a></dt>
+<dd><p>Plots the correlation between photon incident and emission angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_tracks</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of tracks to plot (default is None, which means all).</p></li>
+<li><p><strong>detected_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only detected photons (default is True).</p></li>
+<li><p><strong>reflected_specular_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only specularly reflected photons (default is True).</p></li>
+<li><p><strong>reflected_diffuse_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only diffusely reflected photons (default is False).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.photon_incident_angle_emission_angle_correlation_wrapper">
+<span class="sig-name descname"><span class="pre">photon_incident_angle_emission_angle_correlation_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.photon_incident_angle_emission_angle_correlation_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.photon_incident_angle_emission_angle_correlation_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.photon_shooting_angle">
+<span class="sig-name descname"><span class="pre">photon_shooting_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_tracks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detected_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reflected_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diffuse_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.photon_shooting_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.photon_shooting_angle" title="Link to this definition"></a></dt>
+<dd><p>Plots the distribution of photon shooting angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_tracks</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of tracks to plot (default is None, which means all).</p></li>
+<li><p><strong>detected_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only detected photons (default is True).</p></li>
+<li><p><strong>reflected_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only reflected photons (default is False).</p></li>
+<li><p><strong>diffuse_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only diffusely reflected photons (default is False).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.photon_shooting_angle_wrapper">
+<span class="sig-name descname"><span class="pre">photon_shooting_angle_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.photon_shooting_angle_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.photon_shooting_angle_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_all_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_all_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_all_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_all_tracks_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_angle_hist">
+<span class="sig-name descname"><span class="pre">plot_angle_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">histogramfilename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showPlot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_angle_hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_angle_hist" title="Link to this definition"></a></dt>
+<dd><p>Plots a histogram of the detected photon angles and saves the data to a CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>histogramfilename</strong> (<em>str</em>) – Path to the file where the histogram data will be saved.</p></li>
+<li><p><strong>showPlot</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to show the plot (default is True).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of histogram values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_angle_hist_wrapper">
+<span class="sig-name descname"><span class="pre">plot_angle_hist_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">showPlot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_angle_hist_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_angle_hist_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_detected_reflected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_detected_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_detected_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_detected_reflected_tracks_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_detected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_detected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_detected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_detected_tracks_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_diffuse_reflected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_diffuse_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_diffuse_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_diffuse_reflected_tracks_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_filtered_scattered_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_filtered_scattered_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_filtered_scattered_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_filtered_scattered_tracks_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_position_hist">
+<span class="sig-name descname"><span class="pre">plot_position_hist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_position_hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_position_hist" title="Link to this definition"></a></dt>
+<dd><p>Plots a 2D histogram of the detected photon positions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_position_hist_wrapper">
+<span class="sig-name descname"><span class="pre">plot_position_hist_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_position_hist_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_position_hist_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_refl_angle">
+<span class="sig-name descname"><span class="pre">plot_refl_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">do_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">91</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_refl_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_refl_angle" title="Link to this definition"></a></dt>
+<dd><p>Plots the reflection angle of detected photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>do_log</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use a logarithmic scale for the color bar (default is True).</p></li>
+<li><p><strong>low_angle</strong> (<em>int</em><em>, </em><em>optional</em>) – Lower bound for the angle histogram (default is 0).</p></li>
+<li><p><strong>high_angle</strong> (<em>int</em><em>, </em><em>optional</em>) – Upper bound for the angle histogram (default is 91).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_refl_angle_wrapper">
+<span class="sig-name descname"><span class="pre">plot_refl_angle_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_refl_angle_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_refl_angle_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_refl_multiplicity">
+<span class="sig-name descname"><span class="pre">plot_refl_multiplicity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">do_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_refl_multiplicity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_refl_multiplicity" title="Link to this definition"></a></dt>
+<dd><p>Plots the reflection multiplicity of photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>do_log</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use a logarithmic scale for the y-axis (default is True).</p></li>
+<li><p><strong>density</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to normalize the histogram (default is True).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_refl_multiplicity_wrapper">
+<span class="sig-name descname"><span class="pre">plot_refl_multiplicity_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_refl_multiplicity_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_refl_multiplicity_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_reflected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_reflected_tracks_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_specular_reflected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_specular_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_specular_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_specular_reflected_tracks_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_tracks">
+<span class="sig-name descname"><span class="pre">plot_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tracks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_geometry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tab:blue'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linewidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_tracks" title="Link to this definition"></a></dt>
+<dd><p>Plots the photon tracks in 3D.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tracks</strong> (<em>list</em>) – List of photon tracks to plot.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title of the plot.</p></li>
+<li><p><strong>plot_geometry</strong> (<em>bool</em>) – Whether to plot the geometry.</p></li>
+<li><p><strong>color</strong> (<em>str</em><em>, </em><em>optional</em>) – Color of the tracks (default is ‘tab:blue’).</p></li>
+<li><p><strong>linewidth</strong> (<em>int</em><em>, </em><em>optional</em>) – Line width of the tracks (default is 1).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.plot_undetected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_undetected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.plot_undetected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.plot_undetected_tracks_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.preprocess_tracks">
+<span class="sig-name descname"><span class="pre">preprocess_tracks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.preprocess_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.preprocess_tracks" title="Link to this definition"></a></dt>
+<dd><p>Preprocesses the photon tracks and categorizes them.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.save_detected">
+<span class="sig-name descname"><span class="pre">save_detected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/analysis_manager.html#analysis_manager.save_detected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.save_detected" title="Link to this definition"></a></dt>
+<dd><p>Saves the detected photon data to a CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Path to the file where the data will be saved.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-analysis.geometry_manager">
+<span id="analysis-geometry-manager-module"></span><h2>analysis.geometry_manager module<a class="headerlink" href="#module-analysis.geometry_manager" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.geometry_manager.</span></span><span class="sig-name descname"><span class="pre">geometry_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visualize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/geometry_manager.html#geometry_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.geometry_manager.geometry_manager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages the geometry of an experiment by reading component data from a CSV file,
+creating solid objects, and organizing them into a detector geometry.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.experiment_name">
+<span class="sig-name descname"><span class="pre">experiment_name</span></span><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.experiment_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.run_id">
+<span class="sig-name descname"><span class="pre">run_id</span></span><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.run_id" title="Link to this definition"></a></dt>
+<dd><p>Identifier for the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.mat_manager">
+<span class="sig-name descname"><span class="pre">mat_manager</span></span><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.mat_manager" title="Link to this definition"></a></dt>
+<dd><p>Manager for materials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="source/analysis.html#analysis.material_manager.material_manager" title="analysis.material_manager.material_manager">material_manager</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.surf_manager">
+<span class="sig-name descname"><span class="pre">surf_manager</span></span><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.surf_manager" title="Link to this definition"></a></dt>
+<dd><p>Manager for surfaces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="source/analysis.html#analysis.surface_manager.surface_manager" title="analysis.surface_manager.surface_manager">surface_manager</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.global_geometry">
+<span class="sig-name descname"><span class="pre">global_geometry</span></span><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.global_geometry" title="Link to this definition"></a></dt>
+<dd><p>The global detector geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Detector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.geometry_data_path">
+<span class="sig-name descname"><span class="pre">geometry_data_path</span></span><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.geometry_data_path" title="Link to this definition"></a></dt>
+<dd><p>Path to the CSV file with geometry component data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.geometry_df">
+<span class="sig-name descname"><span class="pre">geometry_df</span></span><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.geometry_df" title="Link to this definition"></a></dt>
+<dd><p>DataFrame containing the geometry component data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.solids">
+<span class="sig-name descname"><span class="pre">solids</span></span><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.solids" title="Link to this definition"></a></dt>
+<dd><p>Dictionary of solid objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.build_geometry">
+<span class="sig-name descname"><span class="pre">build_geometry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/geometry_manager.html#geometry_manager.build_geometry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.build_geometry" title="Link to this definition"></a></dt>
+<dd><p>Builds the geometry by reading the CSV file and creating solid objects.
+Adds the solids to the global geometry based on their type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.get_solid_center">
+<span class="sig-name descname"><span class="pre">get_solid_center</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/geometry_manager.html#geometry_manager.get_solid_center"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.get_solid_center" title="Link to this definition"></a></dt>
+<dd><p>Gets the center of a solid object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The name of the solid.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Coordinates of the center of the solid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-analysis.material_manager">
+<span id="analysis-material-manager-module"></span><h2>analysis.material_manager module<a class="headerlink" href="#module-analysis.material_manager" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.material_manager.material_manager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.material_manager.</span></span><span class="sig-name descname"><span class="pre">material_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/material_manager.html#material_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.material_manager.material_manager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages materials by reading their properties from a CSV file and creating Material objects.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.material_manager.material_manager.experiment_name">
+<span class="sig-name descname"><span class="pre">experiment_name</span></span><a class="headerlink" href="#analysis.material_manager.material_manager.experiment_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.material_manager.material_manager.run_id">
+<span class="sig-name descname"><span class="pre">run_id</span></span><a class="headerlink" href="#analysis.material_manager.material_manager.run_id" title="Link to this definition"></a></dt>
+<dd><p>Identifier for the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.material_manager.material_manager.material_data_path">
+<span class="sig-name descname"><span class="pre">material_data_path</span></span><a class="headerlink" href="#analysis.material_manager.material_manager.material_data_path" title="Link to this definition"></a></dt>
+<dd><p>Path to the CSV file with material properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.material_manager.material_manager.materials_df">
+<span class="sig-name descname"><span class="pre">materials_df</span></span><a class="headerlink" href="#analysis.material_manager.material_manager.materials_df" title="Link to this definition"></a></dt>
+<dd><p>DataFrame containing the material properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.material_manager.material_manager.materials">
+<span class="sig-name descname"><span class="pre">materials</span></span><a class="headerlink" href="#analysis.material_manager.material_manager.materials" title="Link to this definition"></a></dt>
+<dd><p>Dictionary of Material objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.material_manager.material_manager.material_props">
+<span class="sig-name descname"><span class="pre">material_props</span></span><a class="headerlink" href="#analysis.material_manager.material_manager.material_props" title="Link to this definition"></a></dt>
+<dd><p>Dictionary of material properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis.material_manager.material_manager.global_material">
+<span class="sig-name descname"><span class="pre">global_material</span></span><a class="headerlink" href="#analysis.material_manager.material_manager.global_material" title="Link to this definition"></a></dt>
+<dd><p>The global material used in the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Material</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.material_manager.material_manager.add_attributes">
+<span class="sig-name descname"><span class="pre">add_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curr_material</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refractive_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absorption_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scattering_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/material_manager.html#material_manager.add_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.material_manager.material_manager.add_attributes" title="Link to this definition"></a></dt>
+<dd><p>Sets the optical properties for a given material.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>curr_material</strong> (<em>Material</em>) – The Material object to which attributes are added.</p></li>
+<li><p><strong>refractive_index</strong> (<em>float</em>) – Refractive index of the material.</p></li>
+<li><p><strong>absorption_length</strong> (<em>float</em>) – Absorption length of the material.</p></li>
+<li><p><strong>scattering_length</strong> (<em>float</em>) – Scattering length of the material.</p></li>
+<li><p><strong>density</strong> (<em>float</em>) – Density of the material.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.material_manager.material_manager.build_materials">
+<span class="sig-name descname"><span class="pre">build_materials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/material_manager.html#material_manager.build_materials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.material_manager.material_manager.build_materials" title="Link to this definition"></a></dt>
+<dd><p>Reads material properties from a CSV file and creates Material objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_id</strong> (<em>int</em>) – Identifier for the run.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.material_manager.material_manager.get_material">
+<span class="sig-name descname"><span class="pre">get_material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">material_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/material_manager.html#material_manager.get_material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.material_manager.material_manager.get_material" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the Material object for a given material name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>material_name</strong> (<em>str</em>) – The name of the material.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Material object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Material</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If the material does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-analysis.run_manager">
+<span id="analysis-run-manager-module"></span><h2>analysis.run_manager module<a class="headerlink" href="#module-analysis.run_manager" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.run_manager.primary_generator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.run_manager.</span></span><span class="sig-name descname"><span class="pre">primary_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_particles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_beam_dir">
+<span class="sig-name descname"><span class="pre">get_beam_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_beam_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_beam_dir" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_isotropic_dir">
+<span class="sig-name descname"><span class="pre">get_isotropic_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_isotropic_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_isotropic_dir" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_point_source_pos">
+<span class="sig-name descname"><span class="pre">get_point_source_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_point_source_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_point_source_pos" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_x_cone_dir">
+<span class="sig-name descname"><span class="pre">get_x_cone_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_x_cone_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_x_cone_dir" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_xy_disk_source_pos">
+<span class="sig-name descname"><span class="pre">get_xy_disk_source_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_xy_disk_source_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_xy_disk_source_pos" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_xz_disk_source_pos">
+<span class="sig-name descname"><span class="pre">get_xz_disk_source_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_xz_disk_source_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_xz_disk_source_pos" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_y_cone_dir">
+<span class="sig-name descname"><span class="pre">get_y_cone_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_y_cone_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_y_cone_dir" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.run_manager.run_manager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.run_manager.</span></span><span class="sig-name descname"><span class="pre">run_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geometry_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_particles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plots</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#run_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.run_manager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.run_manager.run_manager.propagate_photon">
+<span class="sig-name descname"><span class="pre">propagate_photon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#run_manager.propagate_photon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.run_manager.propagate_photon" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.run_manager.run_manager.reset_nonterminal_flags">
+<span class="sig-name descname"><span class="pre">reset_nonterminal_flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flag_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#run_manager.reset_nonterminal_flags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.run_manager.reset_nonterminal_flags" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.run_manager.run_manager.update_tallies">
+<span class="sig-name descname"><span class="pre">update_tallies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photons</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#run_manager.update_tallies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.run_manager.update_tallies" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-analysis.surface_manager">
+<span id="analysis-surface-manager-module"></span><h2>analysis.surface_manager module<a class="headerlink" href="#module-analysis.surface_manager" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.surface_manager.surface_manager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.surface_manager.</span></span><span class="sig-name descname"><span class="pre">surface_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">material_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.SiPMEmpirical_surface">
+<span class="sig-name descname"><span class="pre">SiPMEmpirical_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.SiPMEmpirical_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.SiPMEmpirical_surface" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.build_surfaces">
+<span class="sig-name descname"><span class="pre">build_surfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.build_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.build_surfaces" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.calc_R_T">
+<span class="sig-name descname"><span class="pre">calc_R_T</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_angles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.calc_R_T"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.calc_R_T" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.create_dichroic_surface">
+<span class="sig-name descname"><span class="pre">create_dichroic_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_mat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.create_dichroic_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.create_dichroic_surface" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.create_dielectric_metal_surface">
+<span class="sig-name descname"><span class="pre">create_dielectric_metal_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_mat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.create_dielectric_metal_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.create_dielectric_metal_surface" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.get_eta2_k2">
+<span class="sig-name descname"><span class="pre">get_eta2_k2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.get_eta2_k2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.get_eta2_k2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.get_surface">
+<span class="sig-name descname"><span class="pre">get_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.get_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.get_surface" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-analysis.test_chroma">
+<span id="analysis-test-chroma-module"></span><h2>analysis.test_chroma module<a class="headerlink" href="#module-analysis.test_chroma" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.test_chroma.test_Sebastian_08012023liquefaction_correctedSiPM">
+<span class="sig-prename descclassname"><span class="pre">analysis.test_chroma.</span></span><span class="sig-name descname"><span class="pre">test_Sebastian_08012023liquefaction_correctedSiPM</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/test_chroma.html#test_Sebastian_08012023liquefaction_correctedSiPM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.test_chroma.test_Sebastian_08012023liquefaction_correctedSiPM" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.test_chroma.test_Sebastian_FS_06082023_correctedSiPM">
+<span class="sig-prename descclassname"><span class="pre">analysis.test_chroma.</span></span><span class="sig-name descname"><span class="pre">test_Sebastian_FS_06082023_correctedSiPM</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/test_chroma.html#test_Sebastian_FS_06082023_correctedSiPM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.test_chroma.test_Sebastian_FS_06082023_correctedSiPM" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-analysis">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-analysis" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, PocarLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

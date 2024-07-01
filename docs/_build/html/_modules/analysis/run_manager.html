@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>analysis.run_manager &mdash; Chroma Analysis 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Chroma Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">analysis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Chroma Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">analysis.run_manager</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for analysis.run_manager</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">from</span> <span class="nn">chroma.sim</span> <span class="kn">import</span> <span class="n">Simulation</span>
+<span class="kn">from</span> <span class="nn">chroma.event</span> <span class="kn">import</span> <span class="n">Photons</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">mpl_toolkits</span> <span class="kn">import</span> <span class="n">mplot3d</span>
+
+<span class="kn">from</span> <span class="nn">chroma</span> <span class="kn">import</span> <span class="n">gpu</span>
+
+<span class="kn">from</span> <span class="nn">.analysis_manager</span> <span class="kn">import</span> <span class="n">analysis_manager</span>
+
+<div class="viewcode-block" id="run_manager">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.run_manager">[docs]</a>
+<span class="k">class</span> <span class="nc">run_manager</span><span class="p">:</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometry_manager</span><span class="p">,</span> <span class="n">experiment_name</span><span class="p">,</span> <span class="n">random_seed</span><span class="p">,</span> <span class="n">num_particles</span><span class="p">,</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">plots</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">num_steps</span> <span class="o">=</span> <span class="mi">100</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">run_id</span> <span class="o">=</span> <span class="n">run_id</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">random_seed</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">gm</span> <span class="o">=</span> <span class="n">geometry_manager</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">center_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gm</span><span class="o">.</span><span class="n">get_solid_center</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;source&#39;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span> <span class="o">=</span> <span class="n">num_particles</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gm</span><span class="o">.</span><span class="n">global_geometry</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">random_seed</span><span class="p">,</span> <span class="n">geant4_processes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">pg</span> <span class="o">=</span> <span class="n">primary_generator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">,</span> <span class="n">run_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">,</span> <span class="n">center_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_pos</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">propagate_photon</span><span class="p">()</span>
+
+		<span class="c1"># 	def __init__(self, geometry_manager, experiment_name, selected_plot, photons, photon_tracks = 1000, run_id = 0, seed = 0, histories = None):</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">ana_man</span> <span class="o">=</span> <span class="n">analysis_manager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gm</span><span class="p">,</span> <span class="n">experiment_name</span><span class="p">,</span> <span class="n">plots</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">photon_tracks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="p">)</span>
+
+
+
+<span class="c1"># create primary generator which will create all the initial photons. we will tell primary generator</span>
+<span class="c1"># what we want the source to be like</span>
+<span class="c1"># get Photons from primary generator</span>
+
+	<span class="c1"># def propagate_photon(self):</span>
+	<span class="c1"># 	nthreads_per_block = 64</span>
+	<span class="c1"># 	max_blocks = 1024</span>
+	<span class="c1"># 	seed = 20000000</span>
+
+	<span class="c1"># 	gpu_photons = gpu.GPUPhotons(self.pg.primary_photons)</span>
+	<span class="c1"># 	gpu_geometry = gpu.GPUGeometry(self.gm.global_geometry)</span>
+	<span class="c1"># 	self.photon_tracks = np.zeros((self.num_steps + 1, self.num_particles, 3))</span>
+	<span class="c1"># 	self.photon_tracks[0, :, :] = self.pg.positions</span>
+	<span class="c1"># 	rng_states = gpu.get_rng_states(nthreads_per_block * max_blocks, seed = seed)</span>
+	<span class="c1"># 	for i in range(self.num_steps):</span>
+	<span class="c1"># 		gpu_photons.propagate(gpu_geometry, rng_states, nthreads_per_block = nthreads_per_block, max_blocks = max_blocks, max_steps = 1)</span>
+	<span class="c1"># 		self.photons = gpu_photons.get()</span>
+	<span class="c1"># 		self.photon_tracks[i + 1, :, :] = self.photons.pos</span>
+	<span class="c1"># 		# photon_track[i,:,0] = photons.pos[:,0] </span>
+	<span class="c1"># 		# photon_track[i,:,1] = photons.pos[:,1] </span>
+	<span class="c1"># 		# photon_track[i,:,2] = photons.pos[:,2]</span>
+
+
+	<span class="c1">#where do we give value to photon_type, nr_steps, geometry, nthreads_per_block, max_blocks, rng_states?</span>
+
+<div class="viewcode-block" id="run_manager.propagate_photon">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.run_manager.propagate_photon">[docs]</a>
+	<span class="k">def</span> <span class="nf">propagate_photon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">nthreads_per_block</span> <span class="o">=</span> <span class="mi">64</span>   	
+		<span class="n">max_blocks</span> <span class="o">=</span> <span class="mi">1024</span>
+		<span class="n">seed</span> <span class="o">=</span> <span class="mi">20000000</span>
+
+		<span class="n">gpu_photons</span> <span class="o">=</span> <span class="n">gpu</span><span class="o">.</span><span class="n">GPUPhotons</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="o">.</span><span class="n">primary_photons</span><span class="p">)</span>
+		<span class="n">gpu_geometry</span> <span class="o">=</span> <span class="n">gpu</span><span class="o">.</span><span class="n">GPUGeometry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gm</span><span class="o">.</span><span class="n">global_geometry</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">photon_tracks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">num_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">photon_tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="o">.</span><span class="n">positions</span>
+		<span class="n">rng_states</span> <span class="o">=</span> <span class="n">gpu</span><span class="o">.</span><span class="n">get_rng_states</span><span class="p">(</span><span class="n">nthreads_per_block</span> <span class="o">*</span> <span class="n">max_blocks</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">interactions</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;RAYLEIGH_SCATTER&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+							 <span class="s1">&#39;REFLECT_DIFFUSE&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> 
+							 <span class="s1">&#39;REFLECT_SPECULAR&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+							 <span class="s1">&#39;SURFACE_REEMIT&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+							 <span class="s1">&#39;SURFACE_TRANSMIT&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+							 <span class="s1">&#39;BULK_REEMIT&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+							 <span class="s1">&#39;CHERENKOV&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+							 <span class="s1">&#39;SCINTILLATION&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">}</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span> <span class="o">=</span> <span class="p">{</span><span class="n">curr_int</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">curr_int</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interactions</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_steps</span><span class="p">):</span>
+			<span class="c1"># propagate photons</span>
+			<span class="n">gpu_photons</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span><span class="n">gpu_geometry</span><span class="p">,</span> <span class="n">rng_states</span><span class="p">,</span> <span class="n">nthreads_per_block</span> <span class="o">=</span> <span class="n">nthreads_per_block</span><span class="p">,</span> <span class="n">max_blocks</span> <span class="o">=</span> <span class="n">max_blocks</span><span class="p">,</span> <span class="n">max_steps</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+			<span class="c1"># from GPUPhoton get event.Photon object</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">photons</span> <span class="o">=</span> <span class="n">gpu_photons</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">photon_tracks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="o">.</span><span class="n">pos</span>
+			<span class="c1"># collect information from flags about interaction history</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">update_tallies</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="p">)</span>
+			<span class="c1"># reset interaction history bits that are nonterminal</span>
+			<span class="n">new_flags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_nonterminal_flags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span>
+			<span class="n">gpu_photons</span><span class="o">.</span><span class="n">flags</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">new_flags</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">))</span></div>
+
+			
+
+<div class="viewcode-block" id="run_manager.reset_nonterminal_flags">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.run_manager.reset_nonterminal_flags">[docs]</a>
+	<span class="k">def</span> <span class="nf">reset_nonterminal_flags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flag_list</span><span class="p">):</span>
+		<span class="c1"># mask = 1111111111111111111000000001111</span>
+		<span class="n">mask</span> <span class="o">=</span> <span class="mi">2147479567</span>
+		<span class="k">return</span> <span class="n">flag_list</span> <span class="o">&amp;</span> <span class="n">mask</span></div>
+
+
+<div class="viewcode-block" id="run_manager.update_tallies">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.run_manager.update_tallies">[docs]</a>
+	<span class="k">def</span> <span class="nf">update_tallies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">photons</span><span class="p">):</span>
+		<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interactions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+			<span class="n">curr_tally</span> <span class="o">=</span> <span class="p">(</span><span class="n">photons</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mh">0x1</span> <span class="o">&lt;&lt;</span> <span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+=</span> <span class="n">curr_tally</span></div>
+</div>
+
+			<span class="c1"># print(key, self.particle_histories[key])</span>
+
+
+
+<div class="viewcode-block" id="primary_generator">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.primary_generator">[docs]</a>
+<span class="k">class</span> <span class="nc">primary_generator</span><span class="p">:</span> <span class="c1">#photon generator</span>
+	<span class="c1"># C++: methods/functions</span>
+	<span class="c1"># def __init__(self, num_particles, center_pos = [0, 0, 0], delta_placement = 0.0):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_particles</span><span class="p">,</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">center_pos</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span> <span class="o">=</span> <span class="n">num_particles</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">center_pos</span> <span class="o">=</span> <span class="n">center_pos</span>
+
+
+		<span class="c1"># positions</span>
+
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_point_source_pos</span><span class="p">(</span><span class="n">x0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+											<span class="n">y0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+											<span class="n">z0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_pos</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+		<span class="c1"># self.positions = self.get_xz_disk_source_pos(x0 = self.center_pos[0],</span>
+		<span class="c1"># 									y0 = self.center_pos[1],</span>
+		<span class="c1"># 									z0 = self.center_pos[2],</span>
+		<span class="c1"># 									r = 2.5)</span>
+
+		<span class="c1"># beam_dir = self.get_beam_dir(px = 0, py = 1, pz = 0)# The beam travel in y direction</span>
+		
+		<span class="c1"># from 0705, try to define the angle of the beam_direction rather than just in y</span>
+
+	    <span class="c1"># define the beam angle from run_id</span>
+
+		<span class="c1"># angle = np.pi * (61.5+0.1*(run_id)) / 180</span>
+		<span class="c1"># angle = np.pi * 60.5/ 180</span>
+		<span class="c1"># phi_angle = np.pi*45 / 180</span>
+		<span class="c1"># beam_dir = self.get_beam_dir(angle)</span>
+		<span class="c1"># print(&quot;the beam angle in degree is&quot;, angle*180 / np.pi)</span>
+
+		<span class="c1"># x_cone_dir = self.get_x_cone_dir(angle = np.pi, positive = False)</span>
+
+		<span class="c1"># y_cone_dir = self.get_y_cone_dir(angle = np.pi / 32.0, positive = True)</span>
+
+		<span class="c1"># curr_dir = y_cone_dir</span>
+		<span class="n">isotropic_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_isotropic_dir</span><span class="p">()</span>
+		<span class="c1"># self.directions = y_cone_dir</span>
+		<span class="c1"># self.directions = beam_dir</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">directions</span> <span class="o">=</span> <span class="n">isotropic_dir</span>
+
+		<span class="c1"># fig = plt.figure()</span>
+		<span class="c1"># ax = plt.axes(projection = &#39;3d&#39;)</span>
+
+		<span class="c1"># ax.scatter(curr_dir[:, 0], curr_dir[:, 1], curr_dir[:, 2])</span>
+		<span class="c1"># ax.set_xlim(-1, 1)</span>
+		<span class="c1"># ax.set_ylim(-1, 1)</span>
+		<span class="c1"># ax.set_zlim(-1, 1)</span>
+		<span class="c1"># plt.xlabel(&#39;x&#39;)</span>
+		<span class="c1"># plt.ylabel(&#39;y&#39;)</span>
+
+		<span class="c1"># plt.show(block = True)</span>
+
+		<span class="c1"># polarization</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">polarization</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_isotropic_dir</span><span class="p">())</span>
+		<span class="c1"># wavelengths</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">wavelengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span> <span class="o">*</span> <span class="mf">175.0</span>
+		<span class="c1"># create photons</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">primary_photons</span> <span class="o">=</span> <span class="n">Photons</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">,</span>
+									<span class="bp">self</span><span class="o">.</span><span class="n">directions</span><span class="p">,</span>
+									<span class="bp">self</span><span class="o">.</span><span class="n">polarization</span><span class="p">,</span>
+									<span class="bp">self</span><span class="o">.</span><span class="n">wavelengths</span><span class="p">)</span>
+
+<div class="viewcode-block" id="primary_generator.get_point_source_pos">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.primary_generator.get_point_source_pos">[docs]</a>
+	<span class="k">def</span> <span class="nf">get_point_source_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">],</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
+
+
+	<span class="c1"># input center of disk and radius</span>
+<div class="viewcode-block" id="primary_generator.get_xy_disk_source_pos">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.primary_generator.get_xy_disk_source_pos">[docs]</a>
+	<span class="k">def</span> <span class="nf">get_xy_disk_source_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+		<span class="c1"># pos_array = np.empty(self.num_particles, 3)</span>
+		<span class="n">curr_sqrtr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">))</span>
+		<span class="n">curr_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span>
+		<span class="n">curr_x</span> <span class="o">=</span> <span class="n">curr_sqrtr</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">curr_theta</span><span class="p">)</span> <span class="o">+</span> <span class="n">x0</span>
+		<span class="n">curr_y</span> <span class="o">=</span> <span class="n">curr_sqrtr</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">curr_theta</span><span class="p">)</span> <span class="o">+</span> <span class="n">y0</span>
+		<span class="n">curr_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span> <span class="o">*</span> <span class="n">z0</span>
+		<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">curr_x</span><span class="p">,</span> <span class="n">curr_y</span><span class="p">,</span> <span class="n">curr_z</span><span class="p">))</span><span class="o">.</span><span class="n">T</span></div>
+
+<div class="viewcode-block" id="primary_generator.get_xz_disk_source_pos">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.primary_generator.get_xz_disk_source_pos">[docs]</a>
+	<span class="k">def</span> <span class="nf">get_xz_disk_source_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+		<span class="c1"># pos_array = np.empty(self.num_particles, 3)</span>
+		<span class="n">curr_sqrtr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">))</span>
+		<span class="n">curr_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span>
+		<span class="n">curr_x</span> <span class="o">=</span> <span class="n">curr_sqrtr</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">curr_theta</span><span class="p">)</span> <span class="o">+</span> <span class="n">x0</span>
+		<span class="n">curr_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span> <span class="o">*</span> <span class="n">y0</span>
+		<span class="n">curr_z</span> <span class="o">=</span> <span class="n">curr_sqrtr</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">curr_theta</span><span class="p">)</span> <span class="o">+</span> <span class="n">z0</span>
+		<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">curr_x</span><span class="p">,</span> <span class="n">curr_y</span><span class="p">,</span> <span class="n">curr_z</span><span class="p">))</span><span class="o">.</span><span class="n">T</span></div>
+
+
+	<span class="c1"># def get_yz_disk_source_pos(self, x0, y0, z0, r):</span>
+
+	<span class="c1"># def get_xy_cylinder_source_pos(self, x0, y0, z0, r, h):</span>
+
+
+<div class="viewcode-block" id="primary_generator.get_isotropic_dir">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.primary_generator.get_isotropic_dir">[docs]</a>
+	<span class="k">def</span> <span class="nf">get_isotropic_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span>
+		<span class="c1"># phi = np.random.uniform(0, np.pi, self.num_particles)</span>
+		<span class="c1"># mu = cos(theta)</span>
+		<span class="n">cos_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span>
+		<span class="n">sin_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cos_theta</span> <span class="o">*</span> <span class="n">cos_theta</span><span class="p">)</span>
+
+		<span class="n">curr_px</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin_theta</span>
+		<span class="n">curr_py</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin_theta</span>
+		<span class="n">curr_pz</span> <span class="o">=</span> <span class="n">cos_theta</span>
+		<span class="c1"># print(np.shape(curr_pz))</span>
+		<span class="c1"># theta = math.acos(curr_pz)</span>
+		<span class="c1"># emit_angle = (0.5 * np.pi) - theta</span>
+		<span class="c1"># self.get_emission_angle(emit_angle)</span>
+		<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">curr_px</span><span class="p">,</span> <span class="n">curr_py</span><span class="p">,</span> <span class="n">curr_pz</span><span class="p">))</span><span class="o">.</span><span class="n">T</span></div>
+
+
+
+	<span class="c1"># #07/11 get emission angle</span>
+	<span class="c1"># def get_emission_angle(self, emission_angle):</span>
+	<span class="c1"># 	self.emission_angle = emission_angle</span>
+	<span class="c1"># 	print(&quot;emission angle is&quot;, self.emission_angle)</span>
+	<span class="c1"># 	return self.emission_angle</span>
+		
+    <span class="c1"># 07/05, get the beam move in xy plane in +/- x direction;</span>
+<div class="viewcode-block" id="primary_generator.get_beam_dir">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.primary_generator.get_beam_dir">[docs]</a>
+	<span class="k">def</span> <span class="nf">get_beam_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+		<span class="n">curr_py</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+		<span class="n">curr_px</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+		<span class="c1"># # curr_pz = 0 shifting the beam in xy plane</span>
+		<span class="n">curr_pz</span> <span class="o">=</span> <span class="mi">0</span> 
+		<span class="c1"># curr_pz = np.sin(angle)*np.cos(phi_angle)</span>
+		<span class="c1"># curr_px = np.sin(angle)*np.sin(phi_angle)</span>
+		<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">([</span><span class="n">curr_px</span><span class="p">,</span> <span class="n">curr_py</span><span class="p">,</span> <span class="n">curr_pz</span><span class="p">],</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="primary_generator.get_x_cone_dir">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.primary_generator.get_x_cone_dir">[docs]</a>
+	<span class="k">def</span> <span class="nf">get_x_cone_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">positive</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+		<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span>
+		<span class="n">cos_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span>
+		<span class="n">sin_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cos_theta</span> <span class="o">*</span> <span class="n">cos_theta</span><span class="p">)</span>
+
+		<span class="n">curr_px</span> <span class="o">=</span> <span class="n">cos_theta</span>
+		<span class="n">curr_py</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin_theta</span>
+		<span class="n">curr_pz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin_theta</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">positive</span><span class="p">:</span>
+			<span class="n">curr_px</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+		<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">curr_px</span><span class="p">,</span> <span class="n">curr_py</span><span class="p">,</span> <span class="n">curr_pz</span><span class="p">))</span><span class="o">.</span><span class="n">T</span></div>
+
+
+<div class="viewcode-block" id="primary_generator.get_y_cone_dir">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.run_manager.primary_generator.get_y_cone_dir">[docs]</a>
+	<span class="k">def</span> <span class="nf">get_y_cone_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">positive</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+		<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span>
+		<span class="n">cos_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span>
+		<span class="n">sin_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cos_theta</span> <span class="o">*</span> <span class="n">cos_theta</span><span class="p">)</span>
+
+		<span class="n">curr_px</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin_theta</span>
+		<span class="n">curr_py</span> <span class="o">=</span> <span class="n">cos_theta</span>
+		<span class="n">curr_pz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin_theta</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">positive</span><span class="p">:</span>
+			<span class="n">curr_py</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+		<span class="c1"># print(np.vstack((curr_px, curr_py, curr_pz)).T)</span>
+		<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">curr_px</span><span class="p">,</span> <span class="n">curr_py</span><span class="p">,</span> <span class="n">curr_pz</span><span class="p">))</span><span class="o">.</span><span class="n">T</span></div>
+</div>
+
+		
+
+
+	<span class="c1"># for placement:</span>
+	<span class="c1"># -feed in specific geometry component name and use the center as the location for photons</span>
+	<span class="c1"># -feed in specific geometry component name and use entire surface (for a disk case)</span>
+	<span class="c1"># -feed in specific (x, y, z) point</span>
+	<span class="c1"># -feed in disk with center (x, y, z) and radius r</span>
+	<span class="c1"># -feed in cylinder with center (x, y, z) with radius r and height h</span>
+
+	<span class="c1"># for direction</span>
+	<span class="c1"># -isotropic (equal probability in all directions) half space?</span>
+	<span class="c1"># -cone defined by angle theta and mu direction</span>
+	<span class="c1"># -beam defined by mu direction</span>
+	<span class="c1"># -only simulate half space/reduced space?</span>
+
+	<span class="c1"># create Photons(position_array,direction_array,polarization_array,wavelengths_array)</span>
+
+	
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, PocarLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

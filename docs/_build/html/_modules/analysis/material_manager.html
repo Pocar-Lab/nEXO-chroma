@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>analysis.material_manager &mdash; Chroma Analysis 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Chroma Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">analysis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Chroma Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">analysis.material_manager</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for analysis.material_manager</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">from</span> <span class="nn">chroma.geometry</span> <span class="kn">import</span> <span class="n">Material</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1"># read materials from database</span>
+<span class="c1"># randomize functionality</span>
+
+<div class="viewcode-block" id="material_manager">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.material_manager.material_manager">[docs]</a>
+<span class="k">class</span> <span class="nc">material_manager</span><span class="p">:</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manages materials by reading their properties from a CSV file and creating Material objects.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        experiment_name (str): Name of the experiment.</span>
+<span class="sd">        run_id (int): Identifier for the run.</span>
+<span class="sd">        material_data_path (str): Path to the CSV file with material properties.</span>
+<span class="sd">        materials_df (pd.DataFrame): DataFrame containing the material properties.</span>
+<span class="sd">        materials (dict): Dictionary of Material objects.</span>
+<span class="sd">        material_props (dict): Dictionary of material properties.</span>
+<span class="sd">        global_material (Material): The global material used in the experiment.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiment_name</span><span class="p">,</span> <span class="n">run_id</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the material_manager with the given experiment name and run ID.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            experiment_name (str): Name of the experiment.</span>
+<span class="sd">            run_id (int): Identifier for the run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/bulk_materials.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/copperplates_06.23.2022/bulk_materials _copperplates_06232022.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/beam_direction_06.30.2022/bulk_materials _copperplates_06302022.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/silica_window_07.18.2022/bulk_materials _silica_window_07182022.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/source_copperholder_08.16.2022/bulk_materials __sourceCu_holder_08162022.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/copper_gasket_08.29.2022/bulk_materials _coppergasket_08292022.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/Al_filler_02.07.2023/bulk_materials _Alfiller_02072023.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/sourcepart_05.11.2023/bulk_materials _sourcepart_05112023.csv&#39;</span>
+		<span class="c1"># self.material_data_path =&#39;/workspace/data_files/data/Sebastian_teflon_05.12 .2023/bulk_materials _Sebastian_teflon_0512.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/Sebastian_teflon_05.23.2023/bulk_materials _Sebastian_teflon_0523.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/Sebastian_teflon_upperlimit_06.05.2023/bulk_materials _Sebastian_teflon_upper_0605.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/Sebastian_flippedsource_06.06.2023/bulk_materials _Sebastian_teflon_FS_0606.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/bulk_materials _Sebastian_teflon_FS_0608_corrected.csv&#39;</span>
+		<span class="c1"># self.material_data_path = &#39;/workspace/data_files/data/Sebastian_03.31.2023(liquefaction_corrrectedSiPM)/bulk_materials _Sebastian_03312023_corrected.csv&#39;</span>
+		<span class="c1"># self.material_data_path =&#39;/workspace/data_files/data/Sebastian_05.18.2023(liquefaction)_correctedSiPM/bulk_materials _Sebastian_teflon_0518_corrected.csv&#39;</span>
+		<span class="c1"># self.material_data_path =&#39;/workspace/data_files/data/Sebastian_07.20.2022(liquefaction)_corrrectedSiPM/bulk_materials _Sebastian_07202022_corrected.csv&#39;</span>
+		<span class="c1">#self.material_data_path = &#39;/workspace/data_files/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/bulk_materials _Sebastian_Pdreflector_0801_corrected.csv&#39;</span>
+	
+		<span class="bp">self</span><span class="o">.</span><span class="n">material_data_path</span> <span class="o">=</span> <span class="s1">&#39;/workspace/data_files/data/&#39;</span> <span class="o">+</span> <span class="n">experiment_name</span> <span class="o">+</span> <span class="s1">&#39;/bulk_materials_&#39;</span> <span class="o">+</span> <span class="n">experiment_name</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span>
+	
+		<span class="bp">self</span><span class="o">.</span><span class="n">run_id</span> <span class="o">=</span> <span class="n">run_id</span>
+		<span class="c1"># self.savedata_path = &#39;/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/Cu_reflector_etal_vary_Cu_eta_LXe_eta.csv&#39;</span>
+		<span class="c1"># self.savedata_path =&#39;/workspace/data_files/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/datapoints/Si_reflector_vary_Si_eta_LXe_eta.csv&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">build_materials</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">global_material</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="s1">&#39;liquid xenon&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="material_manager.add_attributes">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.material_manager.material_manager.add_attributes">[docs]</a>
+	<span class="k">def</span> <span class="nf">add_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+				<span class="n">curr_material</span><span class="p">,</span>
+				<span class="n">refractive_index</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+				<span class="n">absorption_length</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+				<span class="n">scattering_length</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+				<span class="n">density</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the optical properties for a given material.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            curr_material (Material): The Material object to which attributes are added.</span>
+<span class="sd">            refractive_index (float): Refractive index of the material.</span>
+<span class="sd">            absorption_length (float): Absorption length of the material.</span>
+<span class="sd">            scattering_length (float): Scattering length of the material.</span>
+<span class="sd">            density (float): Density of the material.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+		<span class="c1">#set the optical index grabbed from csv file for simulation</span>
+		<span class="n">curr_material</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;refractive_index&#39;</span><span class="p">,</span> <span class="n">refractive_index</span><span class="p">)</span> 
+		<span class="n">curr_material</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;absorption_length&#39;</span><span class="p">,</span> <span class="n">absorption_length</span><span class="p">)</span> 
+		<span class="n">curr_material</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;scattering_length&#39;</span><span class="p">,</span> <span class="n">scattering_length</span><span class="p">)</span>
+		<span class="n">curr_material</span><span class="o">.</span><span class="n">density</span> <span class="o">=</span> <span class="n">density</span></div>
+
+
+		<span class="c1"># print(refractive_index)</span>
+		<span class="c1"># return refractive_index</span>
+
+<div class="viewcode-block" id="material_manager.build_materials">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.material_manager.material_manager.build_materials">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_materials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">run_id</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads material properties from a CSV file and creates Material objects.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            run_id (int): Identifier for the run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+		<span class="c1"># read in the csv file into dataframe</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">materials_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">material_data_path</span><span class="p">)</span>
+		<span class="c1">#print(self.materials_df)</span>
+		<span class="c1"># iterate through all materials and create Material object, store into dictionary of materials</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">materials</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">material_props</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">materials_df</span><span class="o">.</span><span class="n">columns</span>
+		<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">materials_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+			<span class="n">curr_name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="c1">#name of the material		</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">curr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Material</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="n">curr_name</span><span class="p">)</span>	
+			<span class="c1"># # # below define material properties without referring to the material property csv</span>
+			<span class="c1"># if curr_name == &#39;silicon&#39;:</span>
+			<span class="c1"># 	# column = [&#39;Cu eta&#39;]</span>
+			<span class="c1"># 	# copper_eta_ = pd.read_csv(self.savedata_path,usecols=column).to_numpy()</span>
+			<span class="c1"># 	# copper_eta_all = copper_eta_.flatten()</span>
+			<span class="c1"># 	# copper_eta = copper_eta_all[self.run_id]</span>
+			<span class="c1"># 	# row[&#39;eta&#39;] = round(random.uniform(0.72553,0.96400),4)</span>
+			<span class="c1"># 	# row[&#39;eta&#39;] = copper_eta</span>
+			<span class="c1"># 	row[&#39;k&#39;] = round(random.uniform(1.7223,2.0872),4)</span>
+			<span class="c1"># # 	row[&#39;k&#39;] = 1.413</span>
+			<span class="c1"># 	print(&#39;silicon k&#39;,row[&#39;k&#39;])</span>
+
+
+
+			<span class="c1"># if curr_name == &#39;liquid xenon&#39;:	</span>
+			<span class="c1"># # # # 	column = [&#39;LXe Index of Refraction&#39;]</span>
+			<span class="c1"># # # # 	LXe_eta_ = pd.read_csv(self.savedata_path,usecols=column).to_numpy()</span>
+			<span class="c1"># # # # 	LXe_eta_all = LXe_eta_.flatten()</span>
+			<span class="c1"># # # # 	LXe_eta = LXe_eta_all[self.run_id]</span>
+			<span class="c1"># # # 	# row[&#39;refractive_index&#39;] = round(random.uniform(1.59,1.78),4)</span>
+			<span class="c1">#  	row[&#39;refractive_index&#39;] = 1.60+(run_id)*0.01</span>
+			<span class="c1">#  	print(&#39;LXe&#39;,row[&#39;refractive_index&#39;])</span>
+			<span class="c1">#  	# row[&#39;refractive_index&#39;] = 1.69</span>
+			<span class="c1"># # 	#row[&#39;refractive_index&#39;] = LXe_eta</span>
+				
+
+			<span class="c1"># if curr_name == &#39;silicon&#39;:</span>
+			<span class="c1"># 	row[&#39;eta&#39;] = pd.read_csv(&#39;/home/chroma/Downloads/Silicon_Refractive_Indices.csv&#39;, usecols = [&#39;n&#39;]).to_numpy().flatten()[run_id]</span>
+			<span class="c1"># 	print(row[&#39;eta&#39;])</span>
+			<span class="c1"># 	row[&#39;k&#39;] = pd.read_csv(&#39;/home/chroma/Downloads/Silicon_Refractive_Indices.csv&#39;, usecols = [&#39;k&#39;]).to_numpy().flatten()[run_id]</span>
+			<span class="c1"># 	print(row[&#39;k&#39;])</span>
+
+			<span class="c1"># if curr_name == &#39;copper&#39;:</span>
+			<span class="c1"># 	row[&#39;eta&#39;] = pd.read_csv(&#39;/workspace/data_files/Werner_Cu_Refractive_Indices.csv&#39;, usecols = [&#39;n&#39;]).to_numpy().flatten()[run_id]</span>
+			<span class="c1"># 	print(&#39;Cu&#39;,row[&#39;eta&#39;])</span>
+			<span class="c1"># 	row[&#39;k&#39;] = pd.read_csv(&#39;/workspace/data_files/Werner_Cu_Refractive_Indices.csv&#39;, usecols = [&#39;k&#39;]).to_numpy().flatten()[run_id]</span>
+			<span class="c1"># 	print(&#39;Cu&#39;,row[&#39;k&#39;])</span>
+
+			<span class="bp">self</span><span class="o">.</span><span class="n">add_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">curr_name</span><span class="p">],</span>
+								<span class="c1">#refractive_index = r_i,</span>
+								<span class="c1">#refractive_index = row[&#39;refractive_index&#39;]+random.uniform(-row[&#39;abs(r_i_error)&#39;],row[&#39;abs(r_i_error)&#39;]), # only used when no surface model is defined</span>
+								<span class="n">refractive_index</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;refractive_index&#39;</span><span class="p">],</span>
+								<span class="n">absorption_length</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;absorption_length&#39;</span><span class="p">],</span>
+								<span class="n">scattering_length</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;scattering_length&#39;</span><span class="p">],</span>
+								<span class="n">density</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;density&#39;</span><span class="p">])</span>
+
+			<span class="bp">self</span><span class="o">.</span><span class="n">material_props</span><span class="p">[</span><span class="n">curr_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">row</span><span class="p">)</span></div>
+
+			<span class="c1"># print(&#39;material props&#39;,self.material_props)</span>
+			<span class="c1"># try to update the real refractive_index to the csv. file</span>
+		<span class="c1"># print(self.materials)</span>
+
+
+
+<div class="viewcode-block" id="material_manager.get_material">
+<a class="viewcode-back" href="../../source/analysis.html#analysis.material_manager.material_manager.get_material">[docs]</a>
+	<span class="k">def</span> <span class="nf">get_material</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">material_name</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the Material object for a given material name.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            material_name (str): The name of the material.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Material: The Material object.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: If the material does not exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+		<span class="c1"># check to see if material exists. if not, throw exception</span>
+		<span class="k">if</span> <span class="n">material_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">materials</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">material_name</span><span class="p">]</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Material does not exist: &#39;</span> <span class="o">+</span> <span class="n">material_name</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, PocarLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
