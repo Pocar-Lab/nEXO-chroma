@@ -21,10 +21,10 @@ class geometry_manager:
         creating solid objects, and organizing them into a detector geometry.
         
         Attributes:
-            experiment_name (str): Name of the experiment.
+            experiment_name (str): String used to identify each experiment.
             run_id (int): Identifier for the run.
-            mat_manager (material_manager): Manager for materials.
-            surf_manager (surface_manager): Manager for surfaces.
+            mat_manager (material_manager): Instance of the material_manager class.
+            surf_manager (surface_manager): Instance of the surface_manager class.
             global_geometry (Detector): The global detector geometry.
             geometry_data_path (str): Path to the CSV file with geometry component data.
             geometry_df (pd.DataFrame): DataFrame containing the geometry component data.
@@ -35,7 +35,7 @@ class geometry_manager:
         Initializes the geometry_manager with the given experiment name and run ID.
         
         Args:
-            experiment_name (str): Name of the experiment.
+            experiment_name (str): String used to identify each experiment.
             run_id (int): Identifier for the run.
             visualize (bool): If True, visualize the geometry.
         """

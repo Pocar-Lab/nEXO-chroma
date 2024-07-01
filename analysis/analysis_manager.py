@@ -17,9 +17,9 @@ class analysis_manager:
     Attributes
     ----------
     gm : object
-        Geometry manager.
+        Instance of the geometry_manager class.
     experiment_name : str
-        Name of the experiment.
+        String used to identify each experiment.
     photons : ndarray
         Array of photons.
     photon_tracks : int
@@ -206,8 +206,6 @@ class analysis_manager:
         linewidth : int, optional
             Line width of the tracks (default is 1).
         """
-		# fig = plt.figure()
-		# ax = plt.axes(projection='3d')
 
 		figure = plt.figure()
 		axes = mplot3d.Axes3D(figure)
@@ -371,7 +369,7 @@ class analysis_manager:
         Parameters
         ----------
         num_tracks : int, optional
-            Number of tracks to plot (default is None, which means all).
+            Number of tracks to plot (default is None, which means all photons will be plotted.).
         detected_only : bool, optional
             Whether to include only detected photons (default is True).
         reflected_only : bool, optional
