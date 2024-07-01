@@ -11,7 +11,7 @@ from mpl_toolkits import mplot3d
 
 from chroma import gpu
 
-from analysis_manager import analysis_manager
+from .analysis_manager import analysis_manager
 
 class run_manager:
 	def __init__(self, geometry_manager, experiment_name, random_seed, num_particles, run_id, plots):

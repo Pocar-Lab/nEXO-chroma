@@ -11,7 +11,87 @@ from array import array
 
 
 class analysis_manager:
+	"""
+    Manages the analysis of photon tracks and generates various plots.
+
+    Attributes
+    ----------
+    gm : object
+        Geometry manager.
+    experiment_name : str
+        Name of the experiment.
+    photons : ndarray
+        Array of photons.
+    photon_tracks : int
+        Number of photon tracks.
+    run_id : int
+        ID of the run.
+    seed : int
+        Seed for random number generation.
+    particle_histories : dict
+        Dictionary containing particle histories.
+    selected_plots : list
+        List of selected plots to generate.
+    all_tracks : list
+        List to store all photon tracks.
+    detected_tracks : list
+        List to store detected photon tracks.
+    undetected_tracks : list
+        List to store undetected photon tracks.
+    reflected_tracks : list
+        List to store reflected photon tracks.
+    filtered_scattered_tracks : list
+        List to store scattered but not detected or specularly reflected photon tracks.
+    detected_reflected_tracks : list
+        List to store detected and reflected photon tracks.
+    specular_reflected_tracks : list
+        List to store specularly reflected photon tracks.
+    diffuse_reflected_tracks : list
+        List to store diffusely reflected photon tracks.
+    num_particles : int
+        Number of particles.
+    num_tracks : int
+        Number of tracks.
+    plots : list
+        List of plots.
+    geometry_data_path : str
+        Path to the geometry data file.
+    plot_functions : dict
+        Dictionary of plot functions.
+    tallies : dict
+        Dictionary to store tallies.
+    efficiency : float
+        Efficiency of photon detection.
+    detected_positions : ndarray
+        Positions of detected photons.
+    detected_angles : ndarray
+        Angles of detected photons.
+    emit_angle : int
+        Emission angle.
+    """
 	def __init__(self, geometry_manager, experiment_name, selected_plots, photons, photon_tracks = 1000, run_id = 0, seed = 0, histories = None):
+		"""
+        Initializes the analysis manager.
+
+        Parameters
+        ----------
+        geometry_manager : object
+            Geometry manager.
+        experiment_name : str
+            Name of the experiment.
+        selected_plots : list
+            List of selected plots to generate.
+        photons : ndarray
+            Array of photons.
+        photon_tracks : int, optional
+            Number of photon tracks (default is 1000).
+        run_id : int, optional
+            ID of the run (default is 0).
+        seed : int, optional
+            Seed for random number generation (default is 0).
+        histories : dict, optional
+            Dictionary containing particle histories (default is None).
+        """
 		self.gm = geometry_manager
 		self.experiment_name = experiment_name
 		self.photons = photons
@@ -62,6 +142,9 @@ class analysis_manager:
 
 
 	def preprocess_tracks(self):
+		"""
+        Preprocesses the photon tracks and categorizes them.
+        """
 		num_particles = self.num_particles
 		self.all_tracks = []
 		self.detected_tracks = []     			# tracks of photons detected
@@ -107,6 +190,22 @@ class analysis_manager:
 
 
 	def plot_tracks(self, tracks, title, plot_geometry, color='tab:blue', linewidth=1):
+		"""
+        Plots the photon tracks in 3D.
+
+        Parameters
+        ----------
+        tracks : list
+            List of photon tracks to plot.
+        title : str
+            Title of the plot.
+        plot_geometry : bool
+            Whether to plot the geometry.
+        color : str, optional
+            Color of the tracks (default is 'tab:blue').
+        linewidth : int, optional
+            Line width of the tracks (default is 1).
+        """
 		# fig = plt.figure()
 		# ax = plt.axes(projection='3d')
 
@@ -149,10 +248,26 @@ class analysis_manager:
 		plt.show()
 
 	def incident_angle(self, last_pos):
+		"""
+        Calculates the incident angle of photons.
+
+        Parameters
+        ----------
+        last_pos : ndarray
+            Array of last positions of the photons.
+
+        Returns
+        -------
+        ndarray
+            Array of incident angles in degrees.
+        """
 		angles = np.arccos(np.fabs(last_pos[:,1])/np.sqrt((last_pos[:,0]**2 + last_pos[:,1]**2 + last_pos[:,2]**2)))*(180./np.pi)
 		return angles
 
 	def get_tallies(self):
+		"""
+        Retrieves and prints tallies of different photon interactions.
+        """
 		self.tallies = {}
 		self.tallies['NO_HIT']           = (self.photons.flags & (0x1 << 0)).astype(bool)
 		self.tallies['BULK_ABSORB']      = (self.photons.flags & (0x1 << 1)).astype(bool)
@@ -191,6 +306,14 @@ class analysis_manager:
 
 
 	def save_detected(self, filename):
+		"""
+        Saves the detected photon data to a CSV file.
+
+        Parameters
+        ----------
+        filename : str
+            Path to the file where the data will be saved.
+        """
 		# lxe_refractive_index = self.gm.mat_manager.get_material('liquid xenon').refractive_index[0, 1]
 		lxe_refractive_index = self.gm.mat_manager.material_props['liquid xenon']['refractive_index']
 		# print(lxe_refractive_index,'in saved detected')
@@ -242,6 +365,20 @@ class analysis_manager:
 
 
 	def photon_shooting_angle(self, num_tracks = None, detected_only = True, reflected_only = False, diffuse_only = False):
+		"""
+        Plots the distribution of photon shooting angles.
+
+        Parameters
+        ----------
+        num_tracks : int, optional
+            Number of tracks to plot (default is None, which means all).
+        detected_only : bool, optional
+            Whether to include only detected photons (default is True).
+        reflected_only : bool, optional
+            Whether to include only reflected photons (default is False).
+        diffuse_only : bool, optional
+            Whether to include only diffusely reflected photons (default is False).
+        """
 		if num_tracks == None:
 			num_tracks = self.num_particles
 
@@ -281,6 +418,20 @@ class analysis_manager:
 
 #Sili: added on 02/07/2023 to plot the shooting angle and emission angle correlation of detected photons
 	def photon_incident_angle_emission_angle_correlation(self, num_tracks = None, detected_only = True, reflected_specular_only = True, reflected_diffuse_only = False):
+		"""
+        Plots the correlation between photon incident and emission angles.
+
+        Parameters
+        ----------
+        num_tracks : int, optional
+            Number of tracks to plot (default is None, which means all).
+        detected_only : bool, optional
+            Whether to include only detected photons (default is True).
+        reflected_specular_only : bool, optional
+            Whether to include only specularly reflected photons (default is True).
+        reflected_diffuse_only : bool, optional
+            Whether to include only diffusely reflected photons (default is False).
+        """
 		if num_tracks == None:
 			num_tracks = self.num_particles
 
@@ -360,6 +511,21 @@ class analysis_manager:
 		plt.show()
 
 	def plot_angle_hist(self,histogramfilename, showPlot = True):
+		"""
+        Plots a histogram of the detected photon angles and saves the data to a CSV file.
+
+        Parameters
+        ----------
+        histogramfilename : str
+            Path to the file where the histogram data will be saved.
+        showPlot : bool, optional
+            Whether to show the plot (default is True).
+
+        Returns
+        -------
+        ndarray
+            Array of histogram values.
+        """
      
 		lxe_refractive_index = self.gm.mat_manager.material_props['liquid xenon']['refractive_index']
 		fig = plt.figure()
@@ -383,6 +549,9 @@ class analysis_manager:
 		return hist
 
 	def plot_position_hist(self):
+		"""
+        Plots a 2D histogram of the detected photon positions.
+        """
 		fig = plt.figure()
 		plt.hist2d(
 			self.detected_positions[:, 0],
@@ -397,6 +566,16 @@ class analysis_manager:
 		plt.show()
 
 	def plot_refl_multiplicity(self, do_log = True, density = True):
+		"""
+        Plots the reflection multiplicity of photons.
+
+        Parameters
+        ----------
+        do_log : bool, optional
+            Whether to use a logarithmic scale for the y-axis (default is True).
+        density : bool, optional
+            Whether to normalize the histogram (default is True).
+        """
 		bins = [x for x in range(10)]
 		spec_reflection_data = self.particle_histories['REFLECT_SPECULAR']
 		# spec_reflection_data = spec_reflection_data[spec_reflection_data > 0]
@@ -414,6 +593,18 @@ class analysis_manager:
 		plt.show()
 
 	def plot_refl_angle(self, do_log = True, low_angle = 0, high_angle = 91):
+		"""
+        Plots the reflection angle of detected photons.
+
+        Parameters
+        ----------
+        do_log : bool, optional
+            Whether to use a logarithmic scale for the color bar (default is True).
+        low_angle : int, optional
+            Lower bound for the angle histogram (default is 0).
+        high_angle : int, optional
+            Upper bound for the angle histogram (default is 91).
+        """
 		bins_refl = [x for x in range(10)]
 		bins_angle = [x for x in range(low_angle, high_angle)]
 		spec_reflection_data = self.particle_histories['REFLECT_SPECULAR']
@@ -484,6 +675,9 @@ class analysis_manager:
 		self.plot_position_hist()
 
 	def execute_plots(self):
+		"""
+        Executes the selected plot functions defined in self.plot_functions.
+        """
 		for plot_name in self.plots:
 			if plot_name in self.plot_functions:
 				self.plot_functions[plot_name]()

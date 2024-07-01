@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from geometry_manager import geometry_manager
-from run_manager import run_manager
+from .geometry_manager import geometry_manager
+from .run_manager import run_manager
 import numpy as np
 
 def test_Sebastian_FS_06082023_correctedSiPM():

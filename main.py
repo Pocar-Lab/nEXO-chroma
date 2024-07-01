@@ -2,8 +2,8 @@
 
 import sys, getopt
 
-from geometry_manager import geometry_manager
-from run_manager import run_manager
+from analysis.geometry_manager import geometry_manager
+from analysis.run_manager import run_manager
 
 import time
 

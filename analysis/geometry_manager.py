@@ -12,8 +12,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
-from material_manager import material_manager
-from surface_manager import surface_manager
+from .material_manager import material_manager
+from .surface_manager import surface_manager
 # all components, general geometry, manage surface and material
 class geometry_manager:
     """
