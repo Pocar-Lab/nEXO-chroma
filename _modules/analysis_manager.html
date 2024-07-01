@@ -1,0 +1,1064 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>analysis_manager &#8212; Chroma Analysis 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for analysis_manager</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">from</span> <span class="nn">stl</span> <span class="kn">import</span> <span class="n">mesh</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">colors</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits</span> <span class="kn">import</span> <span class="n">mplot3d</span>
+<span class="kn">from</span> <span class="nn">array</span> <span class="kn">import</span> <span class="n">array</span>
+
+
+<div class="viewcode-block" id="analysis_manager"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager">[docs]</a><span class="k">class</span> <span class="nc">analysis_manager</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Analysis manager for photon tracking simulations.</span>
+
+<span class="sd">	This class manages the analysis of photon tracks and simulation results for a given experiment.</span>
+
+<span class="sd">	Attributes:</span>
+<span class="sd">		gm (geometry_manager): Geometry manager instance for handling geometrical data.</span>
+<span class="sd">		experiment_name (str): Name of the experiment.</span>
+<span class="sd">		photons (np.ndarray): Array containing photon data.</span>
+<span class="sd">		photon_tracks (int): Number of photon tracks.</span>
+<span class="sd">		all_tracks (np.ndarray or None): All photon tracks data.</span>
+<span class="sd">		detected_tracks (np.ndarray or None): Detected photon tracks data.</span>
+<span class="sd">		undetected_tracks (np.ndarray or None): Undetected photon tracks data.</span>
+<span class="sd">		reflected_tracks (np.ndarray or None): Reflected photon tracks data.</span>
+<span class="sd">		filtered_scattered_tracks (np.ndarray or None): Filtered scattered photon tracks data.</span>
+<span class="sd">		detected_reflected_tracks (np.ndarray or None): Detected and reflected photon tracks data.</span>
+<span class="sd">		specular_reflected_tracks (np.ndarray or None): Specularly reflected photon tracks data.</span>
+<span class="sd">		diffuse_reflected_tracks (np.ndarray or None): Diffusely reflected photon tracks data.</span>
+<span class="sd">		num_particles (int): Number of photons in the simulation.</span>
+<span class="sd">		run_id (int): ID of the current simulation run.</span>
+<span class="sd">		seed (int): Seed number used for random number generation.</span>
+<span class="sd">		particle_histories (dict or None): Dictionary containing photon histories.</span>
+<span class="sd">		selected_plots (list): List of selected plots to generate.</span>
+<span class="sd">		num_tracks (int): Number of tracks to analyze.</span>
+<span class="sd">		plots (list): Available plots to generate.</span>
+<span class="sd">		geometry_data_path (str): File path to geometry data.</span>
+
+<span class="sd">	Methods:</span>
+<span class="sd">		preprocess_tracks():</span>
+<span class="sd">			Preprocess photon tracks for analysis.</span>
+
+<span class="sd">		plot_tracks(self, tracks, title, plot_geometry, color=&#39;tab:blue&#39;, linewidth=1):</span>
+<span class="sd">			Plots a list of photon tracks.</span>
+
+<span class="sd">		incident_angle(self, last_pos):</span>
+<span class="sd">			Calculates the incident angle of photons based on their last known positions.</span>
+
+<span class="sd">		get_tallies():</span>
+<span class="sd">			Compute tallies of photon interactions.</span>
+<span class="sd">		</span>
+<span class="sd">		save_detected(filename):</span>
+<span class="sd">			Save detected photon data to a CSV file.</span>
+
+<span class="sd">		photon_shooting_angle(self, num_tracks=None, detected_only=True, reflected_only=False, diffuse_only=False):</span>
+<span class="sd">			Compute and plot the distribution of photon shooting angles.</span>
+
+<span class="sd">		photon_incident_angle_emission_angle_correlation(self, num_tracks=None, detected_only=True, reflected_specular_only=True, reflected_diffuse_only=False):</span>
+<span class="sd">			Plot the correlation between incident angles and emission angles of detected photons.</span>
+
+<span class="sd">		plot_angle_hist(self, histogramfilename, showPlot=True):</span>
+<span class="sd">			Plot and save a histogram of the detected photon incident angles.</span>
+
+<span class="sd">		plot_position_hist(self):</span>
+<span class="sd">			Plot a 2D histogram of the detected photon positions.</span>
+
+<span class="sd">		plot_refl_multiplicity(self, do_log=True, density=True):</span>
+<span class="sd">			Plot the reflection multiplicity histogram for detected photons.</span>
+
+<span class="sd">		plot_refl_angle(self, do_log=True, low_angle=0, high_angle=91):</span>
+<span class="sd">			Plot reflection angle versus incident angle.</span>
+
+<span class="sd">		plot_all_tracks_wrapper():</span>
+<span class="sd">			Plot all photon tracks.</span>
+
+<span class="sd">		plot_detected_tracks_wrapper():</span>
+<span class="sd">			Plot detected photon tracks.</span>
+
+<span class="sd">		plot_undetected_tracks_wrapper():</span>
+<span class="sd">			Plot undetected photon tracks.</span>
+
+<span class="sd">		plot_reflected_tracks_wrapper():</span>
+<span class="sd">			Plot reflected photon tracks.</span>
+
+<span class="sd">		plot_filtered_scattered_tracks_wrapper():</span>
+<span class="sd">			Plot filtered scattered photon tracks.</span>
+
+<span class="sd">		plot_detected_reflected_tracks_wrapper():</span>
+<span class="sd">			Plot detected and reflected photon tracks.</span>
+
+<span class="sd">		plot_specular_reflected_tracks_wrapper():</span>
+<span class="sd">			Plot specularly reflected photon tracks.</span>
+
+<span class="sd">		plot_diffuse_reflected_tracks_wrapper():</span>
+<span class="sd">			Plot diffusely reflected photon tracks.</span>
+
+<span class="sd">		plot_refl_multiplicity_wrapper():</span>
+<span class="sd">			Plot reflection multiplicity histogram.</span>
+
+<span class="sd">		photon_shooting_angle_wrapper():</span>
+<span class="sd">			Plot photon shooting angles.</span>
+
+<span class="sd">		photon_incident_angle_emission_angle_correlation_wrapper():</span>
+<span class="sd">			Plot incident angle versus emission angle correlation.</span>
+
+<span class="sd">		plot_angle_hist_wrapper(showPlot=True):</span>
+<span class="sd">			Plot incident angle histogram and save to file.</span>
+
+<span class="sd">		plot_refl_angle_wrapper():</span>
+<span class="sd">			Plot reflection angle versus incident angle.</span>
+
+<span class="sd">		plot_position_hist_wrapper():</span>
+<span class="sd">			Plot photon position histogram.</span>
+
+<span class="sd">		execute_plots():</span>
+<span class="sd">			Execute selected plot generation functions.</span>
+
+<span class="sd">	Notes:</span>
+<span class="sd">		- This class assumes the availability of the `geometry_manager` class for geometry-related operations.</span>
+<span class="sd">		- It initializes various attributes, prepares tracks for analysis, and generates plots based on user-selected options.</span>
+<span class="sd">		- The class interacts with external data files for saving and loading data and simulation results.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="analysis_manager.__init__"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.__init__">[docs]</a>	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometry_manager</span><span class="p">,</span> <span class="n">experiment_name</span><span class="p">,</span> <span class="n">selected_plots</span><span class="p">,</span> <span class="n">photons</span><span class="p">,</span> <span class="n">photon_tracks</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">run_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">histories</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Initialize the analysis manager with necessary parameters.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			geometry_manager (geometry_manager): Instance of geometry_manager.</span>
+<span class="sd">			experiment_name (str): Name of the experiment.</span>
+<span class="sd">			selected_plots (list): List of selected plots to generate.</span>
+<span class="sd">			photons (np.ndarray): Array containing photon data.</span>
+<span class="sd">			photon_tracks (int, optional): Number of photon tracks. Default is 1000.</span>
+<span class="sd">			run_id (int, optional): ID of the current simulation run. Default is 0.</span>
+<span class="sd">			seed (int, optional): Seed number used for random number generation. Default is 0.</span>
+<span class="sd">			histories (dict or None, optional): Dictionary containing photon histories. Default is None.</span>
+
+<span class="sd">		Returns:</span>
+<span class="sd">			None</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">gm</span> <span class="o">=</span> <span class="n">geometry_manager</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">experiment_name</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">photons</span> <span class="o">=</span> <span class="n">photons</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">photon_tracks</span> <span class="o">=</span> <span class="n">photon_tracks</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">all_tracks</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">detected_tracks</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">undetected_tracks</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">reflected_tracks</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">filtered_scattered_tracks</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">detected_reflected_tracks</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">specular_reflected_tracks</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">diffuse_reflected_tracks</span> <span class="o">=</span> <span class="kc">None</span>	
+		<span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">run_id</span> <span class="o">=</span> <span class="n">run_id</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span> <span class="o">=</span> <span class="n">histories</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">selected_plots</span> <span class="o">=</span> <span class="n">selected_plots</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">get_tallies</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">num_tracks</span> <span class="o">=</span> <span class="mi">100</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plots</span> <span class="o">=</span> <span class="n">selected_plots</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">geometry_data_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;/workspace/data_files/data/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="si">}</span><span class="s1">/geometry_components_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="si">}</span><span class="s1">.csv&#39;</span>
+
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_functions</span> <span class="o">=</span> <span class="p">{</span>
+			<span class="s1">&#39;plot_all_tracks&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_all_tracks_wrapper</span><span class="p">,</span>
+			<span class="s1">&#39;plot_detected_tracks&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_detected_tracks_wrapper</span><span class="p">,</span>
+			<span class="s1">&#39;plot_undetected_tracks&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_undetected_tracks_wrapper</span><span class="p">,</span>
+			<span class="s1">&#39;plot_reflected_tracks&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_reflected_tracks_wrapper</span><span class="p">,</span>
+			<span class="s1">&#39;plot_filtered_scattered_tracks&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_filtered_scattered_tracks_wrapper</span><span class="p">,</span>
+			<span class="s1">&#39;plot_detected_reflected_tracks&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_detected_reflected_tracks_wrapper</span><span class="p">,</span>
+			<span class="s1">&#39;plot_specular_reflected_tracks&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_specular_reflected_tracks_wrapper</span><span class="p">,</span>
+			<span class="s1">&#39;plot_diffuse_reflected_tracks&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_diffuse_reflected_tracks_wrapper</span><span class="p">,</span>
+            <span class="s1">&#39;plot_refl_multiplicity&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_refl_multiplicity_wrapper</span><span class="p">,</span>
+            <span class="s1">&#39;photon_shooting_angle&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">photon_shooting_angle_wrapper</span><span class="p">,</span>
+            <span class="s1">&#39;photon_incident_angle_emission_angle_correlation&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">photon_incident_angle_emission_angle_correlation_wrapper</span><span class="p">,</span>
+            <span class="s1">&#39;plot_angle_hist&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_angle_hist_wrapper</span><span class="p">,</span>
+            <span class="s1">&#39;plot_refl_angle&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_refl_angle_wrapper</span><span class="p">,</span>
+            <span class="s1">&#39;plot_position_hist&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_position_hist_wrapper</span>
+        <span class="p">}</span>
+
+		
+		<span class="n">histogram_file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;/workspace/results/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="si">}</span><span class="s1">/histogram_data_seed_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s1">&#39;</span>
+		<span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;/workspace/results/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="si">}</span><span class="s1">/datapoints/hd3_data_test_seed_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s1">.csv&#39;</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">preprocess_tracks</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">execute_plots</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">save_detected</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="analysis_manager.preprocess_tracks"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.preprocess_tracks">[docs]</a>	<span class="k">def</span> <span class="nf">preprocess_tracks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Process photon tracks and categorize them based on detection and reflection criteria.</span>
+
+<span class="sd">		This method initializes several lists to store categorized photon tracks, then iterates</span>
+<span class="sd">		over each photon&#39;s track to filter out duplicate consecutive positions. It categorizes </span>
+<span class="sd">		the tracks into various categories based on whether the photon was detected, reflected </span>
+<span class="sd">		(specularly or diffusely), or scattered. These lists are then later used to plot the </span>
+<span class="sd">		individual trajectories of photons</span>
+
+<span class="sd">		The method iterates through each photon&#39;s track, removes duplicate consecutive positions, </span>
+<span class="sd">		and categorizes the track based on the following criteria:</span>
+<span class="sd">		</span>
+<span class="sd">		- If the photon is detected, its track is added to `detected_tracks`.</span>
+<span class="sd">		- If the photon is not detected, its track is added to `undetected_tracks`.</span>
+<span class="sd">		- If the photon is specularly reflected, its track is added to `specular_reflected_tracks` </span>
+<span class="sd">		and `reflected_tracks`.</span>
+<span class="sd">		- If the photon is diffusely reflected, its track is added to `diffuse_reflected_tracks` </span>
+<span class="sd">		and `reflected_tracks`.</span>
+<span class="sd">		- If the photon is both detected and reflected (specularly or diffusely), its track is </span>
+<span class="sd">		added to `detected_reflected_tracks`.</span>
+<span class="sd">		- If the photon is scattered but not detected and not specularly reflected, its track </span>
+<span class="sd">		is added to `filtered_scattered_tracks`.</span>
+
+<span class="sd">		Attributes:</span>
+<span class="sd">			num_particles (int): The number of photons being tracked.</span>
+<span class="sd">			all_tracks (list): A list containing the tracks of all photons.</span>
+<span class="sd">			detected_tracks (list): A list containing the tracks of detected photons.</span>
+<span class="sd">			undetected_tracks (list): A list containing the tracks of undetected photons.</span>
+<span class="sd">			reflected_tracks (list): A list containing the tracks of reflected photons.</span>
+<span class="sd">			filtered_scattered_tracks (list): A list containing the tracks of scattered photons </span>
+<span class="sd">											that are not detected or specularly reflected.</span>
+<span class="sd">			detected_reflected_tracks (list): A list containing the tracks of photons that are </span>
+<span class="sd">											both detected and reflected.</span>
+<span class="sd">			specular_reflected_tracks (list): A list containing the tracks of photons that are </span>
+<span class="sd">											specularly reflected.</span>
+<span class="sd">			diffuse_reflected_tracks (list): A list containing the tracks of photons that are </span>
+<span class="sd">											diffusively reflected.</span>
+
+<span class="sd">	</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">num_particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">all_tracks</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">detected_tracks</span> <span class="o">=</span> <span class="p">[]</span>     			<span class="c1"># tracks of photons detected</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">undetected_tracks</span> <span class="o">=</span> <span class="p">[]</span>				<span class="c1"># tracks of photons not detected</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">reflected_tracks</span> <span class="o">=</span> <span class="p">[]</span>				<span class="c1"># tracks of photons reflected</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">filtered_scattered_tracks</span> <span class="o">=</span> <span class="p">[]</span>		<span class="c1"># tracks of photons scattered but not detected or speculrly reflected</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">detected_reflected_tracks</span> <span class="o">=</span> <span class="p">[]</span>		<span class="c1"># tracks of photons both detected and reflected</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">specular_reflected_tracks</span> <span class="o">=</span> <span class="p">[]</span>		<span class="c1"># tracks of photons specularly reflected</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">diffuse_reflected_tracks</span> <span class="o">=</span> <span class="p">[]</span>		<span class="c1"># tracks of photons diffusively reflected</span>
+
+		<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_particles</span><span class="p">):</span>
+			<span class="n">curr_positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">photon_tracks</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># select track of photon idx</span>
+
+			<span class="c1"># Remove duplicate consecutive positions</span>
+			<span class="n">unique_ind</span> <span class="o">=</span> <span class="n">curr_positions</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">!=</span> <span class="n">curr_positions</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span>
+			<span class="n">unique_ind</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">unique_ind</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+			<span class="n">unique_ind</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">+</span> <span class="n">unique_ind</span>
+
+			<span class="n">curr_positions</span> <span class="o">=</span> <span class="n">curr_positions</span><span class="p">[</span><span class="n">unique_ind</span><span class="p">]</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">all_tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_positions</span><span class="p">)</span>
+
+			<span class="n">did_detect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;SURFACE_DETECT&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+			<span class="n">did_reflect_specular</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="p">[</span><span class="s1">&#39;REFLECT_SPECULAR&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+			<span class="n">did_reflect_diffuse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="p">[</span><span class="s1">&#39;REFLECT_DIFFUSE&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+			<span class="n">did_scatter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="p">[</span><span class="s1">&#39;RAYLEIGH_SCATTER&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span>
+
+			<span class="k">if</span> <span class="n">did_detect</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">detected_tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_positions</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">undetected_tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_positions</span><span class="p">)</span>
+
+			<span class="k">if</span> <span class="n">did_reflect_specular</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">specular_reflected_tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_positions</span><span class="p">)</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">reflected_tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_positions</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">did_reflect_diffuse</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">diffuse_reflected_tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_positions</span><span class="p">)</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">reflected_tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_positions</span><span class="p">)</span>
+
+			<span class="k">if</span> <span class="n">did_detect</span> <span class="ow">and</span> <span class="p">(</span><span class="n">did_reflect_specular</span> <span class="ow">or</span> <span class="n">did_reflect_diffuse</span><span class="p">):</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">detected_reflected_tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_positions</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">did_scatter</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">did_detect</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">did_reflect_specular</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">filtered_scattered_tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_positions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="analysis_manager.plot_tracks"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_tracks">[docs]</a>	<span class="k">def</span> <span class="nf">plot_tracks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tracks</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">plot_geometry</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;tab:blue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot photon tracks in a 3D space and optionally overlay 3D geometry.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			tracks (list of arrays): List containing arrays of photon tracks, where each array </span>
+<span class="sd">									represents a track with coordinates (x, y, z).</span>
+<span class="sd">			title (str): Title for the plot.</span>
+<span class="sd">			plot_geometry (bool): Flag indicating whether to plot 3D geometry alongside tracks.</span>
+<span class="sd">			color (str, optional): Color of the plotted tracks. Defaults to &#39;tab:blue&#39;.</span>
+<span class="sd">			linewidth (float, optional): Line width of the plotted tracks. Defaults to 1.</span>
+
+<span class="sd">		The method plots each track in the `tracks` list as a 3D line plot using Matplotlib. </span>
+<span class="sd">		It optionally overlays 3D geometry from a CSV file specified by `geometry_data_path`.</span>
+
+<span class="sd">		If `plot_geometry` is True, this method reads geometry data from `self.geometry_data_path`, </span>
+<span class="sd">		which is assumed to be a CSV file containing:</span>
+<span class="sd">			- &#39;stl_filepath&#39;: File paths to STL files representing 3D geometry.</span>
+<span class="sd">			- &#39;color&#39;: Colors for each geometry.</span>
+<span class="sd">			- &#39;displacement y&#39;: Y-axis displacement for each geometry.</span>
+<span class="sd">			- &#39;displacement z&#39;: Z-axis displacement for each geometry.</span>
+
+<span class="sd">		The 3D geometry is rendered using `matplotlib.pyplot` and `mesh.Mesh`, enhancing the </span>
+<span class="sd">		visualization with translucent colored meshes.</span>
+
+<span class="sd">		Example:</span>
+<span class="sd">			To plot tracks with geometry:</span>
+<span class="sd">			```</span>
+<span class="sd">			plot_tracks(tracks, &quot;Photon Tracks with Geometry&quot;, True)</span>
+<span class="sd">			```</span>
+
+<span class="sd">		Note:</span>
+<span class="sd">			- Requires Matplotlib and numpy-stl libraries for 3D plotting and STL file handling.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">figure</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+		<span class="n">axes</span> <span class="o">=</span> <span class="n">mplot3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">(</span><span class="n">figure</span><span class="p">)</span>
+
+		<span class="n">num_tracks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_tracks</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_tracks</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">tracks</span><span class="p">)</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">tracks</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_tracks</span><span class="p">):</span>
+			<span class="n">track</span> <span class="o">=</span> <span class="n">tracks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+			<span class="c1">#ax.plot(track[:, 0], track[:, 1], track[:, 2], color=color, linewidth=linewidth)</span>
+			<span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">track</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">track</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">track</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">plot_geometry</span><span class="p">:</span>
+			<span class="n">geometry_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_data_path</span><span class="p">)</span>
+			<span class="n">stl_names</span> <span class="o">=</span> <span class="n">geometry_df</span><span class="p">[</span><span class="s1">&#39;stl_filepath&#39;</span><span class="p">]</span>
+			<span class="n">colors</span> <span class="o">=</span> <span class="n">geometry_df</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
+			<span class="n">y_displacement</span> <span class="o">=</span> <span class="n">geometry_df</span><span class="p">[</span><span class="s1">&#39;displacement y&#39;</span><span class="p">]</span>
+			<span class="n">z_displacement</span> <span class="o">=</span> <span class="n">geometry_df</span><span class="p">[</span><span class="s1">&#39;displacement z&#39;</span><span class="p">]</span>
+
+			<span class="k">for</span> <span class="n">curr_filename</span><span class="p">,</span> <span class="n">curr_color</span><span class="p">,</span> <span class="n">current_y_displacement</span><span class="p">,</span> <span class="n">current_z_displacement</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">stl_names</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">y_displacement</span><span class="p">,</span> <span class="n">z_displacement</span><span class="p">):</span>
+				<span class="n">your_mesh</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">Mesh</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span>
+				<span class="n">mesh_dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">your_mesh</span><span class="o">.</span><span class="n">vectors</span><span class="p">)</span>
+				<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mesh_dimension</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+					<span class="n">your_mesh</span><span class="o">.</span><span class="n">vectors</span><span class="p">[:,</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">current_y_displacement</span>
+				<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mesh_dimension</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+					<span class="n">your_mesh</span><span class="o">.</span><span class="n">vectors</span><span class="p">[:,</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">current_z_displacement</span>
+				<span class="n">poly3d</span> <span class="o">=</span> <span class="n">mplot3d</span><span class="o">.</span><span class="n">art3d</span><span class="o">.</span><span class="n">Poly3DCollection</span><span class="p">(</span><span class="n">your_mesh</span><span class="o">.</span><span class="n">vectors</span><span class="p">)</span>
+				<span class="n">poly3d</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+				<span class="n">poly3d</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+				<span class="n">poly3d</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="n">curr_color</span><span class="p">)</span>
+				<span class="n">axes</span><span class="o">.</span><span class="n">add_collection3d</span><span class="p">(</span><span class="n">poly3d</span><span class="p">)</span>
+			<span class="c1"># Auto scale to the mesh size</span>
+			<span class="n">scale</span> <span class="o">=</span> <span class="n">your_mesh</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+			<span class="n">axes</span><span class="o">.</span><span class="n">auto_scale_xyz</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+		<span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x position (mm)&#39;</span><span class="p">)</span>
+		<span class="n">axes</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y position (mm)&#39;</span><span class="p">)</span>
+		<span class="n">axes</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;z position (mm)&#39;</span><span class="p">)</span>
+		<span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="analysis_manager.incident_angle"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.incident_angle">[docs]</a>	<span class="k">def</span> <span class="nf">incident_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_pos</span><span class="p">):</span>
+
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Calculates the incident angle of photons based on their last known positions.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			last_pos (np.ndarray): Array of shape (N, 3) containing the last positions of photons </span>
+<span class="sd">								with coordinates (x, y, z).</span>
+
+<span class="sd">		Returns:</span>
+<span class="sd">			np.ndarray: Array of incident angles in degrees corresponding to each photon.</span>
+
+<span class="sd">		The method computes the incident angle of photons relative to the x-axis using the formula:</span>
+<span class="sd">			angle = arccos(|y| / sqrt(x^2 + y^2 + z^2)) * (180 / pi)</span>
+
+<span class="sd">		This angle represents the deviation from the x-axis in a 3D Cartesian coordinate system.</span>
+
+<span class="sd">		Example:</span>
+<span class="sd">			```</span>
+<span class="sd">			last_positions = np.array([[1.0, 2.0, 3.0], [0.5, 1.0, 2.0]])</span>
+<span class="sd">			angles = incident_angle(last_positions)</span>
+<span class="sd">			print(angles)  # Output: array([73.3008689 , 63.43494882])</span>
+<span class="sd">			```</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">last_pos</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">last_pos</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">last_pos</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">last_pos</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span><span class="o">*</span><span class="p">(</span><span class="mf">180.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">angles</span></div>
+
+<div class="viewcode-block" id="analysis_manager.get_tallies"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.get_tallies">[docs]</a>	<span class="k">def</span> <span class="nf">get_tallies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Calculate tallies and generate summaries based on photon flags and histories.</span>
+
+<span class="sd">		This method initializes and populates several attributes (`tallies` and `efficiency`) </span>
+<span class="sd">		based on the photon flags and histories stored in the object.</span>
+
+<span class="sd">		Attributes Set:</span>
+<span class="sd">			tallies (dict): A dictionary containing tallies for various photon interactions:</span>
+<span class="sd">				- &#39;NO_HIT&#39;: Photons that did not hit any surface.</span>
+<span class="sd">				- &#39;BULK_ABSORB&#39;: Photons absorbed in bulk material.</span>
+<span class="sd">				- &#39;SURFACE_DETECT&#39;: Photons detected at a surface.</span>
+<span class="sd">				- &#39;SURFACE_ABSORB&#39;: Photons absorbed at a surface.</span>
+<span class="sd">				- &#39;RAYLEIGH_SCATTER : Photons that are Rayleigh Scattered.</span>
+<span class="sd">				- &#39;REFLECT_DIFFUSE&#39;: Photons diffusely reflected.</span>
+<span class="sd">				- &#39;REFLECT_SPECULAR&#39; : Photons specularly diffused.</span>
+<span class="sd">			efficiency (float): Efficiency of detecting photons at surfaces, calculated as the </span>
+<span class="sd">								ratio of detected photons to total particles.</span>
+
+<span class="sd">		The method prints a summary of tallies and counts for each interaction type, as well as </span>
+<span class="sd">		efficiencies. It also computes and stores positions and incident angles of detected photons.</span>
+
+<span class="sd">		Note:</span>
+<span class="sd">			- The method assumes the existence of `self.photons` containing photon information.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">tallies</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;NO_HIT&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mh">0x1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;BULK_ABSORB&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mh">0x1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;SURFACE_DETECT&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mh">0x1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;SURFACE_ABSORB&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mh">0x1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+		<span class="c1">##place holder below, the output value doesn&#39;t mean anything.</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;RAYLEIGH_SCATTER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mh">0x1</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;REFLECT_DIFFUSE&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mh">0x1</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;REFLECT_SPECULAR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mh">0x1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+		<span class="c1"># self.tallies[&#39;SURFACE_REEMIT&#39;]   = (self.photons.flags &amp; (0x1 &lt;&lt; 7)).astype(bool)</span>
+		<span class="c1"># self.tallies[&#39;SURFACE_TRANSMIT&#39;] = (self.photons.flags &amp; (0x1 &lt;&lt; 8)).astype(bool)</span>
+		<span class="c1"># self.tallies[&#39;BULK_REEMIT&#39;]      = (self.photons.flags &amp; (0x1 &lt;&lt; 9)).astype(bool)</span>
+		<span class="c1"># self.tallies[&#39;CHERENKOV&#39;]        = (self.photons.flags &amp; (0x1 &lt;&lt; 10)).astype(bool)</span>
+		<span class="c1"># self.tallies[&#39;SCINTILLATION&#39;]    = (self.photons.flags &amp; (0x1 &lt;&lt; 11)).astype(bool)</span>
+		<span class="c1"># self.tallies[&#39;NAN_ABORT&#39;]        = (self.photons.flags &amp; (0x1 &lt;&lt; 31)).astype(bool)</span>
+
+
+		<span class="nb">print</span><span class="p">()</span>
+		<span class="nb">print</span><span class="p">()</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--SUMMARY---------------------------&#39;</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;NUM_PARTICLES&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+			<span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+		<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+			<span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)),</span> <span class="s1">&#39;at least once&#39;</span><span class="p">)</span>
+			<span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="s1">&#39;total number&#39;</span><span class="p">)</span>
+
+		<span class="nb">print</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">efficiency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;SURFACE_DETECT&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;EFFICIENCY&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">efficiency</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------&#39;</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">detected_positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;SURFACE_DETECT&#39;</span><span class="p">]]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">detected_angles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">incident_angle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">photons</span><span class="o">.</span><span class="n">dir</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;SURFACE_DETECT&#39;</span><span class="p">]])</span></div>
+
+
+<div class="viewcode-block" id="analysis_manager.save_detected"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.save_detected">[docs]</a>	<span class="k">def</span> <span class="nf">save_detected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Save detected photon data to a CSV file.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			filename (str): File path to save the CSV data.</span>
+
+<span class="sd">		This method prepares and saves data related to detected photons, including their positions,</span>
+<span class="sd">		emission angles, detection efficiency, and material properties such as refractive indices.</span>
+<span class="sd">		If no photons are detected (`self.efficiency` is zero), placeholder values (&#39;none&#39;) are used </span>
+<span class="sd">		for positions and angles.</span>
+
+<span class="sd">		The saved CSV file includes columns for:</span>
+<span class="sd">			- &#39;x (mm)&#39;: X positions of detected photons.</span>
+<span class="sd">			- &#39;y (mm)&#39;: Y positions of detected photons.</span>
+<span class="sd">			- &#39;z (mm)&#39;: Z positions of detected photons.</span>
+<span class="sd">			- &#39;emission angle&#39;: Emission angle associated with the run ID.</span>
+<span class="sd">			- &#39;angle&#39;: Incident angles of detected photons.</span>
+<span class="sd">			- &#39;PTE&#39;: Detection efficiency (Probability to Emission) for each detected photon.</span>
+<span class="sd">			- &#39;LXe Index of Refraction&#39;: Refractive index of liquid xenon.</span>
+<span class="sd">			- &#39;Seed number&#39;: Seed number used in the simulation.</span>
+<span class="sd">			- &#39;Si eta&#39;: Real part of the refractive index of silicon.</span>
+<span class="sd">			- &#39;Si k&#39;: Imaginary part of the refractive index of silicon.</span>
+
+<span class="sd">		Note:</span>
+<span class="sd">			- Assumes `self.detected_positions` and `self.detected_angles` are already computed.</span>
+<span class="sd">se		&quot;&quot;&quot;</span>
+		<span class="c1"># lxe_refractive_index = self.gm.mat_manager.get_material(&#39;liquid xenon&#39;).refractive_index[0, 1]</span>
+		<span class="n">lxe_refractive_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gm</span><span class="o">.</span><span class="n">mat_manager</span><span class="o">.</span><span class="n">material_props</span><span class="p">[</span><span class="s1">&#39;liquid xenon&#39;</span><span class="p">][</span><span class="s1">&#39;refractive_index&#39;</span><span class="p">]</span>
+		<span class="c1"># print(lxe_refractive_index,&#39;in saved detected&#39;)</span>
+
+		<span class="c1"># silica_refractive_index = self.gm.mat_manager.material_props[&#39;silica&#39;][&#39;refractive_index&#39;]</span>
+		<span class="c1"># Cu_eta_index = self.gm.mat_manager.material_props[&#39;copper&#39;][&#39;eta&#39;]</span>
+		<span class="c1"># Cu_k_index = self.gm.mat_manager.material_props[&#39;copper&#39;][&#39;k&#39;]</span>
+		<span class="n">Si_eta_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gm</span><span class="o">.</span><span class="n">mat_manager</span><span class="o">.</span><span class="n">material_props</span><span class="p">[</span><span class="s1">&#39;silicon&#39;</span><span class="p">][</span><span class="s1">&#39;eta&#39;</span><span class="p">]</span>
+		<span class="n">Si_k_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gm</span><span class="o">.</span><span class="n">mat_manager</span><span class="o">.</span><span class="n">material_props</span><span class="p">[</span><span class="s1">&#39;silicon&#39;</span><span class="p">][</span><span class="s1">&#39;k&#39;</span><span class="p">]</span>
+		<span class="c1"># al_eta = self.gm.mat_manager.material_props[&#39;aluminum&#39;][&#39;eta&#39;]</span>
+		<span class="c1"># al_k = self.gm.mat_manager.material_props[&#39;aluminum&#39;][&#39;k&#39;]</span>
+		<span class="c1"># Cu_spec_coefficient = self.gm.surf_manager.surface_props[&#39;Cu-Xe&#39;]</span>
+
+	    <span class="c1"># store PTE for both 0 and non zero</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">emit_angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_id</span> <span class="o">-</span> <span class="mi">1</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">efficiency</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="c1"># print(&quot;self.efficiency is&quot;, self.efficiency)</span>
+			<span class="n">x_detected_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detected_positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+			<span class="c1"># print(len(x_detected_position))</span>
+			<span class="c1"># print(type(x_detected_position))</span>
+			<span class="n">y_detected_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detected_positions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+			<span class="n">z_detected_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detected_positions</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+			<span class="n">detected_angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detected_angles</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">x_detected_position</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+			<span class="n">y_detected_position</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+			<span class="n">z_detected_position</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+			<span class="n">detected_angle</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>		
+		<span class="n">save_data</span> <span class="o">=</span> <span class="p">{</span>
+				<span class="s1">&#39;x (mm)&#39;</span><span class="p">:</span> <span class="n">x_detected_position</span><span class="p">,</span>
+				<span class="s1">&#39;y (mm)&#39;</span><span class="p">:</span> <span class="n">y_detected_position</span><span class="p">,</span>
+				<span class="s1">&#39;z (mm)&#39;</span><span class="p">:</span> <span class="n">z_detected_position</span><span class="p">,</span>
+				<span class="s1">&#39;emission angle&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emit_angle</span><span class="p">,</span>
+				<span class="s1">&#39;angle&#39;</span><span class="p">:</span> <span class="n">detected_angle</span><span class="p">,</span>
+				<span class="s1">&#39;PTE&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">efficiency</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">detected_angle</span><span class="p">))]),</span>
+				<span class="s1">&#39;LXe Index of Refraction&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lxe_refractive_index</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">detected_angle</span><span class="p">))]),</span>
+				<span class="s1">&#39;Seed number&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">detected_angle</span><span class="p">))]),</span>
+				<span class="s1">&#39;Si eta&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Si_eta_index</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detected_angles</span><span class="p">))]),</span>
+				<span class="s1">&#39;Si k&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Si_k_index</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detected_angles</span><span class="p">))])}</span>
+				<span class="c1"># &#39;Cu spec coeff&#39;: np.array([Cu_spec_coefficient for _ in range(len(self.detected_angles))])}</span>
+
+				<span class="c1"># &#39;Fused Silica Index of Refraction&#39;: np.array([silica_refractive_index for _ in range(len(self.detected_angles))]),</span>
+				<span class="c1"># &#39;Cu eta&#39;: np.array([cu_eta for _ in range(len(self.detected_angles))]),</span>
+				<span class="c1"># &#39;Cu k&#39;: np.array([cu_k for _ in range(len(self.detected_angles))]),</span>
+				<span class="c1"># &#39;Al eta&#39;: np.array([al_eta for _ in range(len(self.detected_angles))]),</span>
+				<span class="c1"># &#39;Al k&#39;: np.array([al_k for _ in range(len(self.detected_angles))])</span>
+		<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">save_data</span><span class="p">)</span>
+		<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="analysis_manager.photon_shooting_angle"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.photon_shooting_angle">[docs]</a>	<span class="k">def</span> <span class="nf">photon_shooting_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_tracks</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">detected_only</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">reflected_only</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">diffuse_only</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Compute and plot the distribution of photon shooting angles.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			num_tracks (int, optional): Number of photon tracks to analyze. Defaults to `self.num_particles`.</span>
+<span class="sd">			detected_only (bool, optional): Whether to include only detected photons. Defaults to True.</span>
+<span class="sd">			reflected_only (bool, optional): Whether to include only specularly reflected photons. Defaults to False.</span>
+<span class="sd">			diffuse_only (bool, optional): Whether to include only diffusely reflected photons. Defaults to False.</span>
+
+<span class="sd">		The method calculates shooting angles between consecutive points along photon tracks based on</span>
+<span class="sd">		specified filtering criteria (`detected_only`, `reflected_only`, `diffuse_only`). It then </span>
+<span class="sd">		plots a histogram showing the distribution of these angles.</span>
+
+<span class="sd">		The histogram bins are set from 0 to 90 degrees with integer steps.</span>
+
+<span class="sd">		Note:</span>
+<span class="sd">			- If `num_tracks` is not provided, it defaults to `self.num_particles`.</span>
+<span class="sd">			- Assumes `self.photon_tracks`, `self.tallies`, and `self.particle_histories` are already computed.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="n">num_tracks</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">num_tracks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span>
+
+		<span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">detected_only</span><span class="p">:</span>
+			<span class="n">mask</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;SURFACE_DETECT&#39;</span><span class="p">]</span>
+
+		<span class="k">if</span> <span class="n">reflected_only</span><span class="p">:</span>
+			<span class="n">mask</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="p">[</span><span class="s1">&#39;REFLECT_SPECULAR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span> 
+				
+		<span class="k">if</span> <span class="n">diffuse_only</span><span class="p">:</span>
+			<span class="n">mask</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="p">[</span><span class="s1">&#39;REFLECT_DIFFUSE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+
+		<span class="n">filtered_tracks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">photon_tracks</span><span class="p">[:,</span> <span class="n">mask</span><span class="p">,</span> <span class="p">:]</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;shape of the filtered tracks&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">filtered_tracks</span><span class="p">))</span>
+
+		<span class="n">x0</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]</span>
+		<span class="n">y0</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">z0</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">2</span><span class="p">]</span>
+		<span class="n">x1</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]</span>
+		<span class="n">y1</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">z1</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="mi">2</span><span class="p">]</span>
+		<span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">z1</span><span class="o">-</span><span class="n">z0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span><span class="o">*</span><span class="p">(</span><span class="mf">180.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+		<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">theta</span> <span class="k">for</span> <span class="n">theta</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">91</span><span class="p">)])</span>
+		<span class="c1"># hist is the height of the historgram</span>
+		<span class="n">hist</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">theta</span> <span class="k">for</span> <span class="n">theta</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">91</span><span class="p">)])</span>
+		<span class="nb">print</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="n">bin_edges</span><span class="p">)</span>
+
+		<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shooting Angle [deg]&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Emission Angle Distribution, Run &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">))</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+	
+
+<span class="c1">#Sili: added on 02/07/2023 to plot the shooting angle and emission angle correlation of detected photons</span>
+<div class="viewcode-block" id="analysis_manager.photon_incident_angle_emission_angle_correlation"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.photon_incident_angle_emission_angle_correlation">[docs]</a>	<span class="k">def</span> <span class="nf">photon_incident_angle_emission_angle_correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_tracks</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">detected_only</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">reflected_specular_only</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">reflected_diffuse_only</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot the correlation between incident angles and emission angles of detected photons.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			num_tracks (int, optional): Number of photon tracks to analyze. Defaults to `self.num_particles`.</span>
+<span class="sd">			detected_only (bool, optional): Whether to include only detected photons. Defaults to True.</span>
+<span class="sd">			reflected_specular_only (bool, optional): Whether to include only specularly reflected photons. Defaults to True.</span>
+<span class="sd">			reflected_diffuse_only (bool, optional): Whether to include only diffusely reflected photons. Defaults to False.</span>
+
+<span class="sd">		The method calculates both the emission and incident angles for the selected photon tracks based on </span>
+<span class="sd">		the specified filtering criteria (`detected_only`, `reflected_specular_only`, `reflected_diffuse_only`).</span>
+<span class="sd">		It then plots a 2D histogram showing the correlation between these angles.</span>
+
+<span class="sd">		Note:</span>
+<span class="sd">			- If `num_tracks` is not provided, it defaults to `self.num_particles`.</span>
+<span class="sd">			- Assumes `self.photon_tracks`, `self.tallies`, and `self.particle_histories` are already computed.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		
+		<span class="k">if</span> <span class="n">num_tracks</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">num_tracks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span>
+
+		<span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">detected_only</span><span class="p">:</span>
+			<span class="n">mask</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;SURFACE_DETECT&#39;</span><span class="p">]</span>
+
+		<span class="k">if</span> <span class="n">reflected_specular_only</span><span class="p">:</span>
+			<span class="n">mask</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="p">[</span><span class="s1">&#39;REFLECT_SPECULAR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span> 
+			<span class="c1"># print(&#39;reflect_specular_only&#39;)</span>
+				
+		<span class="k">if</span> <span class="n">reflected_diffuse_only</span><span class="p">:</span>
+			<span class="n">mask</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="p">[</span><span class="s1">&#39;REFLECT_DIFFUSE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+
+		<span class="n">filtered_tracks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">photon_tracks</span><span class="p">[:,</span> <span class="n">mask</span><span class="p">,</span> <span class="p">:]</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;shape of the filtered tracks&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">filtered_tracks</span><span class="p">))</span>
+		<span class="n">x0</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]</span>
+		<span class="n">y0</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">z0</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">2</span><span class="p">]</span>
+		<span class="n">x1</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]</span>
+		<span class="n">y1</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">z1</span> <span class="o">=</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="mi">2</span><span class="p">]</span>
+		<span class="n">emit_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">z1</span><span class="o">-</span><span class="n">z0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span><span class="o">*</span><span class="p">(</span><span class="mf">180.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;emit angle&#39;</span><span class="p">,</span><span class="n">emit_angle</span><span class="p">)</span>
+
+		<span class="n">last_x</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">last_y</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">last_z</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">second_last_x</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">second_last_y</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">second_last_z</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">filtered_tracks</span><span class="p">)[</span><span class="mi">1</span><span class="p">]):</span>
+			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_tracks</span><span class="p">)):</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
+					<span class="n">last_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+					<span class="n">second_last_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+					<span class="n">last_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+					<span class="n">second_last_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+					<span class="n">last_z</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+					<span class="n">second_last_z</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filtered_tracks</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+					<span class="k">break</span>	
+
+		<span class="n">inci_angle</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">last_z</span><span class="p">)):</span>
+			<span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">last_y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">second_last_y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">last_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">second_last_x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">last_y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">second_last_y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">last_z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">second_last_z</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span><span class="o">*</span><span class="p">(</span><span class="mf">180.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+			<span class="n">inci_angle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;length of incident angle&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">inci_angle</span><span class="p">))</span>
+
+		<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+		<span class="c1"># below is the colorbar histgram</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span><span class="n">inci_angle</span><span class="p">,</span><span class="n">emit_angle</span><span class="p">,</span><span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">90</span><span class="p">,</span><span class="mi">90</span><span class="p">],</span><span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;RdYlGn_r&#39;</span><span class="p">,</span><span class="n">norm</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">LogNorm</span><span class="p">())</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Incident vs. Emission angle of Detected &amp; Reflected Photons&#39;</span><span class="p">)</span>	
+		<span class="c1"># De_no,inci,emit = np.histogram2d(inci_angle,emit_angle,bins = [90,90])</span>
+		<span class="c1"># print(&#39;De_no&#39;,np.shape(De_no))</span>
+
+
+		<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Incident angle (deg)&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Emission angle (deg)&#39;</span><span class="p">)</span>
+		<span class="c1"># plt.colorbar(boundaries = [-10] + [5], extend=&#39;both&#39;)</span>
+		<span class="c1"># plt.colorbar()</span>
+
+		<span class="c1"># #below is the scatter plot</span>
+		<span class="c1"># plt.figure()</span>
+		<span class="c1"># plt.scatter(inci_angle,emit_angle)</span>
+		<span class="c1"># plt.xlabel(&#39;Incident angle (deg)&#39;)</span>
+		<span class="c1"># plt.ylabel(&#39;Emission angle (deg)&#39;)</span>
+		<span class="c1"># plt.title(&#39;Incident vs. Emission angle of Detected Reflected Photons&#39;)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">)</span>		
+		<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_angle_hist"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_angle_hist">[docs]</a>	<span class="k">def</span> <span class="nf">plot_angle_hist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">histogramfilename</span><span class="p">,</span> <span class="n">showPlot</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+		
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot and save a histogram of the detected photon incident angles.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			histogramfilename (str): File path to save the histogram data as a CSV file.</span>
+<span class="sd">			showPlot (bool, optional): Whether to display the plot. Default is True.</span>
+
+<span class="sd">		Returns:</span>
+<span class="sd">			np.ndarray: Histogram counts for each bin.</span>
+
+<span class="sd">		This method generates a histogram of detected photon incident angles, plots the histogram,</span>
+<span class="sd">		and saves the histogram data to a CSV file. The CSV file includes columns for incident angles,</span>
+<span class="sd">		detected counts, and the refractive index of liquid xenon.</span>
+
+<span class="sd">		The histogram bins are set from 0 to 90 degrees with integer steps.</span>
+
+<span class="sd">		Attributes:</span>
+<span class="sd">			lxe_refractive_index (float): Refractive index of liquid xenon, obtained from material properties.</span>
+
+<span class="sd">		Note:</span>
+<span class="sd">			- Assumes `self.detected_angles` is already computed.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		
+		<span class="n">lxe_refractive_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gm</span><span class="o">.</span><span class="n">mat_manager</span><span class="o">.</span><span class="n">material_props</span><span class="p">[</span><span class="s1">&#39;liquid xenon&#39;</span><span class="p">][</span><span class="s1">&#39;refractive_index&#39;</span><span class="p">]</span>
+		<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detected_angles</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">theta</span> <span class="k">for</span> <span class="n">theta</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">91</span><span class="p">)])</span>
+		<span class="c1"># hist is the height of the historgram</span>
+		<span class="n">hist</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detected_angles</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">theta</span> <span class="k">for</span> <span class="n">theta</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">91</span><span class="p">)])</span>
+		<span class="nb">print</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+		<span class="n">save_data</span> <span class="o">=</span> <span class="p">{</span>
+				<span class="s1">&#39;Incident Angle&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">))),</span>
+				<span class="s1">&#39;Detected number&#39;</span><span class="p">:</span> <span class="n">hist</span><span class="p">,</span>
+				<span class="s1">&#39;LXe refractive index&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lxe_refractive_index</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hist</span><span class="p">))])}</span>
+		<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">save_data</span><span class="p">)</span>
+		<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">histogramfilename</span><span class="p">)</span>
+
+		<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Incident Angle [deg]&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Incident Angle Distribution, Run &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">))</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">showPlot</span><span class="p">:</span>
+			<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+		<span class="k">return</span> <span class="n">hist</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_position_hist"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_position_hist">[docs]</a>	<span class="k">def</span> <span class="nf">plot_position_hist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot a 2D histogram of the detected photon positions.</span>
+
+<span class="sd">		This method generates and displays a 2D histogram of the detected photon positions in the x-z plane.</span>
+<span class="sd">		The histogram bins are set from 85 to 97.5 mm with 50 intervals for both x and z positions.</span>
+
+<span class="sd">		The color bar represents the count of detected photons within each bin.</span>
+
+<span class="sd">		Note:</span>
+<span class="sd">			- Assumes `self.detected_positions` is already computed.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">detected_positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">detected_positions</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span>
+			<span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">85</span><span class="p">,</span> <span class="mf">97.5</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">85</span><span class="p">,</span> <span class="mf">97.5</span><span class="p">,</span> <span class="mi">50</span><span class="p">)])</span>
+		<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+		<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Counts&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x position (mm)&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;z position (mm)&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Position Distribution, Run &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">))</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_refl_multiplicity"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_refl_multiplicity">[docs]</a>	<span class="k">def</span> <span class="nf">plot_refl_multiplicity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">do_log</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">density</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot the reflection multiplicity histogram for detected photons.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			do_log (bool, optional): Whether to use a logarithmic scale for the y-axis. Defaults to True.</span>
+<span class="sd">			density (bool, optional): Whether to normalize the histogram to form a probability density. Defaults to True.</span>
+
+<span class="sd">		This method generates a histogram of the number of specular reflections experienced by detected photons.</span>
+<span class="sd">		The histogram bins range from 0 to 9. It also provides the option to display the y-axis on a logarithmic scale</span>
+<span class="sd">		and to normalize the histogram to show the fraction of photons.</span>
+
+<span class="sd">		Note:</span>
+<span class="sd">			- Assumes `self.particle_histories[&#39;REFLECT_SPECULAR&#39;]` and `self.tallies[&#39;SURFACE_DETECT&#39;]` are already computed.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+		<span class="n">spec_reflection_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="p">[</span><span class="s1">&#39;REFLECT_SPECULAR&#39;</span><span class="p">]</span>
+		<span class="c1"># spec_reflection_data = spec_reflection_data[spec_reflection_data &gt; 0]</span>
+		<span class="n">spec_reflection_data_det</span> <span class="o">=</span> <span class="n">spec_reflection_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;SURFACE_DETECT&#39;</span><span class="p">]]</span>
+		
+		<span class="c1"># plt.hist(spec_reflection_data, bins = bins, density = density, label = &#39;All Photons&#39;, histtype = &#39;step&#39;)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">spec_reflection_data_det</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">bins</span><span class="p">,</span> <span class="n">density</span> <span class="o">=</span> <span class="n">density</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Det. Photons&#39;</span><span class="p">,</span> <span class="n">histtype</span> <span class="o">=</span> <span class="s1">&#39;step&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of Reflections&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fraction of Photons&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Reflection Multiplicity&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">do_log</span><span class="p">:</span>
+			<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_refl_angle"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_refl_angle">[docs]</a>	<span class="k">def</span> <span class="nf">plot_refl_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">do_log</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">low_angle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">high_angle</span> <span class="o">=</span> <span class="mi">91</span><span class="p">):</span>
+
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot a 2D histogram of incident angles versus reflection multiplicity for detected photons.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			do_log (bool, optional): Whether to use a logarithmic scale for the color bar. Defaults to True.</span>
+<span class="sd">			low_angle (int, optional): The lower bound for incident angle bins. Defaults to 0.</span>
+<span class="sd">			high_angle (int, optional): The upper bound for incident angle bins. Defaults to 91.</span>
+
+<span class="sd">		This method generates a 2D histogram showing the correlation between the incident angles of detected photons</span>
+<span class="sd">		and their reflection multiplicity. The incident angle bins range from `low_angle` to `high_angle` degrees,</span>
+<span class="sd">		and the reflection multiplicity bins range from 0 to 9.</span>
+
+<span class="sd">		Note:</span>
+<span class="sd">			- Assumes `self.detected_angles` and `self.particle_histories[&#39;REFLECT_SPECULAR&#39;]` are already computed.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">bins_refl</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+		<span class="n">bins_angle</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">low_angle</span><span class="p">,</span> <span class="n">high_angle</span><span class="p">)]</span>
+		<span class="n">spec_reflection_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particle_histories</span><span class="p">[</span><span class="s1">&#39;REFLECT_SPECULAR&#39;</span><span class="p">]</span>
+		<span class="n">spec_reflection_data_det</span> <span class="o">=</span> <span class="n">spec_reflection_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tallies</span><span class="p">[</span><span class="s1">&#39;SURFACE_DETECT&#39;</span><span class="p">]]</span>
+
+		<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">do_log</span><span class="p">:</span>
+			<span class="n">plt</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detected_angles</span><span class="p">,</span> <span class="n">spec_reflection_data_det</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">bins_angle</span><span class="p">,</span> <span class="n">bins_refl</span><span class="p">],</span> <span class="n">norm</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LogNorm</span><span class="p">())</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">plt</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detected_angles</span><span class="p">,</span> <span class="n">spec_reflection_data_det</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">bins_angle</span><span class="p">,</span> <span class="n">bins_refl</span><span class="p">])</span>
+
+		<span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detected_angles</span><span class="p">,</span> <span class="n">spec_reflection_data_det</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Incident Angle (deg)&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Reflection Multiplicity&#39;</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_all_tracks_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_all_tracks_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_all_tracks_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot all photon tracks.</span>
+
+<span class="sd">		This method generates a plot of all photon tracks using the `plot_tracks` method with the title </span>
+<span class="sd">		&#39;Photon Tracks, Seed {self.seed}, Run {self.run_id}&#39;.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Photon Tracks, Seed </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s1">, Run </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s1">&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_tracks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_tracks</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_detected_tracks_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_detected_tracks_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_detected_tracks_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot detected photon tracks.</span>
+
+<span class="sd">		This method generates a plot of detected photon tracks using the `plot_tracks` method with the title </span>
+<span class="sd">		&#39;Detected Photon Tracks, Seed {self.seed}, Run {self.run_id}&#39;.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Detected Photon Tracks, Seed </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s1">, Run </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s1">&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_tracks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detected_tracks</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_undetected_tracks_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_undetected_tracks_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_undetected_tracks_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot undetected photon tracks.</span>
+
+<span class="sd">		This method generates a plot of undetected photon tracks using the `plot_tracks` method with the title </span>
+<span class="sd">		&#39;Undetected Photon Tracks, Seed {self.seed}, Run {self.run_id}&#39;.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Undetected Photon Tracks, Seed </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s1">, Run </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s1">&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_tracks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">undetected_tracks</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_reflected_tracks_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_reflected_tracks_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_reflected_tracks_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot reflected photon tracks.</span>
+
+<span class="sd">		This method generates a plot of reflected photon tracks using the `plot_tracks` method with the title </span>
+<span class="sd">		&#39;Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}&#39;.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Reflected Photon Tracks, Seed </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s1">, Run </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s1">&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_tracks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reflected_tracks</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_filtered_scattered_tracks_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_filtered_scattered_tracks_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_filtered_scattered_tracks_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot filtered scattered photon tracks.</span>
+
+<span class="sd">		This method generates a plot of filtered scattered photon tracks using the `plot_tracks` method with the title </span>
+<span class="sd">		&#39;Filtered Scattered Photon Tracks, Seed {self.seed}, Run {self.run_id}&#39;.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Filtered Scattered Photon Tracks, Seed </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s1">, Run </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s1">&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_tracks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_scattered_tracks</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_detected_reflected_tracks_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_detected_reflected_tracks_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_detected_reflected_tracks_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot detected and reflected photon tracks.</span>
+
+<span class="sd">		This method generates a plot of detected and reflected photon tracks using the `plot_tracks` method with the title </span>
+<span class="sd">		&#39;Detected and Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}&#39;.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Detected and Reflected Photon Tracks, Seed </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s1">, Run </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s1">&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_tracks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detected_reflected_tracks</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_specular_reflected_tracks_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_specular_reflected_tracks_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_specular_reflected_tracks_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot specularly reflected photon tracks.</span>
+
+<span class="sd">		This method generates a plot of specularly reflected photon tracks using the `plot_tracks` method with the title </span>
+<span class="sd">		&#39;Specularly Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}&#39;.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Specularly Reflected Photon Tracks, Seed </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s1">, Run </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s1">&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_tracks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">specular_reflected_tracks</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_diffuse_reflected_tracks_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_diffuse_reflected_tracks_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_diffuse_reflected_tracks_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot diffusively reflected photon tracks.</span>
+
+<span class="sd">		This method generates a plot of diffusively reflected photon tracks using the `plot_tracks` method with the title </span>
+<span class="sd">		&#39;Diffusively Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}&#39;.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Diffusively Reflected Photon Tracks, Seed </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s1">, Run </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s1">&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_tracks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffuse_reflected_tracks</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_refl_multiplicity_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_refl_multiplicity_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_refl_multiplicity_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot reflection multiplicity.</span>
+
+<span class="sd">		This method generates a plot of reflection multiplicity using the `plot_refl_multiplicity` method with density set to True.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_refl_multiplicity</span><span class="p">(</span><span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.photon_shooting_angle_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.photon_shooting_angle_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">photon_shooting_angle_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot photon shooting angle.</span>
+
+<span class="sd">		This method generates a plot of photon shooting angles using the `photon_shooting_angle` method </span>
+<span class="sd">		with default arguments.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">photon_shooting_angle</span><span class="p">(</span><span class="n">num_tracks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">detected_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reflected_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.photon_incident_angle_emission_angle_correlation_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.photon_incident_angle_emission_angle_correlation_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">photon_incident_angle_emission_angle_correlation_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot photon incident angle vs. emission angle correlation.</span>
+
+<span class="sd">		This method generates a plot of the correlation between photon incident angles and emission angles </span>
+<span class="sd">		using the `photon_incident_angle_emission_angle_correlation` method with default arguments.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">photon_incident_angle_emission_angle_correlation</span><span class="p">(</span><span class="n">num_tracks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">detected_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reflected_specular_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reflected_diffuse_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_angle_hist_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_angle_hist_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_angle_hist_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">showPlot</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot and save the incident angle histogram.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			showPlot (bool, optional): Whether to display the plot. Default is True.</span>
+
+<span class="sd">		Returns:</span>
+<span class="sd">			np.ndarray: Histogram counts for each bin.</span>
+
+<span class="sd">		This method generates and saves a histogram of detected photon incident angles using the `plot_angle_hist` method.</span>
+<span class="sd">		The histogram is saved to a file named based on the experiment name and seed.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">histogram_file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;/workspace/results/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="si">}</span><span class="s1">/histogram_seed:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s1">&#39;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_angle_hist</span><span class="p">(</span><span class="n">histogram_file_name</span><span class="p">,</span> <span class="n">showPlot</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_refl_angle_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_refl_angle_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_refl_angle_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot reflection angle histogram.</span>
+
+<span class="sd">		This method generates a 2D histogram of incident angles versus reflection multiplicity using the `plot_refl_angle` method </span>
+<span class="sd">		with a lower angle bound of 12 degrees and no logarithmic scale.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_refl_angle</span><span class="p">(</span><span class="n">low_angle</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">do_log</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="analysis_manager.plot_position_hist_wrapper"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.plot_position_hist_wrapper">[docs]</a>	<span class="k">def</span> <span class="nf">plot_position_hist_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Plot 2D histogram of detected photon positions.</span>
+
+<span class="sd">		This method generates a 2D histogram of detected photon positions using the `plot_position_hist` method.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_position_hist</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="analysis_manager.execute_plots"><a class="viewcode-back" href="../analysis_manager.html#analysis_manager.analysis_manager.execute_plots">[docs]</a>	<span class="k">def</span> <span class="nf">execute_plots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Execute the specified plot functions.</span>
+
+<span class="sd">		This method iterates through the list of plot names in `self.plots` and calls the corresponding </span>
+<span class="sd">		plot functions defined in `self.plot_functions`. If a plot name in `self.plots` is not recognized, </span>
+<span class="sd">		it prints an error message listing the available plot functions.</span>
+
+<span class="sd">		Attributes:</span>
+<span class="sd">			plots (list): A list of plot names to execute.</span>
+<span class="sd">			plot_functions (dict): A dictionary mapping plot names to their corresponding functions.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">for</span> <span class="n">plot_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">plot_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_functions</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">plot_functions</span><span class="p">[</span><span class="n">plot_name</span><span class="p">]()</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plot &#39;</span><span class="si">{</span><span class="n">plot_name</span><span class="si">}</span><span class="s2">&#39; is not recognized. Available plots are: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_functions</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Chroma Analysis</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">nEXO-chroma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis_manager.html">analysis_manager module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, PocarLab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

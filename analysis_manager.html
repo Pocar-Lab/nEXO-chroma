@@ -1,0 +1,1128 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>analysis_manager module &#8212; Chroma Analysis 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geometry_manager module" href="geometry_manager.html" />
+    <link rel="prev" title="nEXO-chroma" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-analysis_manager">
+<span id="analysis-manager-module"></span><h1>analysis_manager module<a class="headerlink" href="#module-analysis_manager" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">analysis_manager.</span></span><span class="sig-name descname"><span class="pre">analysis_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geometry_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photon_tracks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">histories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Analysis manager for photon tracking simulations.</p>
+<p>This class manages the analysis of photon tracks and simulation results for a given experiment.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.gm">
+<span class="sig-name descname"><span class="pre">gm</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.gm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Geometry manager instance for handling geometrical data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>geometry_manager</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.experiment_name">
+<span class="sig-name descname"><span class="pre">experiment_name</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.experiment_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.photons">
+<span class="sig-name descname"><span class="pre">photons</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.photons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array containing photon data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.photon_tracks">
+<span class="sig-name descname"><span class="pre">photon_tracks</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.photon_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of photon tracks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.all_tracks">
+<span class="sig-name descname"><span class="pre">all_tracks</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.all_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>All photon tracks data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.detected_tracks">
+<span class="sig-name descname"><span class="pre">detected_tracks</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.detected_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detected photon tracks data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.undetected_tracks">
+<span class="sig-name descname"><span class="pre">undetected_tracks</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.undetected_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Undetected photon tracks data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.reflected_tracks">
+<span class="sig-name descname"><span class="pre">reflected_tracks</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.reflected_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reflected photon tracks data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.filtered_scattered_tracks">
+<span class="sig-name descname"><span class="pre">filtered_scattered_tracks</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.filtered_scattered_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filtered scattered photon tracks data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.detected_reflected_tracks">
+<span class="sig-name descname"><span class="pre">detected_reflected_tracks</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.detected_reflected_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detected and reflected photon tracks data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.specular_reflected_tracks">
+<span class="sig-name descname"><span class="pre">specular_reflected_tracks</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.specular_reflected_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specularly reflected photon tracks data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.diffuse_reflected_tracks">
+<span class="sig-name descname"><span class="pre">diffuse_reflected_tracks</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.diffuse_reflected_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Diffusely reflected photon tracks data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.num_particles">
+<span class="sig-name descname"><span class="pre">num_particles</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.num_particles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of photons in the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.run_id">
+<span class="sig-name descname"><span class="pre">run_id</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.run_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>ID of the current simulation run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seed number used for random number generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.particle_histories">
+<span class="sig-name descname"><span class="pre">particle_histories</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.particle_histories" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary containing photon histories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.selected_plots">
+<span class="sig-name descname"><span class="pre">selected_plots</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.selected_plots" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of selected plots to generate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.num_tracks">
+<span class="sig-name descname"><span class="pre">num_tracks</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.num_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of tracks to analyze.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plots">
+<span class="sig-name descname"><span class="pre">plots</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.plots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Available plots to generate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.geometry_data_path">
+<span class="sig-name descname"><span class="pre">geometry_data_path</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.geometry_data_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>File path to geometry data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.preprocess_tracks">
+<span class="sig-name descname"><span class="pre">preprocess_tracks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.preprocess_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.preprocess_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocess photon tracks for analysis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">plot_tracks(self,</span> <span class="pre">tracks,</span> <span class="pre">title,</span> <span class="pre">plot_geometry,</span> <span class="pre">color='tab</span></span></dt>
+<dd><p>blue’, linewidth=1):
+Plots a list of photon tracks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.incident_angle">
+<span class="sig-name descname"><span class="pre">incident_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_pos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.incident_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.incident_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the incident angle of photons based on their last known positions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.get_tallies">
+<span class="sig-name descname"><span class="pre">get_tallies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.get_tallies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.get_tallies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute tallies of photon interactions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.save_detected">
+<span class="sig-name descname"><span class="pre">save_detected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.save_detected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.save_detected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save detected photon data to a CSV file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.photon_shooting_angle">
+<span class="sig-name descname"><span class="pre">photon_shooting_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_tracks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detected_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reflected_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diffuse_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.photon_shooting_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.photon_shooting_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute and plot the distribution of photon shooting angles.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.photon_incident_angle_emission_angle_correlation">
+<span class="sig-name descname"><span class="pre">photon_incident_angle_emission_angle_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_tracks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detected_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reflected_specular_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reflected_diffuse_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.photon_incident_angle_emission_angle_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.photon_incident_angle_emission_angle_correlation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the correlation between incident angles and emission angles of detected photons.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_angle_hist">
+<span class="sig-name descname"><span class="pre">plot_angle_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">histogramfilename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showPlot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_angle_hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_angle_hist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot and save a histogram of the detected photon incident angles.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_position_hist">
+<span class="sig-name descname"><span class="pre">plot_position_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_position_hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_position_hist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a 2D histogram of the detected photon positions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_refl_multiplicity">
+<span class="sig-name descname"><span class="pre">plot_refl_multiplicity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_refl_multiplicity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_refl_multiplicity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the reflection multiplicity histogram for detected photons.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_refl_angle">
+<span class="sig-name descname"><span class="pre">plot_refl_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">91</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_refl_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_refl_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot reflection angle versus incident angle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_all_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_all_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_all_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_all_tracks_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot all photon tracks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_detected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_detected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_detected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_detected_tracks_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot detected photon tracks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_undetected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_undetected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_undetected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_undetected_tracks_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot undetected photon tracks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_reflected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_reflected_tracks_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot reflected photon tracks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_filtered_scattered_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_filtered_scattered_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_filtered_scattered_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_filtered_scattered_tracks_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot filtered scattered photon tracks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_detected_reflected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_detected_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_detected_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_detected_reflected_tracks_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot detected and reflected photon tracks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_specular_reflected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_specular_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_specular_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_specular_reflected_tracks_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot specularly reflected photon tracks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_diffuse_reflected_tracks_wrapper">
+<span class="sig-name descname"><span class="pre">plot_diffuse_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_diffuse_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_diffuse_reflected_tracks_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot diffusely reflected photon tracks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_refl_multiplicity_wrapper">
+<span class="sig-name descname"><span class="pre">plot_refl_multiplicity_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_refl_multiplicity_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_refl_multiplicity_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot reflection multiplicity histogram.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.photon_shooting_angle_wrapper">
+<span class="sig-name descname"><span class="pre">photon_shooting_angle_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.photon_shooting_angle_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.photon_shooting_angle_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot photon shooting angles.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.photon_incident_angle_emission_angle_correlation_wrapper">
+<span class="sig-name descname"><span class="pre">photon_incident_angle_emission_angle_correlation_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.photon_incident_angle_emission_angle_correlation_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.photon_incident_angle_emission_angle_correlation_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot incident angle versus emission angle correlation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_angle_hist_wrapper">
+<span class="sig-name descname"><span class="pre">plot_angle_hist_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">showPlot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_angle_hist_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_angle_hist_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot incident angle histogram and save to file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_refl_angle_wrapper">
+<span class="sig-name descname"><span class="pre">plot_refl_angle_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_refl_angle_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_refl_angle_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot reflection angle versus incident angle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_position_hist_wrapper">
+<span class="sig-name descname"><span class="pre">plot_position_hist_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_position_hist_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_position_hist_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot photon position histogram.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.execute_plots">
+<span class="sig-name descname"><span class="pre">execute_plots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.execute_plots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.execute_plots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute selected plot generation functions.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>This class assumes the availability of the <cite>geometry_manager</cite> class for geometry-related operations.</p></li>
+<li><p>It initializes various attributes, prepares tracks for analysis, and generates plots based on user-selected options.</p></li>
+<li><p>The class interacts with external data files for saving and loading data and simulation results.</p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.__dict__">
+<span class="sig-name descname"><span class="pre">__dict__</span></span><em class="property"> <span class="pre">=</span> <span class="pre">mappingproxy({'__module__':</span> <span class="pre">'analysis_manager',</span> <span class="pre">'__doc__':</span> <span class="pre">&quot;\n\tAnalysis</span> <span class="pre">manager</span> <span class="pre">for</span> <span class="pre">photon</span> <span class="pre">tracking</span> <span class="pre">simulations.\n\n\tThis</span> <span class="pre">class</span> <span class="pre">manages</span> <span class="pre">the</span> <span class="pre">analysis</span> <span class="pre">of</span> <span class="pre">photon</span> <span class="pre">tracks</span> <span class="pre">and</span> <span class="pre">simulation</span> <span class="pre">results</span> <span class="pre">for</span> <span class="pre">a</span> <span class="pre">given</span> <span class="pre">experiment.\n\n\tAttributes:\n\t\tgm</span> <span class="pre">(geometry_manager):</span> <span class="pre">Geometry</span> <span class="pre">manager</span> <span class="pre">instance</span> <span class="pre">for</span> <span class="pre">handling</span> <span class="pre">geometrical</span> <span class="pre">data.\n\t\texperiment_name</span> <span class="pre">(str):</span> <span class="pre">Name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">experiment.\n\t\tphotons</span> <span class="pre">(np.ndarray):</span> <span class="pre">Array</span> <span class="pre">containing</span> <span class="pre">photon</span> <span class="pre">data.\n\t\tphoton_tracks</span> <span class="pre">(int):</span> <span class="pre">Number</span> <span class="pre">of</span> <span class="pre">photon</span> <span class="pre">tracks.\n\t\tall_tracks</span> <span class="pre">(np.ndarray</span> <span class="pre">or</span> <span class="pre">None):</span> <span class="pre">All</span> <span class="pre">photon</span> <span class="pre">tracks</span> <span class="pre">data.\n\t\tdetected_tracks</span> <span class="pre">(np.ndarray</span> <span class="pre">or</span> <span class="pre">None):</span> <span class="pre">Detected</span> <span class="pre">photon</span> <span class="pre">tracks</span> <span class="pre">data.\n\t\tundetected_tracks</span> <span class="pre">(np.ndarray</span> <span class="pre">or</span> <span class="pre">None):</span> <span class="pre">Undetected</span> <span class="pre">photon</span> <span class="pre">tracks</span> <span class="pre">data.\n\t\treflected_tracks</span> <span class="pre">(np.ndarray</span> <span class="pre">or</span> <span class="pre">None):</span> <span class="pre">Reflected</span> <span class="pre">photon</span> <span class="pre">tracks</span> <span class="pre">data.\n\t\tfiltered_scattered_tracks</span> <span class="pre">(np.ndarray</span> <span class="pre">or</span> <span class="pre">None):</span> <span class="pre">Filtered</span> <span class="pre">scattered</span> <span class="pre">photon</span> <span class="pre">tracks</span> <span class="pre">data.\n\t\tdetected_reflected_tracks</span> <span class="pre">(np.ndarray</span> <span class="pre">or</span> <span class="pre">None):</span> <span class="pre">Detected</span> <span class="pre">and</span> <span class="pre">reflected</span> <span class="pre">photon</span> <span class="pre">tracks</span> <span class="pre">data.\n\t\tspecular_reflected_tracks</span> <span class="pre">(np.ndarray</span> <span class="pre">or</span> <span class="pre">None):</span> <span class="pre">Specularly</span> <span class="pre">reflected</span> <span class="pre">photon</span> <span class="pre">tracks</span> <span class="pre">data.\n\t\tdiffuse_reflected_tracks</span> <span class="pre">(np.ndarray</span> <span class="pre">or</span> <span class="pre">None):</span> <span class="pre">Diffusely</span> <span class="pre">reflected</span> <span class="pre">photon</span> <span class="pre">tracks</span> <span class="pre">data.\n\t\tnum_particles</span> <span class="pre">(int):</span> <span class="pre">Number</span> <span class="pre">of</span> <span class="pre">photons</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">simulation.\n\t\trun_id</span> <span class="pre">(int):</span> <span class="pre">ID</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">current</span> <span class="pre">simulation</span> <span class="pre">run.\n\t\tseed</span> <span class="pre">(int):</span> <span class="pre">Seed</span> <span class="pre">number</span> <span class="pre">used</span> <span class="pre">for</span> <span class="pre">random</span> <span class="pre">number</span> <span class="pre">generation.\n\t\tparticle_histories</span> <span class="pre">(dict</span> <span class="pre">or</span> <span class="pre">None):</span> <span class="pre">Dictionary</span> <span class="pre">containing</span> <span class="pre">photon</span> <span class="pre">histories.\n\t\tselected_plots</span> <span class="pre">(list):</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">selected</span> <span class="pre">plots</span> <span class="pre">to</span> <span class="pre">generate.\n\t\tnum_tracks</span> <span class="pre">(int):</span> <span class="pre">Number</span> <span class="pre">of</span> <span class="pre">tracks</span> <span class="pre">to</span> <span class="pre">analyze.\n\t\tplots</span> <span class="pre">(list):</span> <span class="pre">Available</span> <span class="pre">plots</span> <span class="pre">to</span> <span class="pre">generate.\n\t\tgeometry_data_path</span> <span class="pre">(str):</span> <span class="pre">File</span> <span class="pre">path</span> <span class="pre">to</span> <span class="pre">geometry</span> <span class="pre">data.\n\n\tMethods:\n\t\tpreprocess_tracks():\n\t\t\tPreprocess</span> <span class="pre">photon</span> <span class="pre">tracks</span> <span class="pre">for</span> <span class="pre">analysis.\n\n\t\tplot_tracks(self,</span> <span class="pre">tracks,</span> <span class="pre">title,</span> <span class="pre">plot_geometry,</span> <span class="pre">color='tab:blue',</span> <span class="pre">linewidth=1):\n\t\t\tPlots</span> <span class="pre">a</span> <span class="pre">list</span> <span class="pre">of</span> <span class="pre">photon</span> <span class="pre">tracks.\n\n\t\tincident_angle(self,</span> <span class="pre">last_pos):\n\t\t\tCalculates</span> <span class="pre">the</span> <span class="pre">incident</span> <span class="pre">angle</span> <span class="pre">of</span> <span class="pre">photons</span> <span class="pre">based</span> <span class="pre">on</span> <span class="pre">their</span> <span class="pre">last</span> <span class="pre">known</span> <span class="pre">positions.\n\n\t\tget_tallies():\n\t\t\tCompute</span> <span class="pre">tallies</span> <span class="pre">of</span> <span class="pre">photon</span> <span class="pre">interactions.\n\t\t\n\t\tsave_detected(filename):\n\t\t\tSave</span> <span class="pre">detected</span> <span class="pre">photon</span> <span class="pre">data</span> <span class="pre">to</span> <span class="pre">a</span> <span class="pre">CSV</span> <span class="pre">file.\n\n\t\tphoton_shooting_angle(self,</span> <span class="pre">num_tracks=None,</span> <span class="pre">detected_only=True,</span> <span class="pre">reflected_only=False,</span> <span class="pre">diffuse_only=False):\n\t\t\tCompute</span> <span class="pre">and</span> <span class="pre">plot</span> <span class="pre">the</span> <span class="pre">distribution</span> <span class="pre">of</span> <span class="pre">photon</span> <span class="pre">shooting</span> <span class="pre">angles.\n\n\t\tphoton_incident_angle_emission_angle_correlation(self,</span> <span class="pre">num_tracks=None,</span> <span class="pre">detected_only=True,</span> <span class="pre">reflected_specular_only=True,</span> <span class="pre">reflected_diffuse_only=False):\n\t\t\tPlot</span> <span class="pre">the</span> <span class="pre">correlation</span> <span class="pre">between</span> <span class="pre">incident</span> <span class="pre">angles</span> <span class="pre">and</span> <span class="pre">emission</span> <span class="pre">angles</span> <span class="pre">of</span> <span class="pre">detected</span> <span class="pre">photons.\n\n\t\tplot_angle_hist(self,</span> <span class="pre">histogramfilename,</span> <span class="pre">showPlot=True):\n\t\t\tPlot</span> <span class="pre">and</span> <span class="pre">save</span> <span class="pre">a</span> <span class="pre">histogram</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">detected</span> <span class="pre">photon</span> <span class="pre">incident</span> <span class="pre">angles.\n\n\t\tplot_position_hist(self):\n\t\t\tPlot</span> <span class="pre">a</span> <span class="pre">2D</span> <span class="pre">histogram</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">detected</span> <span class="pre">photon</span> <span class="pre">positions.\n\n\t\tplot_refl_multiplicity(self,</span> <span class="pre">do_log=True,</span> <span class="pre">density=True):\n\t\t\tPlot</span> <span class="pre">the</span> <span class="pre">reflection</span> <span class="pre">multiplicity</span> <span class="pre">histogram</span> <span class="pre">for</span> <span class="pre">detected</span> <span class="pre">photons.\n\n\t\tplot_refl_angle(self,</span> <span class="pre">do_log=True,</span> <span class="pre">low_angle=0,</span> <span class="pre">high_angle=91):\n\t\t\tPlot</span> <span class="pre">reflection</span> <span class="pre">angle</span> <span class="pre">versus</span> <span class="pre">incident</span> <span class="pre">angle.\n\n\t\tplot_all_tracks_wrapper():\n\t\t\tPlot</span> <span class="pre">all</span> <span class="pre">photon</span> <span class="pre">tracks.\n\n\t\tplot_detected_tracks_wrapper():\n\t\t\tPlot</span> <span class="pre">detected</span> <span class="pre">photon</span> <span class="pre">tracks.\n\n\t\tplot_undetected_tracks_wrapper():\n\t\t\tPlot</span> <span class="pre">undetected</span> <span class="pre">photon</span> <span class="pre">tracks.\n\n\t\tplot_reflected_tracks_wrapper():\n\t\t\tPlot</span> <span class="pre">reflected</span> <span class="pre">photon</span> <span class="pre">tracks.\n\n\t\tplot_filtered_scattered_tracks_wrapper():\n\t\t\tPlot</span> <span class="pre">filtered</span> <span class="pre">scattered</span> <span class="pre">photon</span> <span class="pre">tracks.\n\n\t\tplot_detected_reflected_tracks_wrapper():\n\t\t\tPlot</span> <span class="pre">detected</span> <span class="pre">and</span> <span class="pre">reflected</span> <span class="pre">photon</span> <span class="pre">tracks.\n\n\t\tplot_specular_reflected_tracks_wrapper():\n\t\t\tPlot</span> <span class="pre">specularly</span> <span class="pre">reflected</span> <span class="pre">photon</span> <span class="pre">tracks.\n\n\t\tplot_diffuse_reflected_tracks_wrapper():\n\t\t\tPlot</span> <span class="pre">diffusely</span> <span class="pre">reflected</span> <span class="pre">photon</span> <span class="pre">tracks.\n\n\t\tplot_refl_multiplicity_wrapper():\n\t\t\tPlot</span> <span class="pre">reflection</span> <span class="pre">multiplicity</span> <span class="pre">histogram.\n\n\t\tphoton_shooting_angle_wrapper():\n\t\t\tPlot</span> <span class="pre">photon</span> <span class="pre">shooting</span> <span class="pre">angles.\n\n\t\tphoton_incident_angle_emission_angle_correlation_wrapper():\n\t\t\tPlot</span> <span class="pre">incident</span> <span class="pre">angle</span> <span class="pre">versus</span> <span class="pre">emission</span> <span class="pre">angle</span> <span class="pre">correlation.\n\n\t\tplot_angle_hist_wrapper(showPlot=True):\n\t\t\tPlot</span> <span class="pre">incident</span> <span class="pre">angle</span> <span class="pre">histogram</span> <span class="pre">and</span> <span class="pre">save</span> <span class="pre">to</span> <span class="pre">file.\n\n\t\tplot_refl_angle_wrapper():\n\t\t\tPlot</span> <span class="pre">reflection</span> <span class="pre">angle</span> <span class="pre">versus</span> <span class="pre">incident</span> <span class="pre">angle.\n\n\t\tplot_position_hist_wrapper():\n\t\t\tPlot</span> <span class="pre">photon</span> <span class="pre">position</span> <span class="pre">histogram.\n\n\t\texecute_plots():\n\t\t\tExecute</span> <span class="pre">selected</span> <span class="pre">plot</span> <span class="pre">generation</span> <span class="pre">functions.\n\n\tNotes:\n\t\t-</span> <span class="pre">This</span> <span class="pre">class</span> <span class="pre">assumes</span> <span class="pre">the</span> <span class="pre">availability</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">`geometry_manager`</span> <span class="pre">class</span> <span class="pre">for</span> <span class="pre">geometry-related</span> <span class="pre">operations.\n\t\t-</span> <span class="pre">It</span> <span class="pre">initializes</span> <span class="pre">various</span> <span class="pre">attributes,</span> <span class="pre">prepares</span> <span class="pre">tracks</span> <span class="pre">for</span> <span class="pre">analysis,</span> <span class="pre">and</span> <span class="pre">generates</span> <span class="pre">plots</span> <span class="pre">based</span> <span class="pre">on</span> <span class="pre">user-selected</span> <span class="pre">options.\n\t\t-</span> <span class="pre">The</span> <span class="pre">class</span> <span class="pre">interacts</span> <span class="pre">with</span> <span class="pre">external</span> <span class="pre">data</span> <span class="pre">files</span> <span class="pre">for</span> <span class="pre">saving</span> <span class="pre">and</span> <span class="pre">loading</span> <span class="pre">data</span> <span class="pre">and</span> <span class="pre">simulation</span> <span class="pre">results.\n\t&quot;,</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.__init__&gt;,</span> <span class="pre">'preprocess_tracks':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.preprocess_tracks&gt;,</span> <span class="pre">'plot_tracks':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_tracks&gt;,</span> <span class="pre">'incident_angle':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.incident_angle&gt;,</span> <span class="pre">'get_tallies':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.get_tallies&gt;,</span> <span class="pre">'save_detected':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.save_detected&gt;,</span> <span class="pre">'photon_shooting_angle':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.photon_shooting_angle&gt;,</span> <span class="pre">'photon_incident_angle_emission_angle_correlation':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.photon_incident_angle_emission_angle_correlation&gt;,</span> <span class="pre">'plot_angle_hist':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_angle_hist&gt;,</span> <span class="pre">'plot_position_hist':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_position_hist&gt;,</span> <span class="pre">'plot_refl_multiplicity':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_refl_multiplicity&gt;,</span> <span class="pre">'plot_refl_angle':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_refl_angle&gt;,</span> <span class="pre">'plot_all_tracks_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_all_tracks_wrapper&gt;,</span> <span class="pre">'plot_detected_tracks_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_detected_tracks_wrapper&gt;,</span> <span class="pre">'plot_undetected_tracks_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_undetected_tracks_wrapper&gt;,</span> <span class="pre">'plot_reflected_tracks_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_reflected_tracks_wrapper&gt;,</span> <span class="pre">'plot_filtered_scattered_tracks_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_filtered_scattered_tracks_wrapper&gt;,</span> <span class="pre">'plot_detected_reflected_tracks_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_detected_reflected_tracks_wrapper&gt;,</span> <span class="pre">'plot_specular_reflected_tracks_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_specular_reflected_tracks_wrapper&gt;,</span> <span class="pre">'plot_diffuse_reflected_tracks_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_diffuse_reflected_tracks_wrapper&gt;,</span> <span class="pre">'plot_refl_multiplicity_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_refl_multiplicity_wrapper&gt;,</span> <span class="pre">'photon_shooting_angle_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.photon_shooting_angle_wrapper&gt;,</span> <span class="pre">'photon_incident_angle_emission_angle_correlation_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.photon_incident_angle_emission_angle_correlation_wrapper&gt;,</span> <span class="pre">'plot_angle_hist_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_angle_hist_wrapper&gt;,</span> <span class="pre">'plot_refl_angle_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_refl_angle_wrapper&gt;,</span> <span class="pre">'plot_position_hist_wrapper':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.plot_position_hist_wrapper&gt;,</span> <span class="pre">'execute_plots':</span> <span class="pre">&lt;function</span> <span class="pre">analysis_manager.execute_plots&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'analysis_manager'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'analysis_manager'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></em><a class="headerlink" href="#analysis_manager.analysis_manager.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geometry_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photon_tracks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">histories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the analysis manager with necessary parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geometry_manager</strong> (<em>geometry_manager</em>) – Instance of geometry_manager.</p></li>
+<li><p><strong>experiment_name</strong> (<em>str</em>) – Name of the experiment.</p></li>
+<li><p><strong>selected_plots</strong> (<em>list</em>) – List of selected plots to generate.</p></li>
+<li><p><strong>photons</strong> (<em>np.ndarray</em>) – Array containing photon data.</p></li>
+<li><p><strong>photon_tracks</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of photon tracks. Default is 1000.</p></li>
+<li><p><strong>run_id</strong> (<em>int</em><em>, </em><em>optional</em>) – ID of the current simulation run. Default is 0.</p></li>
+<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Seed number used for random number generation. Default is 0.</p></li>
+<li><p><strong>histories</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Dictionary containing photon histories. Default is None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'analysis_manager'</span></em><a class="headerlink" href="#analysis_manager.analysis_manager.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">execute_plots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.execute_plots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the specified plot functions.</p>
+<p>This method iterates through the list of plot names in <cite>self.plots</cite> and calls the corresponding
+plot functions defined in <cite>self.plot_functions</cite>. If a plot name in <cite>self.plots</cite> is not recognized,
+it prints an error message listing the available plot functions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">plots</span></span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of plot names to execute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_functions">
+<span class="sig-name descname"><span class="pre">plot_functions</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.plot_functions" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary mapping plot names to their corresponding functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">get_tallies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.get_tallies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate tallies and generate summaries based on photon flags and histories.</p>
+<p>This method initializes and populates several attributes (<cite>tallies</cite> and <cite>efficiency</cite>)
+based on the photon flags and histories stored in the object.</p>
+<dl class="simple">
+<dt>Attributes Set:</dt><dd><dl class="simple">
+<dt>tallies (dict): A dictionary containing tallies for various photon interactions:</dt><dd><ul class="simple">
+<li><p>‘NO_HIT’: Photons that did not hit any surface.</p></li>
+<li><p>‘BULK_ABSORB’: Photons absorbed in bulk material.</p></li>
+<li><p>‘SURFACE_DETECT’: Photons detected at a surface.</p></li>
+<li><p>‘SURFACE_ABSORB’: Photons absorbed at a surface.</p></li>
+<li><p>‘RAYLEIGH_SCATTER : Photons that are Rayleigh Scattered.</p></li>
+<li><p>‘REFLECT_DIFFUSE’: Photons diffusely reflected.</p></li>
+<li><p>‘REFLECT_SPECULAR’ : Photons specularly diffused.</p></li>
+</ul>
+</dd>
+<dt>efficiency (float): Efficiency of detecting photons at surfaces, calculated as the</dt><dd><p>ratio of detected photons to total particles.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>The method prints a summary of tallies and counts for each interaction type, as well as
+efficiencies. It also computes and stores positions and incident angles of detected photons.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The method assumes the existence of <cite>self.photons</cite> containing photon information.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">incident_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_pos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.incident_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the incident angle of photons based on their last known positions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>last_pos</strong> (<em>np.ndarray</em>) – Array of shape (N, 3) containing the last positions of photons
+with coordinates (x, y, z).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of incident angles in degrees corresponding to each photon.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>The method computes the incident angle of photons relative to the x-axis using the formula:</dt><dd><p>angle = arccos(<a href="#id35"><span class="problematic" id="id36">|y|</span></a> / sqrt(x^2 + y^2 + z^2)) * (180 / pi)</p>
+</dd>
+</dl>
+<p>This angle represents the deviation from the x-axis in a 3D Cartesian coordinate system.</p>
+<p class="rubric">Example</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">last_positions</span> <span class="pre">=</span> <span class="pre">np.array([[1.0,</span> <span class="pre">2.0,</span> <span class="pre">3.0],</span> <span class="pre">[0.5,</span> <span class="pre">1.0,</span> <span class="pre">2.0]])</span>
+<span class="pre">angles</span> <span class="pre">=</span> <span class="pre">incident_angle(last_positions)</span>
+<span class="pre">print(angles)</span>&#160; <span class="pre">#</span> <span class="pre">Output:</span> <span class="pre">array([73.3008689</span> <span class="pre">,</span> <span class="pre">63.43494882])</span>
+<span class="pre">`</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">photon_incident_angle_emission_angle_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_tracks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detected_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reflected_specular_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reflected_diffuse_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.photon_incident_angle_emission_angle_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the correlation between incident angles and emission angles of detected photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_tracks</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of photon tracks to analyze. Defaults to <cite>self.num_particles</cite>.</p></li>
+<li><p><strong>detected_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only detected photons. Defaults to True.</p></li>
+<li><p><strong>reflected_specular_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only specularly reflected photons. Defaults to True.</p></li>
+<li><p><strong>reflected_diffuse_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only diffusely reflected photons. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The method calculates both the emission and incident angles for the selected photon tracks based on
+the specified filtering criteria (<cite>detected_only</cite>, <cite>reflected_specular_only</cite>, <cite>reflected_diffuse_only</cite>).
+It then plots a 2D histogram showing the correlation between these angles.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>If <cite>num_tracks</cite> is not provided, it defaults to <cite>self.num_particles</cite>.</p></li>
+<li><p>Assumes <cite>self.photon_tracks</cite>, <cite>self.tallies</cite>, and <cite>self.particle_histories</cite> are already computed.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">photon_incident_angle_emission_angle_correlation_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.photon_incident_angle_emission_angle_correlation_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot photon incident angle vs. emission angle correlation.</p>
+<p>This method generates a plot of the correlation between photon incident angles and emission angles
+using the <cite>photon_incident_angle_emission_angle_correlation</cite> method with default arguments.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">photon_shooting_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_tracks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detected_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reflected_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diffuse_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.photon_shooting_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute and plot the distribution of photon shooting angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_tracks</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of photon tracks to analyze. Defaults to <cite>self.num_particles</cite>.</p></li>
+<li><p><strong>detected_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only detected photons. Defaults to True.</p></li>
+<li><p><strong>reflected_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only specularly reflected photons. Defaults to False.</p></li>
+<li><p><strong>diffuse_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only diffusely reflected photons. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The method calculates shooting angles between consecutive points along photon tracks based on
+specified filtering criteria (<cite>detected_only</cite>, <cite>reflected_only</cite>, <cite>diffuse_only</cite>). It then
+plots a histogram showing the distribution of these angles.</p>
+<p>The histogram bins are set from 0 to 90 degrees with integer steps.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>If <cite>num_tracks</cite> is not provided, it defaults to <cite>self.num_particles</cite>.</p></li>
+<li><p>Assumes <cite>self.photon_tracks</cite>, <cite>self.tallies</cite>, and <cite>self.particle_histories</cite> are already computed.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">photon_shooting_angle_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.photon_shooting_angle_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot photon shooting angle.</p>
+<p>This method generates a plot of photon shooting angles using the <cite>photon_shooting_angle</cite> method
+with default arguments.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">plot_all_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_all_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot all photon tracks.</p>
+<p>This method generates a plot of all photon tracks using the <cite>plot_tracks</cite> method with the title
+‘Photon Tracks, Seed {self.seed}, Run {self.run_id}’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">plot_angle_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">histogramfilename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showPlot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_angle_hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot and save a histogram of the detected photon incident angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>histogramfilename</strong> (<em>str</em>) – File path to save the histogram data as a CSV file.</p></li>
+<li><p><strong>showPlot</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to display the plot. Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Histogram counts for each bin.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p>This method generates a histogram of detected photon incident angles, plots the histogram,
+and saves the histogram data to a CSV file. The CSV file includes columns for incident angles,
+detected counts, and the refractive index of liquid xenon.</p>
+<p>The histogram bins are set from 0 to 90 degrees with integer steps.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.lxe_refractive_index">
+<span class="sig-name descname"><span class="pre">lxe_refractive_index</span></span><a class="headerlink" href="#analysis_manager.analysis_manager.lxe_refractive_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refractive index of liquid xenon, obtained from material properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Assumes <cite>self.detected_angles</cite> is already computed.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">plot_angle_hist_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">showPlot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_angle_hist_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot and save the incident angle histogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>showPlot</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to display the plot. Default is True.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Histogram counts for each bin.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p>This method generates and saves a histogram of detected photon incident angles using the <cite>plot_angle_hist</cite> method.
+The histogram is saved to a file named based on the experiment name and seed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">plot_detected_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_detected_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot detected and reflected photon tracks.</p>
+<p>This method generates a plot of detected and reflected photon tracks using the <cite>plot_tracks</cite> method with the title
+‘Detected and Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">plot_detected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_detected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot detected photon tracks.</p>
+<p>This method generates a plot of detected photon tracks using the <cite>plot_tracks</cite> method with the title
+‘Detected Photon Tracks, Seed {self.seed}, Run {self.run_id}’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">plot_diffuse_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_diffuse_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id13" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot diffusively reflected photon tracks.</p>
+<p>This method generates a plot of diffusively reflected photon tracks using the <cite>plot_tracks</cite> method with the title
+‘Diffusively Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">plot_filtered_scattered_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_filtered_scattered_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id14" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot filtered scattered photon tracks.</p>
+<p>This method generates a plot of filtered scattered photon tracks using the <cite>plot_tracks</cite> method with the title
+‘Filtered Scattered Photon Tracks, Seed {self.seed}, Run {self.run_id}’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">plot_position_hist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_position_hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id15" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a 2D histogram of the detected photon positions.</p>
+<p>This method generates and displays a 2D histogram of the detected photon positions in the x-z plane.
+The histogram bins are set from 85 to 97.5 mm with 50 intervals for both x and z positions.</p>
+<p>The color bar represents the count of detected photons within each bin.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Assumes <cite>self.detected_positions</cite> is already computed.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">plot_position_hist_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_position_hist_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot 2D histogram of detected photon positions.</p>
+<p>This method generates a 2D histogram of detected photon positions using the <cite>plot_position_hist</cite> method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">plot_refl_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">do_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">91</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_refl_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id17" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a 2D histogram of incident angles versus reflection multiplicity for detected photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>do_log</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use a logarithmic scale for the color bar. Defaults to True.</p></li>
+<li><p><strong>low_angle</strong> (<em>int</em><em>, </em><em>optional</em>) – The lower bound for incident angle bins. Defaults to 0.</p></li>
+<li><p><strong>high_angle</strong> (<em>int</em><em>, </em><em>optional</em>) – The upper bound for incident angle bins. Defaults to 91.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This method generates a 2D histogram showing the correlation between the incident angles of detected photons
+and their reflection multiplicity. The incident angle bins range from <cite>low_angle</cite> to <cite>high_angle</cite> degrees,
+and the reflection multiplicity bins range from 0 to 9.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Assumes <cite>self.detected_angles</cite> and <cite>self.particle_histories[‘REFLECT_SPECULAR’]</cite> are already computed.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">plot_refl_angle_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_refl_angle_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id18" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot reflection angle histogram.</p>
+<p>This method generates a 2D histogram of incident angles versus reflection multiplicity using the <cite>plot_refl_angle</cite> method
+with a lower angle bound of 12 degrees and no logarithmic scale.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">plot_refl_multiplicity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">do_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_refl_multiplicity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id19" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the reflection multiplicity histogram for detected photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>do_log</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use a logarithmic scale for the y-axis. Defaults to True.</p></li>
+<li><p><strong>density</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to normalize the histogram to form a probability density. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This method generates a histogram of the number of specular reflections experienced by detected photons.
+The histogram bins range from 0 to 9. It also provides the option to display the y-axis on a logarithmic scale
+and to normalize the histogram to show the fraction of photons.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Assumes <cite>self.particle_histories[‘REFLECT_SPECULAR’]</cite> and <cite>self.tallies[‘SURFACE_DETECT’]</cite> are already computed.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">plot_refl_multiplicity_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_refl_multiplicity_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id20" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot reflection multiplicity.</p>
+<p>This method generates a plot of reflection multiplicity using the <cite>plot_refl_multiplicity</cite> method with density set to True.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">plot_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id21" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot reflected photon tracks.</p>
+<p>This method generates a plot of reflected photon tracks using the <cite>plot_tracks</cite> method with the title
+‘Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">plot_specular_reflected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_specular_reflected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id22" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot specularly reflected photon tracks.</p>
+<p>This method generates a plot of specularly reflected photon tracks using the <cite>plot_tracks</cite> method with the title
+‘Specularly Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis_manager.analysis_manager.plot_tracks">
+<span class="sig-name descname"><span class="pre">plot_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tracks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_geometry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tab:blue'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linewidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis_manager.analysis_manager.plot_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot photon tracks in a 3D space and optionally overlay 3D geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tracks</strong> (<em>list of arrays</em>) – List containing arrays of photon tracks, where each array
+represents a track with coordinates (x, y, z).</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title for the plot.</p></li>
+<li><p><strong>plot_geometry</strong> (<em>bool</em>) – Flag indicating whether to plot 3D geometry alongside tracks.</p></li>
+<li><p><strong>color</strong> (<em>str</em><em>, </em><em>optional</em>) – Color of the plotted tracks. Defaults to ‘tab:blue’.</p></li>
+<li><p><strong>linewidth</strong> (<em>float</em><em>, </em><em>optional</em>) – Line width of the plotted tracks. Defaults to 1.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The method plots each track in the <cite>tracks</cite> list as a 3D line plot using Matplotlib.
+It optionally overlays 3D geometry from a CSV file specified by <cite>geometry_data_path</cite>.</p>
+<p>If <cite>plot_geometry</cite> is True, this method reads geometry data from <cite>self.geometry_data_path</cite>,
+which is assumed to be a CSV file containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘stl_filepath’: File paths to STL files representing 3D geometry.</p></li>
+<li><p>‘color’: Colors for each geometry.</p></li>
+<li><p>‘displacement y’: Y-axis displacement for each geometry.</p></li>
+<li><p>‘displacement z’: Z-axis displacement for each geometry.</p></li>
+</ul>
+</div></blockquote>
+<p>The 3D geometry is rendered using <cite>matplotlib.pyplot</cite> and <cite>mesh.Mesh</cite>, enhancing the
+visualization with translucent colored meshes.</p>
+<p class="rubric">Example</p>
+<p>To plot tracks with geometry:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">plot_tracks(tracks,</span> <span class="pre">&quot;Photon</span> <span class="pre">Tracks</span> <span class="pre">with</span> <span class="pre">Geometry&quot;,</span> <span class="pre">True)</span>
+<span class="pre">`</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Requires Matplotlib and numpy-stl libraries for 3D plotting and STL file handling.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">plot_undetected_tracks_wrapper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.plot_undetected_tracks_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id23" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot undetected photon tracks.</p>
+<p>This method generates a plot of undetected photon tracks using the <cite>plot_tracks</cite> method with the title
+‘Undetected Photon Tracks, Seed {self.seed}, Run {self.run_id}’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">preprocess_tracks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.preprocess_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id24" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process photon tracks and categorize them based on detection and reflection criteria.</p>
+<p>This method initializes several lists to store categorized photon tracks, then iterates
+over each photon’s track to filter out duplicate consecutive positions. It categorizes
+the tracks into various categories based on whether the photon was detected, reflected
+(specularly or diffusely), or scattered. These lists are then later used to plot the
+individual trajectories of photons</p>
+<p>The method iterates through each photon’s track, removes duplicate consecutive positions,
+and categorizes the track based on the following criteria:</p>
+<ul class="simple">
+<li><p>If the photon is detected, its track is added to <cite>detected_tracks</cite>.</p></li>
+<li><p>If the photon is not detected, its track is added to <cite>undetected_tracks</cite>.</p></li>
+<li><p>If the photon is specularly reflected, its track is added to <cite>specular_reflected_tracks</cite></p></li>
+</ul>
+<p>and <cite>reflected_tracks</cite>.
+- If the photon is diffusely reflected, its track is added to <cite>diffuse_reflected_tracks</cite>
+and <cite>reflected_tracks</cite>.
+- If the photon is both detected and reflected (specularly or diffusely), its track is
+added to <cite>detected_reflected_tracks</cite>.
+- If the photon is scattered but not detected and not specularly reflected, its track
+is added to <cite>filtered_scattered_tracks</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id25">
+<span class="sig-name descname"><span class="pre">num_particles</span></span><a class="headerlink" href="#id25" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of photons being tracked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id26">
+<span class="sig-name descname"><span class="pre">all_tracks</span></span><a class="headerlink" href="#id26" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing the tracks of all photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">detected_tracks</span></span><a class="headerlink" href="#id27" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing the tracks of detected photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id28">
+<span class="sig-name descname"><span class="pre">undetected_tracks</span></span><a class="headerlink" href="#id28" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing the tracks of undetected photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">reflected_tracks</span></span><a class="headerlink" href="#id29" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing the tracks of reflected photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">filtered_scattered_tracks</span></span><a class="headerlink" href="#id30" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing the tracks of scattered photons
+that are not detected or specularly reflected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">detected_reflected_tracks</span></span><a class="headerlink" href="#id31" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing the tracks of photons that are
+both detected and reflected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id32">
+<span class="sig-name descname"><span class="pre">specular_reflected_tracks</span></span><a class="headerlink" href="#id32" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing the tracks of photons that are
+specularly reflected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id33">
+<span class="sig-name descname"><span class="pre">diffuse_reflected_tracks</span></span><a class="headerlink" href="#id33" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing the tracks of photons that are
+diffusively reflected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id34">
+<span class="sig-name descname"><span class="pre">save_detected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis_manager.html#analysis_manager.save_detected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id34" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Save detected photon data to a CSV file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str): File path to save the CSV data.</p>
+</dd>
+</dl>
+<p>This method prepares and saves data related to detected photons, including their positions,
+emission angles, detection efficiency, and material properties such as refractive indices.
+If no photons are detected (<cite>self.efficiency</cite> is zero), placeholder values (‘none’) are used
+for positions and angles.</p>
+<dl class="simple">
+<dt>The saved CSV file includes columns for:</dt><dd><ul class="simple">
+<li><p>‘x (mm)’: X positions of detected photons.</p></li>
+<li><p>‘y (mm)’: Y positions of detected photons.</p></li>
+<li><p>‘z (mm)’: Z positions of detected photons.</p></li>
+<li><p>‘emission angle’: Emission angle associated with the run ID.</p></li>
+<li><p>‘angle’: Incident angles of detected photons.</p></li>
+<li><p>‘PTE’: Detection efficiency (Probability to Emission) for each detected photon.</p></li>
+<li><p>‘LXe Index of Refraction’: Refractive index of liquid xenon.</p></li>
+<li><p>‘Seed number’: Seed number used in the simulation.</p></li>
+<li><p>‘Si eta’: Real part of the refractive index of silicon.</p></li>
+<li><p>‘Si k’: Imaginary part of the refractive index of silicon.</p></li>
+</ul>
+</dd>
+<dt>Note:</dt><dd><ul class="simple">
+<li><p>Assumes <cite>self.detected_positions</cite> and <cite>self.detected_angles</cite> are already computed.</p></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<p>se</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Chroma Analysis</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">nEXO-chroma</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">analysis_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry_manager.html">geometry_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="material_manager.html">material_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_manager.html">run_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surface_manager.html">surface_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test_chroma.html">test_chroma module</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">analysis_manager module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">nEXO-chroma</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">nEXO-chroma</a></li>
+      <li>Next: <a href="geometry_manager.html" title="next chapter">geometry_manager module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, PocarLab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/analysis_manager.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
