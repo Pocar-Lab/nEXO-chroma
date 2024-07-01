@@ -121,7 +121,7 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.gm">
 <span class="sig-name descname"><span class="pre">gm</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.gm" title="Link to this definition"></a></dt>
-<dd><p>Geometry manager.</p>
+<dd><p>Instance of the geometry_manager class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object</p>
@@ -132,7 +132,7 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="analysis.analysis_manager.analysis_manager.experiment_name">
 <span class="sig-name descname"><span class="pre">experiment_name</span></span><a class="headerlink" href="#analysis.analysis_manager.analysis_manager.experiment_name" title="Link to this definition"></a></dt>
-<dd><p>Name of the experiment.</p>
+<dd><p>String used to identify each experiment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -461,7 +461,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_tracks</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of tracks to plot (default is None, which means all).</p></li>
+<li><p><strong>num_tracks</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of tracks to plot (default is None, which means all photons will be plotted.).</p></li>
 <li><p><strong>detected_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only detected photons (default is True).</p></li>
 <li><p><strong>reflected_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only reflected photons (default is False).</p></li>
 <li><p><strong>diffuse_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include only diffusely reflected photons (default is False).</p></li>
@@ -638,7 +638,7 @@ creating solid objects, and organizing them into a detector geometry.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.experiment_name">
 <span class="sig-name descname"><span class="pre">experiment_name</span></span><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.experiment_name" title="Link to this definition"></a></dt>
-<dd><p>Name of the experiment.</p>
+<dd><p>String used to identify each experiment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -660,7 +660,7 @@ creating solid objects, and organizing them into a detector geometry.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.mat_manager">
 <span class="sig-name descname"><span class="pre">mat_manager</span></span><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.mat_manager" title="Link to this definition"></a></dt>
-<dd><p>Manager for materials.</p>
+<dd><p>Instance of the material_manager class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="source/analysis.html#analysis.material_manager.material_manager" title="analysis.material_manager.material_manager">material_manager</a></p>
@@ -671,7 +671,7 @@ creating solid objects, and organizing them into a detector geometry.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="analysis.geometry_manager.geometry_manager.surf_manager">
 <span class="sig-name descname"><span class="pre">surf_manager</span></span><a class="headerlink" href="#analysis.geometry_manager.geometry_manager.surf_manager" title="Link to this definition"></a></dt>
-<dd><p>Manager for surfaces.</p>
+<dd><p>Instance of the surface_manager class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="source/analysis.html#analysis.surface_manager.surface_manager" title="analysis.surface_manager.surface_manager">surface_manager</a></p>
@@ -760,7 +760,7 @@ Adds the solids to the global geometry based on their type.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="analysis.material_manager.material_manager.experiment_name">
 <span class="sig-name descname"><span class="pre">experiment_name</span></span><a class="headerlink" href="#analysis.material_manager.material_manager.experiment_name" title="Link to this definition"></a></dt>
-<dd><p>Name of the experiment.</p>
+<dd><p>String used to identify each experiment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -865,7 +865,7 @@ Adds the solids to the global geometry based on their type.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.material_manager.material_manager.get_material">
 <span class="sig-name descname"><span class="pre">get_material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">material_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/material_manager.html#material_manager.get_material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.material_manager.material_manager.get_material" title="Link to this definition"></a></dt>
-<dd><p>Retrieves the Material object for a given material name.</p>
+<dd><p>Retrieves the Material object for a given material name from the created materials dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>material_name</strong> (<em>str</em>) – The name of the material.</p>
@@ -891,40 +891,151 @@ Adds the solids to the global geometry based on their type.</p>
 <dt class="sig sig-object py" id="analysis.run_manager.primary_generator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.run_manager.</span></span><span class="sig-name descname"><span class="pre">primary_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_particles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generates primary photons for the simulation, including their positions, directions, polarization, and wavelengths.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_particles</strong> (<em>int</em>) – The number of particles to generate.</p></li>
+<li><p><strong>run_id</strong> (<em>int</em>) – The unique identifier for the run.</p></li>
+<li><p><strong>center_pos</strong> (<em>list</em>) – The center position of the photon source.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_beam_dir">
 <span class="sig-name descname"><span class="pre">get_beam_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_beam_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_beam_dir" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Generates beam directions at the specified angle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>angle</strong> (<em>float</em>) – The angle of the beam direction.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The array of beam directions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_isotropic_dir">
 <span class="sig-name descname"><span class="pre">get_isotropic_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_isotropic_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_isotropic_dir" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Generates isotropic directions for the photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The array of directions.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_point_source_pos">
 <span class="sig-name descname"><span class="pre">get_point_source_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_point_source_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_point_source_pos" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Generates positions for a point source at the given coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x0</strong> (<em>float</em>) – The x-coordinate of the source.</p></li>
+<li><p><strong>y0</strong> (<em>float</em>) – The y-coordinate of the source.</p></li>
+<li><p><strong>z0</strong> (<em>float</em>) – The z-coordinate of the source.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The array of positions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_x_cone_dir">
 <span class="sig-name descname"><span class="pre">get_x_cone_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_x_cone_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_x_cone_dir" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Generates directions for a cone in the x direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angle</strong> (<em>float</em>) – The angle of the cone.</p></li>
+<li><p><strong>positive</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the cone is in the positive x direction, defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The array of cone directions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_xy_disk_source_pos">
 <span class="sig-name descname"><span class="pre">get_xy_disk_source_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_xy_disk_source_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_xy_disk_source_pos" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Generates positions for a disk source in the xy-plane with the given center and radius.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x0</strong> (<em>float</em>) – The x-coordinate of the disk center.</p></li>
+<li><p><strong>y0</strong> (<em>float</em>) – The y-coordinate of the disk center.</p></li>
+<li><p><strong>z0</strong> (<em>float</em>) – The z-coordinate of the disk center.</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – The radius of the disk.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The array of positions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_xz_disk_source_pos">
 <span class="sig-name descname"><span class="pre">get_xz_disk_source_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_xz_disk_source_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_xz_disk_source_pos" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Generates positions for a disk source in the xz-plane with the given center and radius.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x0</strong> (<em>float</em>) – The x-coordinate of the disk center.</p></li>
+<li><p><strong>y0</strong> (<em>float</em>) – The y-coordinate of the disk center.</p></li>
+<li><p><strong>z0</strong> (<em>float</em>) – The z-coordinate of the disk center.</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – The radius of the disk.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The array of positions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.run_manager.primary_generator.get_y_cone_dir">
 <span class="sig-name descname"><span class="pre">get_y_cone_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#primary_generator.get_y_cone_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.primary_generator.get_y_cone_dir" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Generates directions for a cone in the y direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angle</strong> (<em>float</em>) – The angle of the cone.</p></li>
+<li><p><strong>positive</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the cone is in the positive y direction, defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The array of cone directions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -932,20 +1043,61 @@ Adds the solids to the global geometry based on their type.</p>
 <dt class="sig sig-object py" id="analysis.run_manager.run_manager">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.run_manager.</span></span><span class="sig-name descname"><span class="pre">run_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geometry_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_particles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plots</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#run_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.run_manager" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages the simulation run, including initializing the simulation, generating primary photons,
+and propagating photons through the geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geometry_manager</strong> (<em>GeometryManager</em>) – The geometry manager that handles the geometry of the simulation.</p></li>
+<li><p><strong>experiment_name</strong> (<em>str</em>) – The name of the experiment.</p></li>
+<li><p><strong>random_seed</strong> (<em>int</em>) – The random seed for reproducibility.</p></li>
+<li><p><strong>num_particles</strong> (<em>int</em>) – The number of particles to simulate.</p></li>
+<li><p><strong>run_id</strong> (<em>int</em>) – The unique identifier for the run.</p></li>
+<li><p><strong>plots</strong> (<em>list</em>) – The plots to be generated during analysis.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.run_manager.run_manager.propagate_photon">
 <span class="sig-name descname"><span class="pre">propagate_photon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#run_manager.propagate_photon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.run_manager.propagate_photon" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Propagates photons through the geometry using the GPU, collecting their positions and interaction histories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.run_manager.run_manager.reset_nonterminal_flags">
 <span class="sig-name descname"><span class="pre">reset_nonterminal_flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flag_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#run_manager.reset_nonterminal_flags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.run_manager.reset_nonterminal_flags" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Resets non-terminal interaction flags in the given flag list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>flag_list</strong> (<em>numpy.ndarray</em>) – The list of photon interaction flags.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated flag list with non-terminal flags reset.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.run_manager.run_manager.update_tallies">
 <span class="sig-name descname"><span class="pre">update_tallies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photons</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/run_manager.html#run_manager.update_tallies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.run_manager.run_manager.update_tallies" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Updates the tally of interactions for the given photons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>photons</strong> (<em>Photons</em>) – The photons whose interaction histories are to be updated.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -956,40 +1108,146 @@ Adds the solids to the global geometry based on their type.</p>
 <dt class="sig sig-object py" id="analysis.surface_manager.surface_manager">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.surface_manager.</span></span><span class="sig-name descname"><span class="pre">surface_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">material_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages the surfaces used in the simulation, including their properties and construction based on input data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>material_manager</strong> (<em>MaterialManager</em>) – The manager handling material properties.</p></li>
+<li><p><strong>experiment_name</strong> (<em>str</em>) – The name of the experiment.</p></li>
+<li><p><strong>run_id</strong> (<em>int</em>) – The unique identifier for the run.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.SiPMEmpirical_surface">
 <span class="sig-name descname"><span class="pre">SiPMEmpirical_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.SiPMEmpirical_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.SiPMEmpirical_surface" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Creates an empirical SiPM surface based on reflectivity data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The name of the surface.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The empirical SiPM surface object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Surface</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.build_surfaces">
 <span class="sig-name descname"><span class="pre">build_surfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.build_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.build_surfaces" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Constructs surface objects based on data read from a CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.calc_R_T">
 <span class="sig-name descname"><span class="pre">calc_R_T</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_angles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.calc_R_T"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.calc_R_T" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Calculates the reflectance and transmittance for a range of incident angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n1</strong> (<em>float</em>) – The refractive index of the outer material.</p></li>
+<li><p><strong>eta2</strong> (<em>float</em>) – The real part of the refractive index of the inner material.</p></li>
+<li><p><strong>k2</strong> (<em>float</em>) – The imaginary part of the refractive index of the inner material.</p></li>
+<li><p><strong>num_angles</strong> (<em>int</em>) – The number of angles to calculate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the angles, reflectance, and transmittance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.create_dichroic_surface">
 <span class="sig-name descname"><span class="pre">create_dichroic_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_mat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.create_dichroic_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.create_dichroic_surface" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Creates a dichroic surface with given properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the surface.</p></li>
+<li><p><strong>inner_mat</strong> (<em>str</em>) – The name of the inner material.</p></li>
+<li><p><strong>outer_mat</strong> (<em>str</em>) – The name of the outer material.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The dichroic surface object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Surface</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.create_dielectric_metal_surface">
 <span class="sig-name descname"><span class="pre">create_dielectric_metal_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_mat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.create_dielectric_metal_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.create_dielectric_metal_surface" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Creates a dielectric-metal surface with given properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the surface.</p></li>
+<li><p><strong>inner_mat</strong> (<em>str</em>) – The name of the inner material.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The dielectric-metal surface object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Surface</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.get_eta2_k2">
 <span class="sig-name descname"><span class="pre">get_eta2_k2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.get_eta2_k2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.get_eta2_k2" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Updates and retrieves the eta2 and k2 values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eta2</strong> (<em>float</em>) – The real part of the refractive index of the inner material.</p></li>
+<li><p><strong>k2</strong> (<em>float</em>) – The imaginary part of the refractive index of the inner material.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the updated eta2 and k2 values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="analysis.surface_manager.surface_manager.get_surface">
 <span class="sig-name descname"><span class="pre">get_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/surface_manager.html#surface_manager.get_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.surface_manager.surface_manager.get_surface" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves a surface object by its name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>surface_name</strong> (<em>str</em>) – The name of the surface.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The surface object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Surface</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If the surface does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

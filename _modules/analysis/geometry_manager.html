@@ -96,10 +96,10 @@
 <span class="sd">        creating solid objects, and organizing them into a detector geometry.</span>
 <span class="sd">        </span>
 <span class="sd">        Attributes:</span>
-<span class="sd">            experiment_name (str): Name of the experiment.</span>
+<span class="sd">            experiment_name (str): String used to identify each experiment.</span>
 <span class="sd">            run_id (int): Identifier for the run.</span>
-<span class="sd">            mat_manager (material_manager): Manager for materials.</span>
-<span class="sd">            surf_manager (surface_manager): Manager for surfaces.</span>
+<span class="sd">            mat_manager (material_manager): Instance of the material_manager class.</span>
+<span class="sd">            surf_manager (surface_manager): Instance of the surface_manager class.</span>
 <span class="sd">            global_geometry (Detector): The global detector geometry.</span>
 <span class="sd">            geometry_data_path (str): Path to the CSV file with geometry component data.</span>
 <span class="sd">            geometry_df (pd.DataFrame): DataFrame containing the geometry component data.</span>
@@ -110,7 +110,7 @@
 <span class="sd">        Initializes the geometry_manager with the given experiment name and run ID.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
-<span class="sd">            experiment_name (str): Name of the experiment.</span>
+<span class="sd">            experiment_name (str): String used to identify each experiment.</span>
 <span class="sd">            run_id (int): Identifier for the run.</span>
 <span class="sd">            visualize (bool): If True, visualize the geometry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>

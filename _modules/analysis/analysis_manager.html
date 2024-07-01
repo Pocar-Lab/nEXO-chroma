@@ -92,9 +92,9 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    gm : object</span>
-<span class="sd">        Geometry manager.</span>
+<span class="sd">        Instance of the geometry_manager class.</span>
 <span class="sd">    experiment_name : str</span>
-<span class="sd">        Name of the experiment.</span>
+<span class="sd">        String used to identify each experiment.</span>
 <span class="sd">    photons : ndarray</span>
 <span class="sd">        Array of photons.</span>
 <span class="sd">    photon_tracks : int</span>
@@ -286,8 +286,6 @@
 <span class="sd">        linewidth : int, optional</span>
 <span class="sd">            Line width of the tracks (default is 1).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-		<span class="c1"># fig = plt.figure()</span>
-		<span class="c1"># ax = plt.axes(projection=&#39;3d&#39;)</span>
 
 		<span class="n">figure</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 		<span class="n">axes</span> <span class="o">=</span> <span class="n">mplot3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">(</span><span class="n">figure</span><span class="p">)</span>
@@ -463,7 +461,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        num_tracks : int, optional</span>
-<span class="sd">            Number of tracks to plot (default is None, which means all).</span>
+<span class="sd">            Number of tracks to plot (default is None, which means all photons will be plotted.).</span>
 <span class="sd">        detected_only : bool, optional</span>
 <span class="sd">            Whether to include only detected photons (default is True).</span>
 <span class="sd">        reflected_only : bool, optional</span>
