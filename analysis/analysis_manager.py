@@ -627,7 +627,7 @@ class analysis_manager:
 
 	def plot_detected_tracks_wrapper(self):
 		title = f'Detected Photon Tracks, Seed {self.seed}, Run {self.run_id}'
-		self.plot_tracks(self.detected_tracks, title, False)
+		self.plot_tracks(self.detected_tracks, title, True)
 
 	def plot_undetected_tracks_wrapper(self):
 		title = f' Undetected Photon Tracks, Seed {self.seed}, Run {self.run_id}'
