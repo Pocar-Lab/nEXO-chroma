@@ -6,6 +6,6 @@ source,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_correct
 
 silica window,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - silicawindow-1 SilicaWindow-1.STL,silica,liquid xenon,None,cyan,0,0,0,solid,False
 
-copper reflector,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - Copper Reflector-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,True
+copper reflector,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - Copper Reflector-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,False
 
  
