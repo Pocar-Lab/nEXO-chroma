@@ -31,6 +31,7 @@ class run_manager:
     :type run_id: int
     :param plots: The plots to be generated during analysis.
     :type plots: list
+    :type write: boolean
     """
 
     def __init__(
@@ -41,6 +42,7 @@ class run_manager:
         num_particles,
         run_id,
         plots,
+        write,
     ):
         self.num_steps = 100
         self.run_id = run_id
@@ -67,6 +69,7 @@ class run_manager:
             self.run_id,
             self.seed,
             self.particle_histories,
+            write,
         )
 
     # create primary generator which will create all the initial photons. we will tell primary generator

@@ -75,7 +75,7 @@ def main():
 
 
     gm = geometry_manager(experiment_name=experiment_name, run_id=run_id, visualize=visualize)
-    rm = run_manager(geometry_manager=gm, experiment_name=experiment_name, random_seed=seed, num_particles=num_particles, run_id=run_id, plots=plots)
+    rm = run_manager(geometry_manager=gm, experiment_name=experiment_name, random_seed=seed, num_particles=num_particles, run_id=run_id, plots=plots, write = write)
 
 
 

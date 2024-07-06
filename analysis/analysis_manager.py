@@ -69,7 +69,7 @@ class analysis_manager:
     emit_angle : int
         Emission angle.
     """
-	def __init__(self, geometry_manager, experiment_name, selected_plots, photons, photon_tracks = 1000, run_id = 0, seed = 0, histories = None):
+	def __init__(self, geometry_manager, experiment_name, selected_plots, photons, photon_tracks = 1000, run_id = 0, seed = 0, histories = None, write = False):
 		"""
         Initializes the analysis manager.
 
@@ -91,6 +91,8 @@ class analysis_manager:
             Seed for random number generation (default is 0).
         histories : dict, optional
             Dictionary containing particle histories (default is None).
+		write : boolean
+			Boolean determining whether or not to write data to a save file.
         """
 		self.gm = geometry_manager
 		self.experiment_name = experiment_name
@@ -112,6 +114,7 @@ class analysis_manager:
 		self.get_tallies()
 		self.plots = selected_plots
 		self.geometry_data_path = f'/workspace/data_files/data/{self.experiment_name}/geometry_components_{self.experiment_name}.csv'
+		self.write = write
 
 
 		self.plot_functions = {
@@ -134,10 +137,12 @@ class analysis_manager:
 		
 		histogram_file_name = f'/workspace/results/{self.experiment_name}/histogram_data_seed_{self.seed}'
 		filename = f'/workspace/results/{self.experiment_name}/datapoints/hd3_data_test_seed_{self.seed}.csv'
+
 		if len(selected_plots) > 0:
 			self.preprocess_tracks()
-		self.execute_plots()
-		self.save_detected(filename)
+			self.execute_plots()
+		if self.write:
+			self.save_detected(filename)
 
 
 	def preprocess_tracks(self):
@@ -533,12 +538,13 @@ class analysis_manager:
 		# hist is the height of the historgram
 		hist, bin_edges = np.histogram(self.detected_angles, bins = [theta for theta in range(91)])
 		print(hist)
-		save_data = {
-				'Incident Angle': np.array(list(range(0,90))),
-				'Detected number': hist,
-				'LXe refractive index':np.array([lxe_refractive_index for _ in range(len(hist))])}
-		df = pd.DataFrame(save_data)
-		df.to_csv(histogramfilename)
+		if self.write:
+			save_data = {
+					'Incident Angle': np.array(list(range(0,90))),
+					'Detected number': hist,
+					'LXe refractive index':np.array([lxe_refractive_index for _ in range(len(hist))])}
+			df = pd.DataFrame(save_data)
+			df.to_csv(histogramfilename)
 
 		plt.ylabel('Counts')
 		plt.xlabel('Incident Angle [deg]')
