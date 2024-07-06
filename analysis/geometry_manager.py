@@ -70,7 +70,11 @@ class geometry_manager:
             mesh = mesh_from_stl(filename = row['stl_filepath'])#convert the stl files to mesh used in Chroma?
             inner_mat = self.mat_manager.get_material(row['inner_mat'])
             outer_mat = self.mat_manager.get_material(row['outer_mat'])
-            surface = self.surf_manager.get_surface(row['surface'])
+
+            if bool(row['killing surface']):
+                surface = self.surf_manager.get_surface('killing surface')
+            else:
+                surface = self.surf_manager.get_surface(row['surface'])
 
             color = int(colors.cnames[row['color']][1:], 16)
 

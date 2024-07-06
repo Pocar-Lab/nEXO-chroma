@@ -1,4 +1,5 @@
-#ignore results folder and data_files folder as they are very large. They are located on the Pocar Lab One-Drive
+#ignore results folder
+results/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

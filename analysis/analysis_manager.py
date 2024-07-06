@@ -110,7 +110,6 @@ class analysis_manager:
 		self.particle_histories = histories
 		self.selected_plots = selected_plots
 		self.get_tallies()
-		self.num_tracks = 100
 		self.plots = selected_plots
 		self.geometry_data_path = f'/workspace/data_files/data/{self.experiment_name}/geometry_components_{self.experiment_name}.csv'
 
@@ -135,8 +134,8 @@ class analysis_manager:
 		
 		histogram_file_name = f'/workspace/results/{self.experiment_name}/histogram_data_seed_{self.seed}'
 		filename = f'/workspace/results/{self.experiment_name}/datapoints/hd3_data_test_seed_{self.seed}.csv'
-
-		self.preprocess_tracks()
+		if len(selected_plots) > 0:
+			self.preprocess_tracks()
 		self.execute_plots()
 		self.save_detected(filename)
 
@@ -209,8 +208,9 @@ class analysis_manager:
 
 		figure = plt.figure()
 		axes = mplot3d.Axes3D(figure)
-
-		num_tracks = self.num_tracks if self.num_tracks < len(tracks) else len(tracks)
+		num_tracks = min(len(tracks), 1000)
+		print("Number of photons plotted: " + str(num_tracks))
+		# num_tracks = self.num_tracks if self.num_tracks < len(tracks) else len(tracks)
 		for i in range(num_tracks):
 			track = tracks[i]
 			#ax.plot(track[:, 0], track[:, 1], track[:, 2], color=color, linewidth=linewidth)
@@ -274,7 +274,7 @@ class analysis_manager:
 		##place holder below, the output value doesn't mean anything.
 		# self.tallies['RAYLEIGH_SCATTER'] = (self.photons.flags & (0x1 << 4)).astype(bool)
 		self.tallies['REFLECT_DIFFUSE']  = (self.photons.flags & (0x1 << 5)).astype(bool)
-		# self.tallies['REFLECT_SPECULAR'] = (self.photons.flags & (0x1 << 6)).astype(bool)
+		self.tallies['REFLECT_SPECULAR'] = (self.photons.flags & (0x1 << 6)).astype(bool)
 		# self.tallies['SURFACE_REEMIT']   = (self.photons.flags & (0x1 << 7)).astype(bool)
 		# self.tallies['SURFACE_TRANSMIT'] = (self.photons.flags & (0x1 << 8)).astype(bool)
 		# self.tallies['BULK_REEMIT']      = (self.photons.flags & (0x1 << 9)).astype(bool)
@@ -294,8 +294,9 @@ class analysis_manager:
 			print(key, np.sum(value), 'total number')
 
 		print()
-		self.efficiency = np.sum(self.tallies['SURFACE_DETECT']) / self.num_particles
-		print('EFFICIENCY', self.efficiency)
+		self.photon_transmission_efficiency = np.sum(self.tallies['SURFACE_DETECT']) / self.num_particles
+		self.pte_st_dev = np.sqrt(np.sum(self.tallies['SURFACE_DETECT']))/self.num_particles
+		print('PHOTON TRANSMISSION EFFICIENCY: ' + str(self.photon_transmission_efficiency) + ' ' + u"\u00B1 " + str(round(self.pte_st_dev,7)))
 		print('------------------------------------')
 
 		self.detected_positions = self.photons.pos[self.tallies['SURFACE_DETECT']]
@@ -327,7 +328,7 @@ class analysis_manager:
 
 	    # store PTE for both 0 and non zero
 		self.emit_angle = self.run_id - 1
-		if self.efficiency != 0:
+		if self.photon_transmission_efficiency != 0:
 			# print("self.efficiency is", self.efficiency)
 			x_detected_position = self.detected_positions[:, 0]
 			# print(len(x_detected_position))
@@ -346,7 +347,8 @@ class analysis_manager:
 				'z (mm)': z_detected_position,
 				'emission angle': self.emit_angle,
 				'angle': detected_angle,
-				'PTE': np.array([self.efficiency for _ in range(len(detected_angle))]),
+				'PTE': np.array([self.photon_transmission_efficiency for _ in range(len(detected_angle))]),
+				'PTE ST DEV': np.array([self.pte_st_dev for _ in range(len(detected_angle))]),
 				'LXe Index of Refraction': np.array([lxe_refractive_index for _ in range(len(detected_angle))]),
 				'Seed number': np.array([self.seed for _ in range(len(detected_angle))]),
 				'Si eta': np.array([Si_eta_index for _ in range(len(self.detected_angles))]),
@@ -635,7 +637,7 @@ class analysis_manager:
 
 	def plot_reflected_tracks_wrapper(self):
 		title = f'Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}'
-		self.plot_tracks(self.reflected_tracks, title, False)
+		self.plot_tracks(self.reflected_tracks, title, True)
 
 	def plot_filtered_scattered_tracks_wrapper(self):
 		title = f'Filtered Scattered Photon Tracks, Seed {self.seed}, Run {self.run_id}'
@@ -643,7 +645,7 @@ class analysis_manager:
 
 	def plot_detected_reflected_tracks_wrapper(self):
 		title = f'Detected and Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}'
-		self.plot_tracks(self.detected_reflected_tracks, title, False)
+		self.plot_tracks(self.detected_reflected_tracks, title, True)
 
 	def plot_specular_reflected_tracks_wrapper(self):
 		title = f'Specularly Refelcted Photon Tracks, Seed {self.seed}, Run {self.run_id}'
