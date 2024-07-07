@@ -76,11 +76,11 @@ def main():
 
     gm = geometry_manager(experiment_name=experiment_name, run_id=run_id, visualize=visualize)
     rm = run_manager(geometry_manager=gm, experiment_name=experiment_name, random_seed=seed, num_particles=num_particles, run_id=run_id, plots=plots, write = write)
-
+    return rm.ana_man.get_end_time()
 
 
 if __name__ == '__main__':
 	s = time.time()
-	main()
-	e = time.time()
+	e = main()
+	# e = time.time()
 	print(f'The simulation run time is: {e - s} s')

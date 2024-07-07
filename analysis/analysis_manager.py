@@ -8,6 +8,7 @@ from stl import mesh
 from matplotlib import colors
 from mpl_toolkits import mplot3d
 from array import array
+import time
 
 
 class analysis_manager:
@@ -140,6 +141,7 @@ class analysis_manager:
 
 		if len(selected_plots) > 0:
 			self.preprocess_tracks()
+			self.end_time = time.time()
 			self.execute_plots()
 		if self.write:
 			self.save_detected(filename)
@@ -692,5 +694,6 @@ class analysis_manager:
 
 
 
-
+	def get_end_time(self):
+		return self.end_time
 
