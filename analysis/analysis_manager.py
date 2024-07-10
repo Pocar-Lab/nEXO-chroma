@@ -343,7 +343,7 @@ class analysis_manager:
             "PHOTON TRANSMISSION EFFICIENCY: "
             + str(self.photon_transmission_efficiency)
             + " "
-            + "\u00B1 "
+            + "+-"  # "\u00B1 "
             + str(round(self.pte_st_dev, 7))
         )
         print("------------------------------------")
