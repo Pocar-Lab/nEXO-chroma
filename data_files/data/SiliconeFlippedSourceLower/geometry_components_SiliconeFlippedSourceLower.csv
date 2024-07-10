@@ -17,9 +17,8 @@ reflector6,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLower
 reflector7,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - 2023_5_25 ReflectorHolderAssemWide-2 reflector-7.STL,silicon,liquid xenon,silicon-Xe,grey,0,0,0,solid,False
 reflector8,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - 2023_5_25 ReflectorHolderAssemWide-2 reflector-8.STL,silicon,liquid xenon,silicon-Xe,grey,0,0,0,solid,False
 reflector9,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - 2023_5_25 ReflectorHolderAssemWide-2 reflector-9.STL,silicon,liquid xenon,silicon-Xe,grey,0,0,0,solid,False
-sipm substrate,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - FBKSiPMAssem-1 Sipmsubstrate-1.STL,steel,liquid xenon,silicon-Xe,blue,0,0,0,solid,False
-sipm 556x596,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - FBKSiPMAssem-1 Sipm556X596-1.STL,steel,liquid xenon,silicon-Xe,blue,0,0,0,solid,False
-threaded rod 3,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - ThreadedRod_1.step-3.STL,steel,liquid xenon,silicon-Xe,blue,0,0,0,solid,False
-threaded rod 4,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - ThreadedRod_1.step-4.STL,steel,liquid xenon,silicon-Xe,blue,0,0,0,solid,False
-source pt1,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - sourceflippedassem-2 Am-241_Source_part-1.step-1.STL,steel,liquid xenon,silicon-Xe,blue,0,0,0,solid,False
-source pt2,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - sourceflippedassem-2 Am-241_Source_part-2.step-1.STL,steel,liquid xenon,silicon-Xe,blue,0,0,0,solid,False
+sipm substrate,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - FBKSiPMAssem-1 Sipmsubstrate-1.STL,steel,liquid xenon,Steel-Xe,blue,0,0,0,solid,False
+threaded rod 3,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - ThreadedRod_1.step-3.STL,steel,liquid xenon,Steel-Xe,blue,0,0,0,solid,False
+threaded rod 4,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - ThreadedRod_1.step-4.STL,steel,liquid xenon,Steel-Xe,blue,0,0,0,solid,False
+source pt1,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - sourceflippedassem-2 Am-241_Source_part-1.step-1.STL,aluminum,liquid xenon,Al-Xe,blue,0,0,0,solid,False
+source pt2,/workspace/data_files/stl_files/2023_8_01_Silicone_FlippedSourceLowerV2/LowerboundRework - sourceflippedassem-2 Am-241_Source_part-2.step-1.STL,steel,liquid xenon,Steel-Xe,blue,0,0,0,solid,False
