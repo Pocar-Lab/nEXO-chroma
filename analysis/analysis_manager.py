@@ -143,6 +143,9 @@ class analysis_manager:
 			self.preprocess_tracks()
 			self.end_time = time.time()
 			self.execute_plots()
+		else:
+			self.end_time = time.time()
+
 		if self.write:
 			self.save_detected(filename)
 

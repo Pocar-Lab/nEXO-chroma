@@ -66,7 +66,6 @@ class geometry_manager:
         self.solids = {}
         for index, row in self.geometry_df.iterrows():
             curr_name = row['name']
-
             mesh = mesh_from_stl(filename = row['stl_filepath'])#convert the stl files to mesh used in Chroma?
             inner_mat = self.mat_manager.get_material(row['inner_mat'])
             outer_mat = self.mat_manager.get_material(row['outer_mat'])

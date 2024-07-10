@@ -1,0 +1,20 @@
+name,stl_filepath,inner_mat,outer_mat,surface,color,displacement x,displacement y,displacement z,solid_type,killing surface
+sipm,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - SipmSubAssembly-1 SipmPlate-1.STL,silicon,liquid xenon,FBK HD3,black,0,0,0,pmt,False
+source,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - sourceflippedassem-1 sourcepart3-2.STL,steel,liquid xenon,None,red,0,0,0,none,False
+silica window,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - silicawindow-1 SilicaWindow-1.STL,silica,liquid xenon,None,cyan,0,0,0,solid,False
+copper reflector,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - Copper Reflector-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,False
+source holder,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - Am-241_Source_Holder.step-1.STL,steel,liquid xenon,None,red,0,0,0,solid,True
+source part 4,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - Am-241_Source_part-4.step-1.STL,steel,liquid xenon,None,red,0,0,0,solid,True
+Fiber Optic,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - FibreOpricApprox-1.STL,silica,liquid xenon,None,cyan,0,0,0,solid,True
+Silica Gasket 1,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - silicawindow-1 SilicaGasket.step-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,True
+Silica Gasket 2,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - silicawindow-1 SilicaGasket.step-2.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,True
+Sipm Disk 1,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - SiPM-Disk-1.step-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,True
+SiPM Disk 2,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - SiPM-Disk-2-Updated-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,True
+Copper Rod 1,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - SipmSubAssembly-1 Assem2_Pho_S5.step-1 Rod1.step-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,True
+Copper Rod 2,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - SipmSubAssembly-1 Assem2_Pho_S5.step-1 Rod2.step-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,True
+Copper Holder 1,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - SipmSubAssembly-1 CuHolderPART-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,True
+Source part 1,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - sourceflippedassem-1 Am-241_Source_part-1.step-1.STL,steel,liquid xenon,None,red,0,0,0,solid,True
+source part 2,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - sourceflippedassem-1 Am-241_Source_part-2.step-1.STL,steel,liquid xenon,None,red,0,0,0,solid,True
+Threaded Rod 1,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - ThreadedRod_1.step-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,True
+Threaded Rod 2,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - ThreadedRod_1.step-2.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,True
+copper washer,/workspace/data_files/stl_files/Sebastian/2023_6_20_Copper_teflon_corrected/CopperReflectorAssemwithFO - WasherReplacement-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid,True
