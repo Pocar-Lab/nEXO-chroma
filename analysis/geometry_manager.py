@@ -82,7 +82,7 @@ class geometry_manager:
             inner_mat = self.mat_manager.get_material(row["inner_mat"])
             outer_mat = self.mat_manager.get_material(row["outer_mat"])
 
-            if bool(row["killing surface"]):
+            if "killing surface" in self.geometry_df and bool(row["killing surface"]):
                 surface = self.surf_manager.get_surface("killing surface")
             else:
                 surface = self.surf_manager.get_surface(row["surface"])
