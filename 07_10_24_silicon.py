@@ -15,7 +15,7 @@ Run this file from within the Chroma container with `python ./ExampleAnalysis.py
 
 def main():
 
-    experiment_name = "SiliconFlippedSourceLower"
+    experiment_name = "SiliconeFlippedSourceLower"
     num_particles = 1_000_000
     seed = 1042
     run_id = 1
