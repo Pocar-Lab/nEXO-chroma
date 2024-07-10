@@ -52,7 +52,7 @@ class geometry_manager:
         self.global_geometry = Detector(self.mat_manager.global_material)
 
         self.geometry_data_path = f"/workspace/data_files/data/{experiment_name}/geometry_components_{experiment_name}.csv"
-        self.build_geometry(exclude=exclude)
+        self.build_geometry()
 
         self.global_geometry.flatten()
         if visualize:
