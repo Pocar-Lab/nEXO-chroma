@@ -15,7 +15,7 @@ Run this file from within the Chroma container with `python ./ExampleAnalysis.py
 
 def main():
 
-    experiment_name = "SiliconeFlippedSourceLower"
+    experiment_name = "SiliconeFlippedSourceUpper"
     num_particles = 1_000_000
     seed = 1042
     run_id = 1
@@ -35,10 +35,10 @@ def main():
     ]
 
     labels = [
-        "silicon-noreflector",
-        "silicon-8reflector",
-        "silicon-4reflector-outer",
-        "silicon-4reflector-inner",
+        "silicon-upper-noreflector",
+        "silicon-upper-8reflector",
+        "silicon-upper-4reflector-outer",
+        "silicon-upper-4reflector-inner",
     ]
 
     exclusions = [[f"reflector{i}" for i in excl] for excl in exclusions]
