@@ -42,7 +42,7 @@ class run_manager:
         num_particles,
         run_id,
         plots,
-        write,
+        write=False,
     ):
         self.num_steps = 100
         self.run_id = run_id
