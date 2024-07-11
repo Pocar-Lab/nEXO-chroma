@@ -22,28 +22,11 @@ def main():
     run_id = 1
     visualize = True
     plots = []
+    tallNums =  [9, 10, 11, 12, 13, 14, 15, 16]
+    shortNums = [2, 3, 4, 5, 6, 7, 8, 9]
 
-    exclusions = [ #flipped source tall
-        [9, 10, 11, 12, 13, 14, 15, 16],
-        [],
-        [9, 10, 11, 12],
-        [13, 14, 15, 16],
-    ]
-
-    
-
-    # exclusions = [ #silicone flipped source lower
-    #     [2, 3, 4, 5, 6, 7, 8, 9],
-    #     [],
-    #     [2, 3, 4, 5],
-    #     [
-    #         6,
-    #         7,
-    #         8,
-    #         9,
-    #     ],
-    # ]
-
+    #pairs = [[10, 11], [9, 12], [13, 15], [14, 16]]
+    #pairs = [[2, 5], [3, 9], [6, 4], [7, 8]]
     labels = [
         "silicon-upper-noreflector",
         "silicon-upper-8reflector",
@@ -51,10 +34,11 @@ def main():
         "silicon-upper-4reflector-inner",
     ]
 
-    exclusions = [[f"reflector{i}" for i in excl] for excl in exclusions]
+    #exclusions = [[f"reflector{i}" for i in excl] for excl in exclusions]
     ptes = []
     ptes_err = []
-    for exclusion in exclusions:
+    for pair in pairs:
+        exclusion = 
         print(f"Experiment Name:       {experiment_name }")
         print(f"Number of particles:   {str(num_particles) }")
         print(f"Random seed:           {str(seed) }")
