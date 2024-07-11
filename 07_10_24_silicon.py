@@ -5,11 +5,19 @@ import time
 
 
 """
-Example showing how to run a simulation with a script file rather than from the command line.
+Authors: Luc Barrett & Loick Marion
+Date: July 10th 2024
 
-Here perhaps include description of what the simulation is testing for archival reasons.
 
-Run this file from within the Chroma container with `python ./ExampleAnalysis.py`
+This script runs simulations in batches of 4 at a time for different configurations of silicon/palladium reflectors.
+The configurations are:
+- no reflectors
+- 8 reflectors
+- 4 reflectors (outer)
+- 4 reflectors (inner)
+
+It will output the PTE for all four runs at the end. Takes about 2 minutes to complete. To change to palladium, change the
+material for the reflectors in the geometry_components csv.
 """
 
 
