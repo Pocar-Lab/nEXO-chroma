@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from geometry_manager import geometry_manager
 from run_manager import run_manager
+from material_manager import material_manager
+from surface_manager import surface_manager
 
 
 def getPTE(runlabel):

@@ -72,30 +72,6 @@ class run_manager:
             write,
         )
 
-    # create primary generator which will create all the initial photons. we will tell primary generator
-    # what we want the source to be like
-    # get Photons from primary generator
-
-    # def propagate_photon(self):
-    # 	nthreads_per_block = 64
-    # 	max_blocks = 1024
-    # 	seed = 20000000
-
-    # 	gpu_photons = gpu.GPUPhotons(self.pg.primary_photons)
-    # 	gpu_geometry = gpu.GPUGeometry(self.gm.global_geometry)
-    # 	self.photon_tracks = np.zeros((self.num_steps + 1, self.num_particles, 3))
-    # 	self.photon_tracks[0, :, :] = self.pg.positions
-    # 	rng_states = gpu.get_rng_states(nthreads_per_block * max_blocks, seed = seed)
-    # 	for i in range(self.num_steps):
-    # 		gpu_photons.propagate(gpu_geometry, rng_states, nthreads_per_block = nthreads_per_block, max_blocks = max_blocks, max_steps = 1)
-    # 		self.photons = gpu_photons.get()
-    # 		self.photon_tracks[i + 1, :, :] = self.photons.pos
-    # 		# photon_track[i,:,0] = photons.pos[:,0]
-    # 		# photon_track[i,:,1] = photons.pos[:,1]
-    # 		# photon_track[i,:,2] = photons.pos[:,2]
-
-    # where do we give value to photon_type, nr_steps, geometry, nthreads_per_block, max_blocks, rng_states?
-
     def propagate_photon(self):
         """
         Propagates photons through the geometry using the GPU, collecting their positions and interaction histories.

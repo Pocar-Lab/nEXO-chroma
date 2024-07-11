@@ -5,25 +5,17 @@ import time
 
 
 """
-Authors: Luc Barrett & Loick Marion
-Date: July 10th 2024
+Example showing how to run a simulation with a script file rather than from the command line.
 
+Here perhaps include description of what the simulation is testing for archival reasons.
 
-This script runs simulations in batches of 4 at a time for different configurations of silicon/palladium reflectors.
-The configurations are:
-- no reflectors
-- 8 reflectors
-- 4 reflectors (outer)
-- 4 reflectors (inner)
-
-It will output the PTE for all four runs at the end. Takes about 2 minutes to complete. To change to palladium, change the
-material for the reflectors in the geometry_components csv.
+Run this file from within the Chroma container with `python ./ExampleAnalysis.py`
 """
 
 
 def main():
 
-    experiment_name = "SiliconeFlippedSourceUpper"
+    experiment_name = "SiliconeFlippedSourceLower"
     num_particles = 1_000_000
     seed = 1042
     run_id = 1
@@ -43,10 +35,10 @@ def main():
     ]
 
     labels = [
-        "silicon-upper-noreflector",
-        "silicon-upper-8reflector",
-        "silicon-upper-4reflector-outer",
-        "silicon-upper-4reflector-inner",
+        "silicon-lower-noreflector",
+        "silicon-lower-8reflector",
+        "silicon-lower-4reflector-outer",
+        "silicon-lower-4reflector-inner",
     ]
 
     exclusions = [[f"reflector{i}" for i in excl] for excl in exclusions]

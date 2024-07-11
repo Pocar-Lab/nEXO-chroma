@@ -33,8 +33,6 @@ class material_manager:
 		self.material_data_path = '/workspace/data_files/data/' + experiment_name + '/bulk_materials_' + experiment_name + '.csv'
 	
 		self.run_id = run_id
-		# self.savedata_path = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/Cu_reflector_etal_vary_Cu_eta_LXe_eta.csv'
-		# self.savedata_path ='/workspace/data_files/data/Sebastian_08.01.2023(liquefaction)_correctedSiPM/datapoints/Si_reflector_vary_Si_eta_LXe_eta.csv'
 		self.build_materials(run_id)
 		self.global_material = self.materials['liquid xenon']
 

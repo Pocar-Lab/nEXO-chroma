@@ -33,7 +33,7 @@ class geometry_manager:
         solids (dict): Dictionary of solid objects.
     """
 
-    def __init__(self, experiment_name, run_id, visualize=False, exclude=None):
+    def __init__(self, experiment_name, run_id, visualize=False, exclude=None, surf_manager = None):
         """
         Initializes the geometry_manager with the given experiment name and run ID.
 
@@ -44,10 +44,8 @@ class geometry_manager:
         """
         self.exclude = [] if exclude is None else exclude
         self.experiment_name = experiment_name
-        self.mat_manager = material_manager(self.experiment_name, run_id)
-        self.surf_manager = surface_manager(
-            self.mat_manager, self.experiment_name, run_id
-        )
+        self.mat_manager = material_manager(self.experiment_name, run_id) if surf_manager is None else surf_manager.mat_manager
+        self.surf_manager = surface_manager(self.mat_manager, self.experiment_name, run_id) if surf_manager is None else surf_manager
         self.run_id = run_id
         self.global_geometry = Detector(self.mat_manager.global_material)
 
@@ -94,18 +92,6 @@ class geometry_manager:
                 row["displacement y"],
                 row["displacement z"],
             )
-            print(curr_displacement)
-
-            # #below shift the vertical displacement
-            # if curr_name == "silica gasket 1" or curr_name == "silica gasket 2" or curr_name == "silica window":
-            #     curr_displacement = (row['displacement x'], row['displacement y']+self.run_id*0.01, row['displacement z'])
-            #     print(curr_displacement)
-            #     # print(type(row['displacement y']))
-            # #Solid object attaches materials, surfaces, and colors to each triangle in a Mesh object
-            # else:
-            #     curr_displacement = (row['displacement x'], row['displacement y'], row['displacement z'])
-            #     # print(curr_displacement)
-
             self.solids[curr_name] = Solid(
                 mesh=mesh,
                 material1=inner_mat,
