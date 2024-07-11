@@ -33,19 +33,18 @@ class surface_manager:
     """
 
     def __init__(self, material_manager, experiment_name, run_id):
+        self.surfaces = {}
+        self.surface_props = {}
         self.surface_data_path = f"/workspace/data_files/data/{experiment_name}/surface_props_{experiment_name}.csv"
+        self.run_id = run_id
 
         self.SiPMAOIref_path = "/workspace/data_files/FBK.csv"
         # self.SiPMAOIref_path = '/workspace/data_files/FBK reflectivity_upper_bound.csv'
         # self.SiPMAOIref_path ='/workspace/data_files/FBK reflectivity_lower_bound.csv'
-        self.run_id = run_id
-        # filename = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/copper_spec_coefficient' + str(self.run_id) + '.csv'
-        # self.save_detected(filename)
+
         self.mat_manager = material_manager
         self.wavelengths = chroma.geometry.standard_wavelengths
         self.num_wavelengths = len(self.wavelengths)
-        # print(self.wavelengths)
-        # self.savedata_path = '/workspace/data_files/data/Sebastian_FS_06.08.2023_correctedSiPM/datapoints/Cu_spec_Cu_eta.csv'
         self.build_surfaces()
 
     def build_surfaces(self):
@@ -55,34 +54,14 @@ class surface_manager:
         :return: None
         """
         self.surfaces_df = pd.read_csv(self.surface_data_path)
-        # self.savedata_df = pd.read_csv(self.savedata_path)
 
-        self.surfaces = {}
-        self.surface_props = {}
         for index, row in self.surfaces_df.iterrows():
             curr_name = row["name"]
-            # print(curr_name)
             curr_inner_mat_name = row["inner_mat"]
             curr_outer_mat_name = row["outer_mat"]
             curr_model_id = row["model_id"]
-            # print('current id is', curr_model_id)
             curr_reflect_specular = row["reflect_specular"]
             curr_reflect_diffuse = row["reflect_diffuse"]
-            # # # Below define surface property not from the surface data path
-            # if curr_name == 'Cu-Xe':
-            # 	# curr_reflect_specular = round(random.uniform(0,1),4)
-            # 	column = ['Cu spec coeff']
-            # 	curr_reflect_specular_ = pd.read_csv(self.savedata_path,usecols=column).to_numpy()
-            # 	curr_reflect_specular_all = curr_reflect_specular_.flatten()
-            # 	curr_reflect_specular = curr_reflect_specular_all[self.run_id]
-            # 	curr_reflect_diffuse = 1-curr_reflect_specular
-            # 	print('copper specular coefficient:',curr_reflect_specular)
-            # 	self.surface_props[curr_name] =str(curr_reflect_specular)
-            # 	# print(self.surface_props)
-            # else:
-            # 	curr_reflect_specular = row['reflect_specular']
-            # 	curr_reflect_diffuse = row['reflect_diffuse']
-            # 	# print(curr_name,curr_reflect_specular)
 
             if curr_model_id == 0:
                 curr_surface = Surface(curr_name, model=curr_model_id)
@@ -96,7 +75,7 @@ class surface_manager:
                 curr_surface = self.create_dielectric_metal_surface(
                     curr_name, curr_inner_mat_name
                 )
-                # print(curr_surface)
+
             # Sili: added on 11/17/2022 to build a killing surface
             elif curr_model_id == 8:
                 curr_surface = Surface(curr_name, model=0)
@@ -148,7 +127,6 @@ class surface_manager:
         """
         dielectric_metal_surface = Surface(name, model=4)
         eta2 = float(self.mat_manager.material_props[inner_mat]["eta"])
-        print("eta2", type(eta2))
         k2 = float(self.mat_manager.material_props[inner_mat]["k"])
         dielectric_metal_surface.set("eta", eta2)
         dielectric_metal_surface.set("k", k2)
@@ -164,7 +142,6 @@ class surface_manager:
         :return: The empirical SiPM surface object.
         :rtype: Surface
         """
-        # print('model 5')
 
         sipmEmpirical_surface = Surface(name, model=5)
 
@@ -185,7 +162,6 @@ class surface_manager:
             r_SiPM[:, 0] = self.wavelengths
             # r_SiPM[:, 1] = random.random()
             r_SiPM[:, 1] = ref_csv[i]
-            # print(r_SiPM[:,1])
             ref.append(r_SiPM)
             relative_PDE = np.zeros((self.num_wavelengths, 2), dtype=np.float32)
             relative_PDE[:, 0] = self.wavelengths
@@ -221,7 +197,6 @@ class surface_manager:
         :return: The dichroic surface object.
         :rtype: Surface
         """
-        print("model 3 here")
         dichroic_surface = Surface(name, model=3)
         n1 = self.mat_manager.material_props[outer_mat]["refractive_index"]
         # Sili: the eta2 and k2 are randomize with some uncertainty
@@ -233,7 +208,6 @@ class surface_manager:
             -self.mat_manager.material_props[inner_mat]["abs(k_error)"],
             self.mat_manager.material_props[inner_mat]["abs(k_error)"],
         )
-        # print(eta2,k2)
         # Sili
         self.get_eta2_k2(eta2, k2)
         theta, reflectance, transmittance = self.calc_R_T(n1, eta2, k2, num_angles=500)
@@ -251,10 +225,6 @@ class surface_manager:
             curr_T[:, 1] = 0
             # curr_T[:, 1] = transmittance[idx]
             T.append(curr_T)
-        # print('theta', len(theta))
-        # print('reflectance',R)
-        print("R list length", len(R))
-        # print('transmittance',T)
         dichroic_props = DichroicProps(theta, R, T)
         dichroic_surface.dichroic_props = dichroic_props
         return dichroic_surface
@@ -310,7 +280,6 @@ class surface_manager:
         reflectance = R(theta)
         transmittance = np.zeros(len(reflectance), dtype=np.float32)
         # absorption = 1 - reflectance
-        # print('the reflectance and transmittance are', reflectance, transmittance)
         return (theta, reflectance, transmittance)
 
     # Sili:
@@ -327,5 +296,7 @@ class surface_manager:
         """
         self.eta2 = eta2
         self.k2 = k2
-        # print('the updated eta2 and k2 are', self.eta2, self.k2)
         return (self.eta2, self.k2)
+    
+    def overwrite_property(self, surface, property, value):
+        self.surfaces[surface].set(property, value)
