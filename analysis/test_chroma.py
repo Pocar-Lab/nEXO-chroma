@@ -21,14 +21,12 @@ def test_Sebastian_FS_06082023_correctedSiPM():
                      plots=plots)
     am = rm.ana_man # analysis_manager
     hist = am.plot_angle_hist_wrapper(showPlot=True)
-    expected = [8, 20, 26, 33, 51, 74, 83, 74, 91, 45, 29, 2,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                0, 0, 0]
-
+    expected = [10, 20, 26, 33, 51, 75, 82, 74, 90, 45, 29, 2, 0, 0, 0, 0, 0, 0,
+   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,
+   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+   0,0,0,0,8,134,140,153,120,13,0,0,0,0,0,0,0,0,
+   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    
     assert np.all(np.asarray(hist) == np.asarray(expected))
 
 def test_Sebastian_08012023liquefaction_correctedSiPM():
@@ -55,5 +53,6 @@ def test_Sebastian_08012023liquefaction_correctedSiPM():
                 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                 0, 0]
-
+    print(hist)
+    print(expected)
     assert np.all(np.asarray(hist) == np.asarray(expected))

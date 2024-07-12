@@ -11,15 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 
-# Manage the surface optical model (of the SiPM and other)? Mainly using model 0 which is the standard Fresnel
-
-# sipm_name = 'FBK HD3'
-# sipm = Surface(sipm_name, model = 0)
-# sipm.set('detect', 1) #?
-
-
-# self.surfaces = {} #
-# self.surfaces[sipm_name] = sipm #
 class surface_manager:
     """
     Manages the surfaces used in the simulation, including their properties and construction based on input data.
