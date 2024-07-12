@@ -15,23 +15,23 @@ Run this file from within the Chroma container with `python ./ExampleAnalysis.py
 
 def main():
 
-    #experiment_name = "SiliconeFlippedSourceLower"
-    experiment_name = "FlippedSourceTall"
+    experiment_name = "SiliconeFlippedSourceLower"
+    #experiment_name = "FlippedSourceTall"
     num_particles = 1_000_000
     seed = 1042
     run_id = 1
     visualize = True
     plots = []
-    nums =  [9, 10, 11, 12, 13, 14, 15, 16] # tall
-   # nums = [2, 3, 4, 5, 6, 7, 8, 9] #lower
+    # nums =  [9, 10, 11, 12, 13, 14, 15, 16] # tall
+    nums = [2, 3, 4, 5, 6, 7, 8, 9] #lower
 
-    pairs = [[10, 11], [9, 12], [13, 15], [14, 16]] # tall
-    #pairs = [[2, 5], [3, 9], [6, 4], [7, 8]] # lower
+    # pairs = [[10, 11], [9, 12], [13, 15], [14, 16]] # tall
+    pairs = [[2, 5], [3, 9], [6, 4], [7, 8]] # lower
     labels = [
-        "silicon-upper-10-11",
-        "silicon-upper-9-12",
-        "silicon-upper-13-15",
-        "silicon-upper-14-16",
+        "silicon-lower-2-5",
+        "silicon-lower-3-9",
+        "silicon-lower-6-4",
+        "silicon-lower-7-8",
     ]
 
     #exclusions = [[f"reflector{i}" for i in excl] for excl in exclusions]

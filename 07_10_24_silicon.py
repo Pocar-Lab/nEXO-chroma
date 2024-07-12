@@ -15,40 +15,40 @@ Run this file from within the Chroma container with `python ./ExampleAnalysis.py
 
 def main():
 
-    #experiment_name = "SiliconeFlippedSourceLower"
-    experiment_name = "FlippedSourceTall"
+    experiment_name = "SiliconeFlippedSourceLower"
+    #experiment_name = "FlippedSourceTall"
     num_particles = 1_000_000
     seed = 1042
     run_id = 1
     visualize = True
     plots = []
 
-    exclusions = [ #flipped source tall
-        [9, 10, 11, 12, 13, 14, 15, 16],
-        [],
-        [9, 10, 11, 12],
-        [13, 14, 15, 16],
-    ]
+    # exclusions = [ #flipped source tall
+    #     [9, 10, 11, 12, 13, 14, 15, 16],
+    #     [],
+    #     [9, 10, 11, 12],
+    #     [13, 14, 15, 16],
+    # ]
 
     
 
-    # exclusions = [ #silicone flipped source lower
-    #     [2, 3, 4, 5, 6, 7, 8, 9],
-    #     [],
-    #     [2, 3, 4, 5],
-    #     [
-    #         6,
-    #         7,
-    #         8,
-    #         9,
-    #     ],
-    # ]
+    exclusions = [ #silicone flipped source lower
+        [2, 3, 4, 5, 6, 7, 8, 9],
+        [],
+        [2, 3, 4, 5],
+        [
+            6,
+            7,
+            8,
+            9,
+        ],
+    ]
 
     labels = [
-        "silicon-upper-noreflector",
-        "silicon-upper-8reflector",
-        "silicon-upper-4reflector-outer",
-        "silicon-upper-4reflector-inner",
+        "silicon-lower-noreflector",
+        "silicon-lower-8reflector",
+        "silicon-lower-4reflector-outer",
+        "silicon-lower-4reflector-inner",
     ]
 
     exclusions = [[f"reflector{i}" for i in excl] for excl in exclusions]
