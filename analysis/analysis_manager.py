@@ -120,6 +120,7 @@ class analysis_manager:
         self.specular_reflected_tracks = None
         self.diffuse_reflected_tracks = None
         self.num_particles = len(self.photons)
+        print(f"num particles {self.num_particles}")
         self.run_id = run_id
         self.seed = seed
         self.particle_histories = histories

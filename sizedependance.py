@@ -14,7 +14,7 @@ Run this file from within the Chroma container with `python ./ExampleAnalysis.py
 """
 
 
-def main(r0):
+def main(r0, noReflector):
 
     experiment_name = "SiliconeFlippedSourceLower"
     # experiment_name = "FlippedSourceTall"
@@ -23,8 +23,14 @@ def main(r0):
     run_id = 1
     visualize = False
     plots = []
+    noReflector = bool(noReflector)
+    if noReflector:
+        exclusions = [2, 3, 4, 5, 6, 7, 8, 9]
+    else:
+        exclusions = []
 
-    # exclusions = [[f"reflector{i}" for i in excl] for excl in exclusions]
+    exclusions = [f"reflector{i}" for i in exclusions]
+
     ptes = []
     ptes_err = []
 
@@ -35,13 +41,14 @@ def main(r0):
     print(f"Visualize:             {str(visualize) }")
     print(f"Plots:                 {plots}")
     print(f"Source radius:         {r0}")
+    print(f"No Reflector:          {noReflector}")
     # print(f"Excluded reflectors:   {exclusion}")
 
     gm = geometry_manager(
         experiment_name=experiment_name,
         run_id=run_id,
         visualize=visualize,
-        exclude=[],
+        exclude=exclusions,
     )
     gen = primary_generator(
         num_particles,
@@ -64,8 +71,13 @@ def main(r0):
     ptes_err.append(rm.ana_man.pte_st_dev)
     run_id += 1
 
-    csv_file = "simulation_results.csv"
-    with open(csv_file, mode="a", newline="") as file:
+    if noReflector:
+        csv_file = "simulation_results_noreflector.csv"
+    else:
+        csv_file = "simulation_results_8reflector.csv"
+
+    with open(csv_file, mode="a+", newline="") as file:
+        print(f"Writing {csv_file}")
         writer = csv.writer(file)
         writer.writerow([r0, pte, ptes_err[-1]])
 
@@ -73,11 +85,12 @@ def main(r0):
 import sys
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python ExampleAnalysis.py <r0>")
+    if len(sys.argv) != 3:
+        print("Usage: python ExampleAnalysis.py <r0> <0/1>")
         sys.exit(1)
     r = float(sys.argv[1])
+    noReflector = bool(int(sys.argv[2]))
     s = time.time()
-    main(r)
+    main(r, noReflector)
     e = time.time()
     print(f"The simulation run time is: {e - s} s")
