@@ -43,6 +43,7 @@ class run_manager:
         run_id,
         plots,
         write=False,
+        pg=None,
     ):
         self.num_steps = 100
         self.run_id = run_id
@@ -53,9 +54,12 @@ class run_manager:
         self.sim = Simulation(
             self.gm.global_geometry, seed=random_seed, geant4_processes=0
         )
-        self.pg = primary_generator(
-            self.num_particles, run_id=self.run_id, center_pos=self.center_pos
-        )
+        if pg is None:
+            self.pg = primary_generator(
+                self.num_particles, run_id=self.run_id, center_pos=self.center_pos
+            )
+        else:
+            self.pg = pg
         self.propagate_photon()
 
         # 	def __init__(self, geometry_manager, experiment_name, selected_plot, photons, photon_tracks = 1000, run_id = 0, seed = 0, histories = None):
@@ -161,20 +165,22 @@ class primary_generator:  # photon generator
 
     # C++: methods/functions
     # def __init__(self, num_particles, center_pos = [0, 0, 0], delta_placement = 0.0):
-    def __init__(self, num_particles, run_id, center_pos=[0, 0, 0]):
+    def __init__(self, num_particles, run_id, center_pos=[0, 0, 0], r=0):
         self.num_particles = num_particles
         self.center_pos = center_pos
 
         # positions
-
-        self.positions = self.get_point_source_pos(
-            x0=self.center_pos[0], y0=self.center_pos[1], z0=self.center_pos[2]
-        )
-
-        # self.positions = self.get_xz_disk_source_pos(x0 = self.center_pos[0],
-        # 									y0 = self.center_pos[1],
-        # 									z0 = self.center_pos[2],
-        # 									r = 2.5)
+        if r == 0:
+            self.positions = self.get_point_source_pos(
+                x0=self.center_pos[0], y0=self.center_pos[1], z0=self.center_pos[2]
+            )
+        else:
+            self.positions = self.get_xz_disk_source_pos(
+                x0=self.center_pos[0],
+                y0=self.center_pos[1],
+                z0=self.center_pos[2],
+                r=r,
+            )
 
         # beam_dir = self.get_beam_dir(px = 0, py = 1, pz = 0)# The beam travel in y direction
 
