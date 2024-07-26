@@ -4,11 +4,14 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+
+mpl.use("Agg")
 from stl import mesh
 from matplotlib import colors
 from mpl_toolkits import mplot3d
 from array import array
 import time
+import os
 
 
 class analysis_manager:
@@ -147,6 +150,9 @@ class analysis_manager:
             "plot_position_hist": self.plot_position_hist_wrapper,
         }
 
+        self.plot_dir = f"/workspace/results/{self.experiment_name}/plots"
+        os.makedirs(self.plot_dir, exist_ok=True)
+
         histogram_file_name = (
             f"/workspace/results/{self.experiment_name}/histogram_data_seed_{self.seed}"
         )
@@ -279,7 +285,9 @@ class analysis_manager:
         axes.set_ylabel("y position (mm)")
         axes.set_zlabel("z position (mm)")
         figure.suptitle(title)
-        plt.show()
+        # plt.show()
+        plt.title(title)
+        self.save_plot(plt, title.replace(" ", "_").lower())
 
     def incident_angle(self, last_pos):
         """
@@ -486,7 +494,8 @@ class analysis_manager:
         plt.xlabel("Shooting Angle [deg]")
         plt.title("Emission Angle Distribution, Run " + str(self.run_id))
         plt.tight_layout()
-        plt.show()
+        # plt.show()
+        self.save_plot(plt, "emission_angle_distribution")
 
     # Sili: added on 02/07/2023 to plot the shooting angle and emission angle correlation of detected photons
     def photon_incident_angle_emission_angle_correlation(
@@ -604,10 +613,11 @@ class analysis_manager:
         # plt.scatter(inci_angle,emit_angle)
         # plt.xlabel('Incident angle (deg)')
         # plt.ylabel('Emission angle (deg)')
-        # plt.title('Incident vs. Emission angle of Detected Reflected Photons')
+        plt.title("Incident vs. Emission angle of Detected Reflected Photons")
         plt.xlim(0, 90)
         plt.ylim(0, 90)
-        plt.show()
+        # plt.show()
+        self.save_plot(plt, "incident_vs_emission_angle")
 
     def plot_angle_hist(self, histogramfilename, showPlot=True):
         """
@@ -651,8 +661,9 @@ class analysis_manager:
         plt.xlabel("Incident Angle [deg]")
         plt.title("Incident Angle Distribution, Run " + str(self.run_id))
         plt.tight_layout()
-        if showPlot:
-            plt.show()
+        # if showPlot:
+        #     plt.show()
+        self.save_plot(plt, "incident_angle_distribution")
         return hist
 
     def plot_position_hist(self):
@@ -671,7 +682,8 @@ class analysis_manager:
         plt.ylabel("z position (mm)")
         plt.title("Position Distribution, Run " + str(self.run_id))
         plt.tight_layout()
-        plt.show()
+        # plt.show()
+        self.save_plot(plt, "position_distribution")
 
     def plot_refl_multiplicity(self, do_log=True, density=True):
         """
@@ -704,7 +716,8 @@ class analysis_manager:
         if do_log:
             plt.yscale("log")
         plt.tight_layout()
-        plt.show()
+        # plt.show()
+        self.save_plot(plt, "reflection_multiplicity")
 
     def plot_refl_angle(self, do_log=True, low_angle=0, high_angle=91):
         """
@@ -723,7 +736,7 @@ class analysis_manager:
         bins_angle = [x for x in range(low_angle, high_angle)]
         spec_reflection_data = self.particle_histories["REFLECT_SPECULAR"]
         spec_reflection_data_det = spec_reflection_data[self.tallies["SURFACE_DETECT"]]
-
+        print("hmm")
         plt.figure()
         if do_log:
             plt.hist2d(
@@ -738,13 +751,14 @@ class analysis_manager:
                 spec_reflection_data_det,
                 bins=[bins_angle, bins_refl],
             )
-
+        print("wowie")
         print(self.detected_angles, spec_reflection_data_det)
         plt.xlabel("Incident Angle (deg)")
         plt.ylabel("Reflection Multiplicity")
         plt.colorbar()
         plt.tight_layout()
-        plt.show()
+        # plt.show()
+        self.save_plot(plt, "reflection_angle_distribution")
 
     def plot_all_tracks_wrapper(self):
         title = f"Photon Tracks, Seed {self.seed}, Run {self.run_id}"
@@ -812,11 +826,21 @@ class analysis_manager:
     def plot_position_hist_wrapper(self):
         self.plot_position_hist()
 
+    def save_plot(self, plt, plot_name):
+        """
+        Save the current plot as a PNG file.
+        """
+        filename = f"{self.plot_dir}/{plot_name}_seed_{self.seed}_run_{self.run_id}.png"
+        plt.savefig(filename, dpi=300, bbox_inches="tight")
+        plt.close()
+        print(f"Plot saved as {filename}")
+
     def execute_plots(self):
         """
         Executes the selected plot functions defined in self.plot_functions.
         """
         for plot_name in self.plots:
+            print(f"Making {plot_name}")
             if plot_name in self.plot_functions:
                 self.plot_functions[plot_name]()
             else:
