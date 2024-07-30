@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
 from chroma import gpu
-
+import pycuda.tools
 from .analysis_manager import analysis_manager
 
 
@@ -61,7 +61,7 @@ class run_manager:
         else:
             self.pg = pg
         self.propagate_photon()
-
+        
         # 	def __init__(self, geometry_manager, experiment_name, selected_plot, photons, photon_tracks = 1000, run_id = 0, seed = 0, histories = None):
 
         self.ana_man = analysis_manager(
@@ -123,6 +123,9 @@ class run_manager:
             # reset interaction history bits that are nonterminal
             new_flags = self.reset_nonterminal_flags(self.photons.flags)
             gpu_photons.flags[: self.num_particles].set(new_flags.astype(np.uint32))
+        
+        #simulation done, clear GPU cache to save memory
+        pycuda.tools.clear_context_caches()
 
     def reset_nonterminal_flags(self, flag_list):
         """
