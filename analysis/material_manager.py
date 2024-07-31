@@ -41,7 +41,7 @@ class material_manager:
 				refractive_index = None,
 				absorption_length = None,
 				scattering_length = None,
-				density = 0.0):
+				density = None):
 		"""
         Sets the optical properties for a given material.
         
@@ -53,10 +53,14 @@ class material_manager:
             density (float): Density of the material.
         """
 		#set the optical index grabbed from csv file for simulation
-		curr_material.set('refractive_index', refractive_index) 
-		curr_material.set('absorption_length', absorption_length) 
-		curr_material.set('scattering_length', scattering_length)
-		curr_material.density = density
+		if refractive_index is not None:
+			curr_material.set('refractive_index', refractive_index) 
+		if absorption_length is not None:
+			curr_material.set('absorption_length', absorption_length) 
+		if scattering_length is not None:
+			curr_material.set('scattering_length', scattering_length)
+		if density is not None:
+			curr_material.density = density
 
 		# print(refractive_index)
 		# return refractive_index
