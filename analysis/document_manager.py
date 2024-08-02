@@ -2,7 +2,7 @@ import os
 import subprocess
 import numpy as np
 import pandas as pd
-
+import shutil
 
 class document_manager:
     def __init__(self, analysis_manager, label):
@@ -11,12 +11,17 @@ class document_manager:
         self.label = label
         self.am = analysis_manager
         self.experiment_name = self.am.experiment_name
+        os.makedirs(f"/workspace/results/{self.experiment_name}-{self.label}", exist_ok=True)
+        os.makedirs(f"/workspace/results/{self.experiment_name}-{self.label}/plots", exist_ok=True)
+        shutil.copy2(f"/workspace/results/template.typ", f"/workspace/results/{self.experiment_name}-{self.label}")
+        self.am.plot_dir = f"/workspace/results/{self.experiment_name}-{self.label}/plots"
         self.am.execute_plots()
 
-    def generate_typst_file(self, filename="report.typ"):
+    def generate_typst_file(self):
         """
         Generate a Typst file based on the analysis_manager data.
         """
+        filename = f"/workspace/results/{self.experiment_name}-{self.label}/report.typ"
         content = self._create_typst_content()
 
         with open(filename, "w") as f:
@@ -41,7 +46,7 @@ class document_manager:
 - Random Seed: {self.am.seed}
 - Run ID: {self.am.run_id}
 - Excluded Geometry: {self.am.gm.exclude}
-- PTE: {self.am.photon_transmission_efficiency:.4f} ± {self.am.pte_st_dev:.4f}.
+- PTE: {self.am.photon_transmission_efficiency:.4f} $plus.minus$ {self.am.pte_st_dev:.4f}.
 
 #pagebreak()
 = Material Properties
@@ -59,7 +64,7 @@ class document_manager:
 == Photon Transmission Efficiency
 
 The Photon Transmission Efficiency (PTE) for this experiment was 
-{self.am.photon_transmission_efficiency:.4f} ± {self.am.pte_st_dev:.4f}.
+{self.am.photon_transmission_efficiency:.4f} $plus.minus$ {self.am.pte_st_dev:.4f}.
 
 == Tallies
 
@@ -169,7 +174,7 @@ The Photon Transmission Efficiency (PTE) for this experiment was
 
     def _get_plot_files(self):
         plot_dir = f"plots"  # Relative path from the Typst file location
-        full_plot_dir = f"/workspace/results/{self.experiment_name}/plots"
+        full_plot_dir = f"/workspace/results/{self.experiment_name}-{self.label}/plots"
         plot_files = [f for f in os.listdir(full_plot_dir) if f.endswith(".png")]
         # Format as a Typst array with proper escaping
         return (
@@ -188,7 +193,9 @@ The Photon Transmission Efficiency (PTE) for this experiment was
         Compile the Typst file to PDF using the Typst compiler.
         """
         try:
-            subprocess.run(["./typst", "compile", typst_file, output_file], check=True)
+            typst_file = f"/workspace/results/{self.experiment_name}-{self.label}/report.typ"
+            output_file = f"/workspace/results/{self.experiment_name}-{self.label}/{self.experiment_name}-{self.label}.pdf"
+            subprocess.run(["/workspace/typst", "compile", typst_file, output_file], check=True)
             print(f"PDF '{output_file}' has been generated.")
         except subprocess.CalledProcessError:
             print(
