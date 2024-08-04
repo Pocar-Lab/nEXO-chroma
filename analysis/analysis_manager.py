@@ -348,6 +348,7 @@ class analysis_manager:
         self.pte_st_dev = (
             np.sqrt(np.sum(self.tallies["SURFACE_DETECT"])) / self.num_particles
         )
+        self.pte_st_dev_exp = np.sqrt(np.sum(self.tallies["SURFACE_DETECT"])) / (500/self.photon_transmission_efficiency)
         print(
             "PHOTON TRANSMISSION EFFICIENCY: "
             + str(self.photon_transmission_efficiency)
