@@ -77,8 +77,6 @@ def main():
 
     mm = material_manager(experiment_name=experiment_name,run_id=run_id)
     sm = surface_manager(material_manager = mm, experiment_name = experiment_name, run_id = run_id)
-    sm.overwrite_property("silicon-Xe","reflect_specular",1)
-    sm.overwrite_property("silicon-Xe","reflect_diffuse",0)
     gm = geometry_manager(experiment_name=experiment_name, run_id=run_id, visualize=visualize, surf_manager = sm)
     rm = run_manager(geometry_manager=gm, experiment_name=experiment_name, random_seed=seed, num_particles=num_particles, run_id=run_id, plots=plots, write = write)
     return rm.ana_man.get_end_time()

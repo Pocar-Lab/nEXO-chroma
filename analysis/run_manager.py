@@ -58,6 +58,7 @@ class run_manager:
         self.photon_dir = []
         self.photon_pos = []
         self.photon_tracks = []
+        self.first_photon_tracks = []
         self.total_photons = []
 
         # self.total_photon_tracks = np.zeros((self.num_steps + 1, self.num_particles, 3)) we dont need photon tracks for very large simulations
@@ -100,7 +101,7 @@ class run_manager:
                 plots,
                 myPhotons,  #8/6/2024 Changed from self.photons. This was in attempt to incorporate multiple simulations. If needed put it back.
                 # self.photon_tracks,
-                photon_tracks = None, # again we dont need photon tracks for very large simulations.
+                photon_tracks = self.first_photon_tracks, # photon tracks from just the first part of simulations
                 run_id = self.run_id,
                 seed = self.seed,
                 histories = self.particle_histories,
@@ -164,7 +165,7 @@ class run_manager:
     
 
     def run_larger_sim(self, seed, num_particles):
-        batch_size = 1_000_000
+        batch_size = 2_000_000
         num_sims = math.ceil(num_particles / batch_size)
         
         total_flags = []
@@ -179,10 +180,11 @@ class run_manager:
             # Run a single simulation with the current batch
             self.run_single_simulation(seed + i, current_batch_size)
             
-
+            if i == 0:
+                self.first_photon_tracks = self.photon_tracks
             total_flags.append(self.photons.flags)
             total_dir.append(self.photons.dir)
-            total_pos.append(self.photons.pos)
+            total_pos.append(self.photons.pos)  
             # total_photon_tracks.append(self.photon_tracks) we do not need all photon tracks for tens of millions of photons, we can only plot on hte roder of thousands.
             
             # Update particle histories

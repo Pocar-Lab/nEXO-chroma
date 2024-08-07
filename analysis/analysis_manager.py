@@ -80,7 +80,7 @@ class analysis_manager:
         experiment_name,
         selected_plots,
         photons,
-        photon_tracks=1000,
+        photon_tracks,
         run_id=0,
         seed=0,
         histories=None,
@@ -123,7 +123,6 @@ class analysis_manager:
         self.specular_reflected_tracks = None
         self.diffuse_reflected_tracks = None
         self.num_particles = len(self.photons)
-        print(f"num particles {self.num_particles}")
         self.run_id = run_id
         self.seed = seed
         self.particle_histories = histories
@@ -173,20 +172,32 @@ class analysis_manager:
         Preprocesses the photon tracks and categorizes them.
         """
         num_particles = self.num_particles
-        self.all_tracks = []
-        self.detected_tracks = []  # tracks of photons detected
-        self.undetected_tracks = []  # tracks of photons not detected
-        self.reflected_tracks = []  # tracks of photons reflected
-        self.filtered_scattered_tracks = (
-            []
-        )  # tracks of photons scattered but not detected or speculrly reflected
-        self.detected_reflected_tracks = (
-            []
-        )  # tracks of photons both detected and reflected
-        self.specular_reflected_tracks = []  # tracks of photons specularly reflected
-        self.diffuse_reflected_tracks = []  # tracks of photons diffusively reflected
 
-        for idx in range(num_particles):
+        self.all_tracks = []
+        self.all_indices = []
+
+        self.detected_tracks = []  # tracks of photons detected
+        self.detected_indices = []
+
+        self.undetected_tracks = []  # tracks of photons not detected
+        self.undetected_indices = []
+
+        self.reflected_tracks = []  # tracks of photons reflected
+        self.reflected_indices = []
+
+        self.filtered_scattered_tracks = [] # tracks of photons scattered but not detected or speculrly reflected
+        self.filtered_scattered_indices = []
+
+        self.detected_reflected_tracks = [] # tracks of photons both detected and reflected
+        self.detected_reflected_indices = []
+
+        self.specular_reflected_tracks = []  # tracks of photons specularly reflected
+        self.specular_reflected_indices = []
+
+        self.diffuse_reflected_tracks = []  # tracks of photons diffusively reflected
+        self.diffuse_reflected_indices = []
+
+        for idx in range(len(self.photon_tracks[0])):
             curr_positions = self.photon_tracks[:, idx, :]  # select track of photon idx
 
             # Remove duplicate consecutive positions
@@ -198,32 +209,37 @@ class analysis_manager:
             self.all_tracks.append(curr_positions)
 
             did_detect = self.tallies["SURFACE_DETECT"][idx]
-            did_reflect_specular = self.particle_histories["REFLECT_SPECULAR"][
-                idx
-            ].astype(bool)
-            did_reflect_diffuse = self.particle_histories["REFLECT_DIFFUSE"][
-                idx
-            ].astype(bool)
+            did_reflect_specular = self.particle_histories["REFLECT_SPECULAR"][idx].astype(bool)
+            did_reflect_diffuse = self.particle_histories["REFLECT_DIFFUSE"][idx].astype(bool)
             did_scatter = self.particle_histories["RAYLEIGH_SCATTER"][idx] != 0
 
             if did_detect:
                 self.detected_tracks.append(curr_positions)
+                self.detected_indices.append(idx)
             else:
                 self.undetected_tracks.append(curr_positions)
+                self.undetected_indices.append(idx)
 
             if did_reflect_specular:
                 self.specular_reflected_tracks.append(curr_positions)
+                self.specular_reflected_indices.append(idx)
                 self.reflected_tracks.append(curr_positions)
+                self.reflected_indices.append(idx)
+
             if did_reflect_diffuse:
                 self.diffuse_reflected_tracks.append(curr_positions)
+                self.detected_reflected_indices.append(idx)
                 self.reflected_tracks.append(curr_positions)
+                self.reflected_indices.append(idx)
 
             if did_detect and (did_reflect_specular or did_reflect_diffuse):
                 self.detected_reflected_tracks.append(curr_positions)
+                self.detected_reflected_indices.append(idx)
             if did_scatter and not did_detect and not did_reflect_specular:
                 self.filtered_scattered_tracks.append(curr_positions)
+                self.filtered_scattered_indices.append(idx)
 
-    def plot_tracks(self, tracks, title, plot_geometry, color="tab:blue", linewidth=1):
+    def plot_tracks(self, tracks, track_indices, title, plot_geometry, linewidth=1):
         """
         Plots the photon tracks in 3D.
 
@@ -243,12 +259,38 @@ class analysis_manager:
 
         figure = plt.figure()
         axes = mplot3d.Axes3D(figure)
-        num_tracks = min(len(tracks), 1000)
-        print("Number of photons plotted: " + str(num_tracks))
+        num_tracks_to_plot = min(1000, len(tracks))  # Ensure not to exceed available tracks
+        plotted_indices = np.random.choice(len(tracks), num_tracks_to_plot, replace=False)
+        # print("Number of photons plotted: " + str(num_tracks))
+
         # num_tracks = self.num_tracks if self.num_tracks < len(tracks) else len(tracks)
-        for i in range(num_tracks):
+        # print(self.photon_tracks)
+        # print(self.detected_tracks)
+        # print(tracks)
+        # print(track_indices)
+        print(len(tracks))
+        print(len(self.detected_tracks))
+        print(len(track_indices))
+        print(len(self.reflected_tracks))
+        for i in plotted_indices:
             track = tracks[i]
-            # ax.plot(track[:, 0], track[:, 1], track[:, 2], color=color, linewidth=linewidth)
+            idx = track_indices[i]
+            did_detect = self.tallies["SURFACE_DETECT"][idx]
+            did_reflect_specular = self.particle_histories["REFLECT_SPECULAR"][idx].astype(bool)
+            did_reflect_diffuse = self.particle_histories["REFLECT_DIFFUSE"][idx].astype(bool)
+            did_scatter = self.particle_histories["RAYLEIGH_SCATTER"][idx] != 0
+
+            if did_reflect_diffuse and did_reflect_diffuse:
+                color = "purple"
+            elif did_reflect_diffuse:
+                color = "red"
+            elif did_reflect_specular:
+                color = "blue"
+            elif did_scatter:
+                color = "black"
+            else:
+                color = "green"
+
             axes.plot(
                 track[:, 0], track[:, 1], track[:, 2], color=color, linewidth=linewidth
             )
@@ -777,41 +819,41 @@ class analysis_manager:
 
     def plot_all_tracks_wrapper(self):
         title = f"Photon Tracks, Seed {self.seed}, Run {self.run_id}"
-        self.plot_tracks(self.all_tracks, title, False)
+        self.plot_tracks(self.all_tracks, self.all_indices, title, False)
 
     def plot_detected_tracks_wrapper(self):
         title = f"Detected Photon Tracks, Seed {self.seed}, Run {self.run_id}"
-        self.plot_tracks(self.detected_tracks, title, True)
+        self.plot_tracks(self.detected_tracks, self.detected_indices,title, True)
 
     def plot_undetected_tracks_wrapper(self):
         title = f" Undetected Photon Tracks, Seed {self.seed}, Run {self.run_id}"
-        self.plot_tracks(self.undetected_tracks, title, False)
+        self.plot_tracks(self.undetected_tracks, self.undetected_indices, title, False)
 
     def plot_reflected_tracks_wrapper(self):
         title = f"Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}"
-        self.plot_tracks(self.reflected_tracks, title, True)
+        self.plot_tracks(self.reflected_tracks, self.reflected_indices, title, True)
 
     def plot_filtered_scattered_tracks_wrapper(self):
         title = f"Filtered Scattered Photon Tracks, Seed {self.seed}, Run {self.run_id}"
-        self.plot_tracks(self.filtered_scattered_tracks, title, False)
+        self.plot_tracks(self.filtered_scattered_tracks, self.filtered_scattered_indices, title, False)
 
     def plot_detected_reflected_tracks_wrapper(self):
         title = (
             f"Detected and Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}"
         )
-        self.plot_tracks(self.detected_reflected_tracks, title, True)
+        self.plot_tracks(self.detected_reflected_tracks, self.detected_reflected_indices, title, True)
 
     def plot_specular_reflected_tracks_wrapper(self):
         title = (
             f"Specularly Refelcted Photon Tracks, Seed {self.seed}, Run {self.run_id}"
         )
-        self.plot_tracks(self.specular_reflected_tracks, title, False)
+        self.plot_tracks(self.specular_reflected_tracks, self.specular_reflected_indices, title, False)
 
     def plot_diffuse_reflected_tracks_wrapper(self):
         title = (
             f" Diffusively Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}"
         )
-        self.plot_tracks(self.diffuse_reflected_tracks, title, False)
+        self.plot_tracks(self.diffuse_reflected_tracks, self.diffuse_reflected_indices, title, False)
 
     def plot_refl_multiplicity_wrapper(self):
         self.plot_refl_multiplicity(density=True)
