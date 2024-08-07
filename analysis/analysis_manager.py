@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-mpl.use("Agg")
+# mpl.use("Agg")
 from stl import mesh
 from matplotlib import colors
 from mpl_toolkits import mplot3d
@@ -157,7 +157,7 @@ class analysis_manager:
             f"/workspace/results/{self.experiment_name}/histogram_data_seed_{self.seed}"
         )
         filename = f"/workspace/results/{self.experiment_name}/datapoints/hd3_data_test_seed_{self.seed}.csv"
-
+        # self.plot_photon_step_hist()
         if len(selected_plots) > 0:
             self.preprocess_tracks()
             self.end_time = time.time()
@@ -308,6 +308,22 @@ class analysis_manager:
             / np.sqrt((last_pos[:, 0] ** 2 + last_pos[:, 1] ** 2 + last_pos[:, 2] ** 2))
         ) * (180.0 / np.pi)
         return angles
+    
+    def step_length(self,photon_path):
+        steps = 1
+        for i in range(len(photon_path) - 1):
+            if(set(photon_path[i]) == set(photon_path[i+1])):
+                return steps
+            steps += 1
+        return steps
+            
+    def plot_photon_step_hist(self):
+        steps = [self.step_length(self.photon_tracks[:,i,:]) for i in range(self.num_particles)]
+        plt.hist(steps,bins=15)
+        plt.title("Histogram of Photon Step Count")
+        plt.xlabel("No. Steps")
+        plt.ylabel("No. Photons")
+        plt.show()
 
     def get_tallies(self):
         """
@@ -321,9 +337,7 @@ class analysis_manager:
         ##place holder below, the output value doesn't mean anything.
         # self.tallies['RAYLEIGH_SCATTER'] = (self.photons.flags & (0x1 << 4)).astype(bool)
         self.tallies["REFLECT_DIFFUSE"] = (self.photons.flags & (0x1 << 5)).astype(bool)
-        self.tallies["REFLECT_SPECULAR"] = (self.photons.flags & (0x1 << 6)).astype(
-            bool
-        )
+        self.tallies["REFLECT_SPECULAR"] = (self.photons.flags & (0x1 << 6)).astype(bool)
         # self.tallies['SURFACE_REEMIT']   = (self.photons.flags & (0x1 << 7)).astype(bool)
         # self.tallies['SURFACE_TRANSMIT'] = (self.photons.flags & (0x1 << 8)).astype(bool)
         # self.tallies['BULK_REEMIT']      = (self.photons.flags & (0x1 << 9)).astype(bool)

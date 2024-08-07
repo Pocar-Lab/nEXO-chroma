@@ -6,7 +6,7 @@ from chroma.event import Photons
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-
+import hashlib
 from mpl_toolkits import mplot3d
 
 from chroma import gpu
@@ -45,38 +45,71 @@ class run_manager:
         write=False,
         pg=None,
     ):
-        self.num_steps = 100
+        self.num_steps = 15
         self.run_id = run_id
         self.seed = random_seed
         self.gm = geometry_manager
         self.center_pos = self.gm.get_solid_center(name="source")
         self.num_particles = num_particles
-        self.sim = Simulation(
-            self.gm.global_geometry, seed=random_seed, geant4_processes=0
-        )
-        if pg is None:
-            self.pg = primary_generator(
-                self.num_particles, run_id=self.run_id, center_pos=self.center_pos
+
+        self.given_pg = pg
+        self.pg = pg
+        self.photon_flags = []
+        self.photon_dir = []
+        self.photon_pos = []
+        self.photon_tracks = []
+        self.total_photons = []
+
+        # self.total_photon_tracks = np.zeros((self.num_steps + 1, self.num_particles, 3)) we dont need photon tracks for very large simulations
+
+        self.interactions = {
+            "RAYLEIGH_SCATTER": 4,
+            "REFLECT_DIFFUSE": 5,
+            "REFLECT_SPECULAR": 6,
+            "SURFACE_REEMIT": 7,
+            "SURFACE_TRANSMIT": 8,
+            "BULK_REEMIT": 9,
+            "CHERENKOV": 10,
+            "SCINTILLATION": 11,
+        }
+
+        self.total_particle_histories = {
+            curr_int: np.zeros(self.num_particles, dtype=int)
+            for curr_int in self.interactions.keys()
+        }
+
+        if num_particles <= 1_000_000:
+            self.run_single_simulation(random_seed, num_particles)
+            self.ana_man = analysis_manager(
+                self.gm,
+                experiment_name,
+                plots,
+                self.photons,
+                self.photon_tracks,
+                self.run_id,
+                self.seed,
+                self.particle_histories,
+                write,
             )
         else:
-            self.pg = pg
-        self.propagate_photon()
+            self.run_larger_sim(random_seed, num_particles)
+            myPhotons = MyPhotons(photon_pos = self.photon_pos, photon_dir = self.photon_dir, photon_flags = self.photon_flags)
+            self.ana_man = analysis_manager(
+                self.gm,
+                experiment_name,
+                plots,
+                myPhotons,  #8/6/2024 Changed from self.photons. This was in attempt to incorporate multiple simulations. If needed put it back.
+                # self.photon_tracks,
+                photon_tracks = None, # again we dont need photon tracks for very large simulations.
+                run_id = self.run_id,
+                seed = self.seed,
+                histories = self.particle_histories,
+                write = write,
+            )
+
         
-        # 	def __init__(self, geometry_manager, experiment_name, selected_plot, photons, photon_tracks = 1000, run_id = 0, seed = 0, histories = None):
-
-        self.ana_man = analysis_manager(
-            self.gm,
-            experiment_name,
-            plots,
-            self.photons,
-            self.photon_tracks,
-            self.run_id,
-            self.seed,
-            self.particle_histories,
-            write,
-        )
-
-    def propagate_photon(self):
+        
+    def propagate_photon(self,num_particles):
         """
         Propagates photons through the geometry using the GPU, collecting their positions and interaction histories.
 
@@ -88,21 +121,11 @@ class run_manager:
 
         gpu_photons = gpu.GPUPhotons(self.pg.primary_photons)
         gpu_geometry = gpu.GPUGeometry(self.gm.global_geometry)
-        self.photon_tracks = np.zeros((self.num_steps + 1, self.num_particles, 3))
+        self.photon_tracks = np.zeros((self.num_steps + 1, num_particles, 3))
         self.photon_tracks[0, :, :] = self.pg.positions
         rng_states = gpu.get_rng_states(nthreads_per_block * max_blocks, seed=seed)
-        self.interactions = {
-            "RAYLEIGH_SCATTER": 4,
-            "REFLECT_DIFFUSE": 5,
-            "REFLECT_SPECULAR": 6,
-            "SURFACE_REEMIT": 7,
-            "SURFACE_TRANSMIT": 8,
-            "BULK_REEMIT": 9,
-            "CHERENKOV": 10,
-            "SCINTILLATION": 11,
-        }
         self.particle_histories = {
-            curr_int: np.zeros(self.num_particles, dtype=int)
+            curr_int: np.zeros(num_particles, dtype=int)
             for curr_int in self.interactions.keys()
         }
 
@@ -122,10 +145,65 @@ class run_manager:
             self.update_tallies(self.photons)
             # reset interaction history bits that are nonterminal
             new_flags = self.reset_nonterminal_flags(self.photons.flags)
-            gpu_photons.flags[: self.num_particles].set(new_flags.astype(np.uint32))
+            gpu_photons.flags[: num_particles].set(new_flags.astype(np.uint32))
         
         #simulation done, clear GPU cache to save memory
         pycuda.tools.clear_context_caches()
+
+    def run_single_simulation(self,seed, batch_size):
+        self.sim = Simulation(
+            self.gm.global_geometry, seed = seed, geant4_processes=0
+        )   
+        if self.given_pg is None:
+            self.pg = primary_generator(
+                batch_size, run_id=self.run_id, center_pos=self.center_pos
+            )
+        else:
+            self.pg = self.given_pg
+        self.propagate_photon(batch_size)
+    
+
+    def run_larger_sim(self, seed, num_particles):
+        batch_size = 1_000_000
+        num_sims = math.ceil(num_particles / batch_size)
+        
+        total_flags = []
+        total_dir = []
+        total_pos = []
+        total_photon_tracks = []
+        total_particle_histories = {key: np.zeros(num_particles, dtype=int) for key in self.interactions.keys()}
+        
+        for i in range(num_sims):
+            current_batch_size = min(batch_size, num_particles - i * batch_size)
+            
+            # Run a single simulation with the current batch
+            self.run_single_simulation(seed + i, current_batch_size)
+            
+
+            total_flags.append(self.photons.flags)
+            total_dir.append(self.photons.dir)
+            total_pos.append(self.photons.pos)
+            # total_photon_tracks.append(self.photon_tracks) we do not need all photon tracks for tens of millions of photons, we can only plot on hte roder of thousands.
+            
+            # Update particle histories
+            start_idx = i * batch_size
+            end_idx = start_idx + current_batch_size
+            for key in self.particle_histories.keys():
+                total_particle_histories[key][start_idx:end_idx] = self.particle_histories[key]
+            
+        
+        # Combine the photon tracks
+        # self.photon_tracks = np.concatenate(total_photon_tracks, axis=1)
+        
+        # Combine the extracted photon data
+        self.photon_flags = np.concatenate(total_flags)
+        self.photon_dir = np.concatenate(total_dir)
+        self.photon_pos = np.concatenate(total_pos)
+        
+        self.particle_histories = total_particle_histories
+        
+        # Clean up
+        del total_flags, total_dir, total_pos, total_photon_tracks
 
     def reset_nonterminal_flags(self, flag_list):
         """
@@ -153,6 +231,28 @@ class run_manager:
             self.particle_histories[key] += curr_tally
             # print(key, self.particle_histories[key])
 
+    def repeatable_random(seed, num_numbers):
+        numbers = []
+        hash = str(seed).encode()  
+        while len(numbers) < num_numbers:
+            hash = hashlib.md5(hash).digest()
+            for c in hash:
+                numbers.append(c)
+                if len(numbers) >= num_numbers:
+                    break 
+        return numbers
+    
+    
+        #store all the necessary information as photons that we use in analysis manager but not stored in GPU so they can be longer
+class MyPhotons:
+
+    def __init__(self,photon_pos,photon_dir, photon_flags):
+        self.pos = photon_pos
+        self.dir = photon_dir
+        self.flags = photon_flags
+
+    def __len__(self):
+        return len(self.flags)
 
 class primary_generator:  # photon generator
     """
