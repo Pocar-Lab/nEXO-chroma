@@ -44,6 +44,7 @@ class run_manager:
         plots,
         write=False,
         pg=None,
+        batches = False,
     ):
         self.num_steps = 15
         self.run_id = run_id
@@ -79,7 +80,7 @@ class run_manager:
             for curr_int in self.interactions.keys()
         }
 
-        if num_particles <= 1_000_000:
+        if not batches:
             self.run_single_simulation(random_seed, num_particles)
             self.ana_man = analysis_manager(
                 self.gm,
@@ -93,7 +94,7 @@ class run_manager:
                 write,
             )
         else:
-            self.run_larger_sim(random_seed, num_particles)
+            self.run_batches(random_seed, num_particles)
             myPhotons = MyPhotons(photon_pos = self.photon_pos, photon_dir = self.photon_dir, photon_flags = self.photon_flags)
             self.ana_man = analysis_manager(
                 self.gm,
@@ -164,7 +165,7 @@ class run_manager:
         self.propagate_photon(batch_size)
     
 
-    def run_larger_sim(self, seed, num_particles):
+    def run_batches(self, seed, num_particles):
         batch_size = 2_000_000
         num_sims = math.ceil(num_particles / batch_size)
         
