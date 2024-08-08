@@ -170,6 +170,7 @@ The Photon Transmission Efficiency (PTE) for this experiment was
         rows = ""
         for key, value in self.am.tallies.items():
             rows += f"[{key}], [{np.sum(value)}],\n"
+        return ""
         return rows
 
     def _get_plot_files(self):
