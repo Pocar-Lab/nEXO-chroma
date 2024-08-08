@@ -15,7 +15,7 @@ Run this file from within the Chroma container with `python ./ExampleAnalysis.py
 def main():
     #experiment_name = "8refelctortall"
     experiment_name = "8Silicon35_87" #define experiment
-    LABEL = "DIFFUSE" # label configuration or properties
+    LABEL = "NO REFLECTOR" # label configuration or properties
 
     num_particles = 100_000_000
     seed = 1042
@@ -38,7 +38,7 @@ def main():
             "plot_position_hist" ,
              ]
 
-    e = [1, 3, 5, 7] #exclude outer
+    e = [1, 2, 3, 4, 5, 6, 7, 8] #exclude outer
     print(f"Experiment Name: {experiment_name}")
     print(f"Number of particles: {num_particles}")
     print(f"Random seed: {seed}")
@@ -57,7 +57,9 @@ def main():
         num_particles=num_particles,
         run_id=run_id,
         plots=plots,
+        batches=True
     )
+    print("Run manager complete")
 
     dm = document_manager(rm.ana_man, LABEL)
     dm.generate_typst_file()
