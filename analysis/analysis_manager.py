@@ -207,6 +207,7 @@ class analysis_manager:
 
             curr_positions = curr_positions[unique_ind]
             self.all_tracks.append(curr_positions)
+            self.all_indices.append(idx)
 
             did_detect = self.tallies["SURFACE_DETECT"][idx]
             did_reflect_specular = self.particle_histories["REFLECT_SPECULAR"][idx].astype(bool)
@@ -228,7 +229,7 @@ class analysis_manager:
 
             if did_reflect_diffuse:
                 self.diffuse_reflected_tracks.append(curr_positions)
-                self.detected_reflected_indices.append(idx)
+                self.diffuse_reflected_indices.append(idx)
                 self.reflected_tracks.append(curr_positions)
                 self.reflected_indices.append(idx)
 
@@ -515,18 +516,18 @@ class analysis_manager:
             Whether to include only diffusely reflected photons (default is False).
         """
         if num_tracks == None:
-            num_tracks = self.num_particles
+            num_tracks = len(self.photon_tracks[0])
 
-        mask = np.ones(self.num_particles, dtype=bool)
+        mask = np.ones(num_tracks, dtype=bool)
 
         if detected_only:
-            mask &= self.tallies["SURFACE_DETECT"]
+            mask &= self.tallies["SURFACE_DETECT"][0:len(mask)]
 
         if reflected_only:
-            mask &= self.particle_histories["REFLECT_SPECULAR"].astype(bool)
+            mask &= self.particle_histories["REFLECT_SPECULAR"][0:len(mask)].astype(bool)
 
         if diffuse_only:
-            mask &= self.particle_histories["REFLECT_DIFFUSE"].astype(bool)
+            mask &= self.particle_histories["REFLECT_DIFFUSE"][0:len(mask)].astype(bool)
 
         filtered_tracks = self.photon_tracks[:, mask, :]
         print("shape of the filtered tracks", np.shape(filtered_tracks))
@@ -577,19 +578,19 @@ class analysis_manager:
             Whether to include only diffusely reflected photons (default is False).
         """
         if num_tracks == None:
-            num_tracks = self.num_particles
+            num_tracks = len(self.photon_tracks[0])
 
-        mask = np.ones(self.num_particles, dtype=bool)
+        mask = np.ones(num_tracks, dtype=bool)
 
         if detected_only:
-            mask &= self.tallies["SURFACE_DETECT"]
+            mask &= self.tallies["SURFACE_DETECT"][0:len(mask)]
 
         if reflected_specular_only:
-            mask &= self.particle_histories["REFLECT_SPECULAR"].astype(bool)
+            mask &= self.particle_histories["REFLECT_SPECULAR"][0:len(mask)].astype(bool)
             # print('reflect_specular_only')
 
         if reflected_diffuse_only:
-            mask &= self.particle_histories["REFLECT_DIFFUSE"].astype(bool)
+            mask &= self.particle_histories["REFLECT_DIFFUSE"][0:len(mask)].astype(bool)
 
         filtered_tracks = self.photon_tracks[:, mask, :]
         print("shape of the filtered tracks", np.shape(filtered_tracks))
