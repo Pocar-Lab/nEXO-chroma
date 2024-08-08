@@ -1,0 +1,19 @@
+name,stl_filepath,inner_mat,outer_mat,surface,color,displacement x,displacement y,displacement z,solid_type
+sipm,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - FBKSiPMAssem-2 SipmPlate-1.STL,silicon,liquid xenon,FBK HD3,black,0,0,0,pmt
+source,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - sourceflippedassem-1 sourcepart3-2.STL,steel,liquid xenon,None,red,0,0,0,none
+silica window,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - silicawindow-1 SilicaWindow-1.STL,silica,liquid xenon,None,cyan,0,0,0,solid
+silica gasket 1,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - silicawindow-1 SilicaGasket.step-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+silica gasket 2,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - silicawindow-1 SilicaGasket.step-2.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+copper plate 1,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - SiPM-Disk-1-.15mm-2.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+copper plate 2,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - SiPM-Disk-2-Updated-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+copper washer,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - WasherReplacement-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+reflectorholder1,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - 2023_5_23_SilicaGasketCut-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+reflectorholder2,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - 2023_5_23_SilicaGasketCut-2.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
+reflector1,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - reflector (copy)-1.STL,silicon,liquid xenon,silicon-Xe,grey,0,0,0,solid
+reflector2,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - reflector (copy)-2.STL,silicon,liquid xenon,silicon-Xe,grey,0,0,0,solid
+reflector3,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - reflector (copy)-3.STL,silicon,liquid xenon,silicon-Xe,grey,0,0,0,solid
+reflector4,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - reflector (copy)-4.STL,silicon,liquid xenon,silicon-Xe,grey,0,0,0,solid
+reflector5,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - reflector (copy)-5.STL,silicon,liquid xenon,silicon-Xe,grey,0,0,0,solid
+reflector6,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - reflector (copy)-6.STL,silicon,liquid xenon,silicon-Xe,grey,0,0,0,solid
+reflector7,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - reflector (copy)-7.STL,silicon,liquid xenon,silicon-Xe,grey,0,0,0,solid
+reflector8,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - reflector (copy)-8.STL,silicon,liquid xenon,silicon-Xe,grey,0,0,0,solid
