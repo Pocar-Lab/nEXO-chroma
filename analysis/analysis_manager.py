@@ -697,22 +697,17 @@ class analysis_manager:
             "refractive_index"
         ]
         fig = plt.figure()
-        plt.hist(self.detected_angles, bins=[theta for theta in range(91)])
+
+        if self.num_particles < 20_000_000:
+            bins=[theta for theta in range(91)]
+        else:
+            bins= [0.5 *theta for theta in range(181)]
+        plt.hist(self.detected_angles, bins = bins )
         # hist is the height of the historgram
         hist, bin_edges = np.histogram(
-            self.detected_angles, bins=[theta for theta in range(91)]
+            self.detected_angles, bins = bins
         )
         print(hist)
-        if self.write:
-            save_data = {
-                "Incident Angle": np.array(list(range(0, 90))),
-                "Detected number": hist,
-                "LXe refractive index": np.array(
-                    [lxe_refractive_index for _ in range(len(hist))]
-                ),
-            }
-            df = pd.DataFrame(save_data)
-            df.to_csv(histogramfilename)
 
         plt.ylabel("Counts")
         plt.xlabel("Incident Angle [deg]")
