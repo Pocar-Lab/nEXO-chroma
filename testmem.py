@@ -24,7 +24,7 @@ from contextlib import contextmanager
 import sys, os
 
 @contextmanager
-def suppress_stdout():
+def suppress_stdout(): #custom context to not print things
     with open(os.devnull, "w") as devnull:
         old_stdout = sys.stdout
         sys.stdout = devnull
@@ -36,7 +36,9 @@ def suppress_stdout():
 
 
 def run_8_reflector(n_si, k_si, run_id):
-
+    """
+    Run  8 reflector simulation, return results
+    """
     experiment_name = "Sebastian_08.01.2023(liquefaction)_correctedSiPM"
     num_particles = 100_000
     seed = 1042
@@ -64,7 +66,7 @@ def run_8_reflector(n_si, k_si, run_id):
         surf_manager=sm
     )
     fail_counter = 0
-    while fail_counter < 3:
+    while fail_counter < 3: #handle rare CUDA error
         try:
             rm = run_manager(
                 geometry_manager=gm,
@@ -91,7 +93,9 @@ def run_8_reflector(n_si, k_si, run_id):
 
 
 def run_4_reflector(n_si, k_si, run_id):
-
+    """
+    Run 4 reflector config
+    """
     experiment_name = "8refelctortall"
     num_particles = 100_000
     seed = 1042
@@ -123,7 +127,7 @@ def run_4_reflector(n_si, k_si, run_id):
         exclude=excluded
     )
     fail_counter = 0
-    while fail_counter < 3:
+    while fail_counter < 3: #handle rare CUDA error
         try:
             rm = run_manager(
                 geometry_manager=gm,
@@ -151,11 +155,15 @@ def main():
     results = []
     run_id = 1
     # for k_si, n_si in itertools.product(np.linspace(.5, 2.5, 100), np.linspace(.5, 1.5, 55)):
+
+    #iterate over all combinations of chosen values of k_si, n_si
     for k_si, n_si in itertools.product(np.linspace(.5, 2.5, 100), np.linspace(.5, 1.5, 55)):
-            with suppress_stdout():
-                pte_8, pte_err_8 = run_8_reflector(n_si, k_si, run_id)
-                pte_4, pte_err_4 = run_4_reflector(n_si, k_si, run_id)
-                results.append({
+            with suppress_stdout(): #suppress output to not clog up the log
+                pte_8, pte_err_8 = run_8_reflector(n_si, k_si, run_id) #run 8 reflector
+                pte_4, pte_err_4 = run_4_reflector(n_si, k_si, run_id) #run 4 reflector
+
+                #compile results and info
+                results.append({ 
                     'run_id' : run_id,
                     'k_si': k_si,
                     'n_si': n_si,
