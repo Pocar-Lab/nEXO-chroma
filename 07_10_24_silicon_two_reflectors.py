@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-from analysis.geometry_manager import geometry_manager
-from analysis.run_manager import run_manager
+from PocarChroma.geometry_manager import geometry_manager
+from PocarChroma.run_manager import run_manager
 import time
 
 

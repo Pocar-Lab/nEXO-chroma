@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-from analysis.geometry_manager import geometry_manager
-from analysis.run_manager import run_manager
+from PocarChroma.geometry_manager import geometry_manager
+from PocarChroma.run_manager import run_manager
 import time
-from analysis.document_manager import document_manager
+from PocarChroma.document_manager import document_manager
 
 """
 Example showing how to run a simulation with a script file rather than from the command line.

@@ -3,10 +3,10 @@
 import sys, getopt
 import numpy as np
 
-from analysis.geometry_manager import geometry_manager
-from analysis.run_manager import run_manager
-from analysis.material_manager import material_manager
-from analysis.surface_manager import surface_manager
+from PocarChroma.geometry_manager import geometry_manager
+from PocarChroma.run_manager import run_manager
+from PocarChroma.material_manager import material_manager
+from PocarChroma.surface_manager import surface_manager
 
 import time
 
