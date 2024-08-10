@@ -309,17 +309,18 @@ class analysis_manager:
                 current_y_displacement,
                 current_z_displacement,
             ) in zip(stl_names, colors, y_displacement, z_displacement):
-                your_mesh = mesh.Mesh.from_file(curr_filename)
-                mesh_dimension = np.shape(your_mesh.vectors)
-                for i in range(mesh_dimension[1]):
-                    your_mesh.vectors[:, i, 1] += current_y_displacement
-                for k in range(mesh_dimension[1]):
-                    your_mesh.vectors[:, i, 2] += current_z_displacement
-                poly3d = mplot3d.art3d.Poly3DCollection(your_mesh.vectors)
-                poly3d.set_alpha(0.2)
-                poly3d.set_edgecolor(None)
-                poly3d.set_facecolor(curr_color)
-                axes.add_collection3d(poly3d)
+                if curr_filename not in self.gm.exclude:
+                    your_mesh = mesh.Mesh.from_file(curr_filename)
+                    mesh_dimension = np.shape(your_mesh.vectors)
+                    for i in range(mesh_dimension[1]):
+                        your_mesh.vectors[:, i, 1] += current_y_displacement
+                    for k in range(mesh_dimension[1]):
+                        your_mesh.vectors[:, i, 2] += current_z_displacement
+                    poly3d = mplot3d.art3d.Poly3DCollection(your_mesh.vectors)
+                    poly3d.set_alpha(0.2)
+                    poly3d.set_edgecolor(None)
+                    poly3d.set_facecolor(curr_color)
+                    axes.add_collection3d(poly3d)
             # Auto scale to the mesh size
             scale = your_mesh.points.flatten()
 

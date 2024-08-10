@@ -271,7 +271,7 @@ class primary_generator:  # photon generator
 
     # C++: methods/functions
     # def __init__(self, num_particles, center_pos = [0, 0, 0], delta_placement = 0.0):
-    def __init__(self, num_particles, run_id, center_pos=[0, 0, 0], r=0):
+    def __init__(self, num_particles, run_id, center_pos=[0, 0, 0], r=0, source_type = "isotropic"):
         self.num_particles = num_particles
         self.center_pos = center_pos
 
@@ -297,18 +297,26 @@ class primary_generator:  # photon generator
         # angle = np.pi * (61.5+0.1*(run_id)) / 180
         # angle = np.pi * 60.5/ 180
         # phi_angle = np.pi*45 / 180
-        # beam_dir = self.get_beam_dir(angle)
+        angle = 0
+        beam_dir = self.get_beam_dir(angle)
         # print("the beam angle in degree is", angle*180 / np.pi)
 
         # x_cone_dir = self.get_x_cone_dir(angle = np.pi, positive = False)
 
-        # y_cone_dir = self.get_y_cone_dir(angle = np.pi / 32.0, positive = True)
+        y_cone_dir = self.get_y_cone_dir(angle = np.pi / 32.0, positive = True)
 
         # curr_dir = y_cone_dir
         isotropic_dir = self.get_isotropic_dir()
         # self.directions = y_cone_dir
-        # self.directions = beam_dir
-        self.directions = isotropic_dir
+        if source_type == "isotropic":
+            self.directions = isotropic_dir
+        elif source_type == "beam":
+            self.directions = beam_dir
+        elif source_type == "y_cone":
+            self.directions = y_cone_dir
+        else:
+            raise Exception("Unknown Source Type. Currently supported source types are 'isotropic', 'beam', and 'y_cone'.")
+
 
         # fig = plt.figure()
         # ax = plt.axes(projection = '3d')
