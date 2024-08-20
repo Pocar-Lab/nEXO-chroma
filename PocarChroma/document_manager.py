@@ -11,6 +11,8 @@ class document_manager:
         self.label = label
         self.am = analysis_manager
         self.experiment_name = self.am.experiment_name
+        self.escaped_experiment_name = self.am.experiment_name.replace("_", r"\_")
+
         os.makedirs(f"/workspace/results/{self.experiment_name}-{self.label}", exist_ok=True)
         os.makedirs(f"/workspace/results/{self.experiment_name}-{self.label}/plots", exist_ok=True)
         shutil.copy2(f"/workspace/results/template.typ", f"/workspace/results/{self.experiment_name}-{self.label}")
@@ -34,14 +36,14 @@ class document_manager:
 #import "template.typ": *
 
 #show: project.with(
-  title: [Chroma Simulation \ {self.experiment_name} \ {self.label}],
+  title: [Chroma Simulation \ {self.escaped_experiment_name} \ {self.label}],
   authors: ((name: "Pocar Lab", email: "Lab 21", affiliation: "nEXO Collaboration"),),
   date: "2023-07-22",
 )
 
 = Experiment Details
 
-- Experiment Name: {self.am.experiment_name}
+- Experiment Name: {self.escaped_experiment_name}
 - Number of Particles: {self.am.num_particles}
 - Random Seed: {self.am.seed}
 - Run ID: {self.am.run_id}
