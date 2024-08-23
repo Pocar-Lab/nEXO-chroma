@@ -75,6 +75,10 @@ class surface_manager:
                 curr_surface = self.create_dielectric_metal_surface(
                     curr_name, curr_inner_mat_name
                 )
+                
+            #Attempt at specular lobed surface
+            elif curr_model_id == 6:
+                curr_surface = Surface(curr_name, model = 6)
 
             # Sili: added on 11/17/2022 to build a killing surface
             elif curr_model_id == 8:
