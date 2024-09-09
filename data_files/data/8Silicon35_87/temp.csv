@@ -1,0 +1,3 @@
+name,stl_filepath,inner_mat,outer_mat,surface,color,displacement x,displacement y,displacement z,solid_type
+sipm,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - FBKSiPMAssem-2 SipmPlate-1.STL,silicon,liquid xenon,FBK HD3,black,0,0,0,pmt
+source,/workspace/data_files/stl_files/8Silicon35_87/8refelctortall - sourceflippedassem-1 sourcepart3-2.STL,steel,liquid xenon,None,red,0,0,0,none

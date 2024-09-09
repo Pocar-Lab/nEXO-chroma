@@ -19,7 +19,7 @@ def main():
     experiment_name = "8Silicon35_87" #define experiment
     LABEL = "newsurface" # label configuration or properties
 
-    num_particles = 100_0_0
+    num_particles = 1_00
     seed = 1042
     run_id = 1
     visualize = False 
@@ -41,14 +41,13 @@ def main():
     #          ]
     plots = ["plot_all_tracks","plot_reflected_tracks"]
 
-    e = [1, 3, 4, 5, 6, 7, 8] #exclude outer THIS IS ONLY 7 REFLECTORS EXCLUDED BE CAREFUL
     # e = [2, 3, 4, 5, 6, 7, 8, 9] #exclude outer
 
     # e = [9, 10, 11, 12, 13, 14, 15, 16] #exclude outer
 
     # e = [1, 3, 5, 7] #exclude outer
-
-    e = [f"reflector{i}" for i in e]
+    e = None
+    # e = [f"reflector{i}" for i in e]
     print(f"Experiment Name: {experiment_name}")
     print(f"Number of particles: {num_particles}")
     print(f"Random seed: {seed}")
@@ -64,16 +63,14 @@ def main():
     gen = primary_generator(
         num_particles,
         run_id=run_id,
-        center_pos=gm.get_solid_center(name="source"),
-        source_type = "beam",
-        angle = 0
+        center_pos=gm.get_solid_center(name="source")
     )
     rm = run_manager(geometry_manager=gm, experiment_name=experiment_name, random_seed=seed, num_particles=num_particles, run_id=run_id, plots=plots, write = write, pg = gen)
     print("Run manager complete")
 
-    dm = document_manager(rm.ana_man, LABEL)
-    dm.generate_typst_file()
-    dm.compile_to_pdf()
+    # dm = document_manager(rm.ana_man, LABEL)
+    # dm.generate_typst_file()
+    # dm.compile_to_pdf()
 
 if __name__ == "__main__":
     s = time.time()

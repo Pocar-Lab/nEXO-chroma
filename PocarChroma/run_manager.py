@@ -73,6 +73,8 @@ class run_manager:
             "BULK_REEMIT": 9,
             "CHERENKOV": 10,
             "SCINTILLATION": 11,
+            "REFLECT_LOBED": 12,
+            "BACKSCATTER":  13,
         }
 
         self.total_particle_histories = {

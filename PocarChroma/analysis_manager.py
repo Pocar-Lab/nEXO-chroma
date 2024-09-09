@@ -213,6 +213,8 @@ class analysis_manager:
             did_reflect_specular = self.particle_histories["REFLECT_SPECULAR"][idx].astype(bool)
             did_reflect_diffuse = self.particle_histories["REFLECT_DIFFUSE"][idx].astype(bool)
             did_scatter = self.particle_histories["RAYLEIGH_SCATTER"][idx] != 0
+            did_backscatter = self.particle_histories["BACKSCATTER"][idx].astype(bool)
+            did_reflect_lobed = self.particle_histories["REFLECT_LOBED"][idx].astype(bool)
 
             if did_detect:
                 self.detected_tracks.append(curr_positions)
@@ -221,13 +223,13 @@ class analysis_manager:
                 self.undetected_tracks.append(curr_positions)
                 self.undetected_indices.append(idx)
 
-            if did_reflect_specular:
+            if did_reflect_specular or did_reflect_lobed:
                 self.specular_reflected_tracks.append(curr_positions)
                 self.specular_reflected_indices.append(idx)
                 self.reflected_tracks.append(curr_positions)
                 self.reflected_indices.append(idx)
 
-            if did_reflect_diffuse:
+            if did_reflect_diffuse or did_backscatter:
                 self.diffuse_reflected_tracks.append(curr_positions)
                 self.diffuse_reflected_indices.append(idx)
                 self.reflected_tracks.append(curr_positions)
@@ -280,17 +282,22 @@ class analysis_manager:
             did_reflect_specular = self.particle_histories["REFLECT_SPECULAR"][idx].astype(bool)
             did_reflect_diffuse = self.particle_histories["REFLECT_DIFFUSE"][idx].astype(bool)
             did_scatter = self.particle_histories["RAYLEIGH_SCATTER"][idx] != 0
+            did_backscatter = self.particle_histories["BACKSCATTER"][idx].astype(bool)
+            did_reflect_lobed = self.particle_histories["REFLECT_LOBED"][idx].astype(bool)
 
-            if did_reflect_diffuse and did_reflect_diffuse:
+
+            if did_reflect_lobed:
                 color = "purple"
-            elif did_reflect_diffuse:
+            elif did_reflect_diffuse or did_backscatter:
                 color = "red"
             elif did_reflect_specular:
                 color = "blue"
             elif did_scatter:
                 color = "black"
-            else:
+            elif did_detect:
                 color = "green"
+            else:
+                color = "orange"
 
             axes.plot(
                 track[:, 0], track[:, 1], track[:, 2], color=color, linewidth=linewidth
@@ -386,7 +393,9 @@ class analysis_manager:
         # self.tallies['SURFACE_TRANSMIT'] = (self.photons.flags & (0x1 << 8)).astype(bool)
         # self.tallies['BULK_REEMIT']      = (self.photons.flags & (0x1 << 9)).astype(bool)
         # self.tallies['CHERENKOV']        = (self.photons.flags & (0x1 << 10)).astype(bool)
-        # self.tallies['SCINTILLATION']    = (self.photons.flags & (0x1 << 11)).astype(bool)
+        # self.tallies['SCINTILLATION']    = (self.photons.flags & (0x1 << 11)).astype(bool)\
+        self.tallies['REFLECT_LOBED'] = (self.photons.flags & (0x1 << 12)).astype(bool)
+        self.tallies['BACKSCATTER'] = (self.photons.flags & (0x1 << 13)).astype(bool)
         # self.tallies['NAN_ABORT']        = (self.photons.flags & (0x1 << 31)).astype(bool)
 
         print()
