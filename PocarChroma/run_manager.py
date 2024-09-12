@@ -6,7 +6,6 @@ from chroma.event import Photons
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-import hashlib
 from mpl_toolkits import mplot3d
 
 from chroma import gpu
@@ -29,7 +28,12 @@ class run_manager:
     :type num_particles: int
     :param plots: The plots to be generated during analysis.
     :type plots: list
+    :param write: Whether to write output files, defaults to False.
     :type write: boolean
+    :param pg: An optional primary generator instance. If None, a new primary generator will be created.
+    :type pg: primary_generator, optional
+    :param batches: Whether to run simulations in batches, defaults to False.
+    :type batches: boolean
     """
 
     def __init__(
@@ -74,6 +78,8 @@ class run_manager:
             for curr_int in self.interactions.keys()
         }
 
+        #run the simulation either all at once or in batches depending on the value of 'batches'
+        #running more than 2-3 million all at once will cause the program to crash unless your GPU has a lot of vram so be careful
         if not batches:
             self.run_single_simulation(random_seed, num_particles)
             self.ana_man = analysis_manager(
@@ -103,6 +109,9 @@ class run_manager:
     def propagate_photon(self,num_particles):
         """
         Propagates photons through the geometry using the GPU, collecting their positions and interaction histories.
+
+        :param num_particles: The number of particles to simulate.
+        :type num_particles: int
 
         :return: None
         """
@@ -142,6 +151,7 @@ class run_manager:
         pycuda.tools.clear_context_caches()
 
     def run_single_simulation(self,seed, batch_size):
+        #runs a simulation with a set number of particless at a set seed using the simulation parameters passed into run manager initialization
         self.sim = Simulation(
             self.gm.global_geometry, seed = seed, geant4_processes=0
         )   
@@ -154,7 +164,12 @@ class run_manager:
         self.propagate_photon(batch_size)
     
 
+    #runs a simulation of a larger number of photons in smaller batches to avoid running out of memory.
+    #the seed is incremented after each batch to ensure a different seed but also have the process be repeatable from the same initial seed. 
+    # This means that a simulation of 100 million photons at seed 1000 will use seeds 1000-1049, so be careful not to call initial seeds too close together as there may be overlap
     def run_batches(self, seed, num_particles):
+
+        #running more than 2-3 million all at once will cause the program to crash unless your GPU has a lot of vram so be careful
         batch_size = 2_000_000
         num_sims = math.ceil(num_particles / batch_size)
         
@@ -177,7 +192,7 @@ class run_manager:
             total_pos.append(self.photons.pos)  
             # total_photon_tracks.append(self.photon_tracks) we do not need all photon tracks for tens of millions of photons, we can only plot on the order of thousands.
             
-            # Update particle histories
+            #update particle histories
             start_idx = i * batch_size
             end_idx = start_idx + current_batch_size
             for key in self.particle_histories.keys():
@@ -187,14 +202,14 @@ class run_manager:
         # Combine the photon tracks
         # self.photon_tracks = np.concatenate(total_photon_tracks, axis=1)
         
-        # Combine the extracted photon data
+        #combine the extracted photon data
         self.photon_flags = np.concatenate(total_flags)
         self.photon_dir = np.concatenate(total_dir)
         self.photon_pos = np.concatenate(total_pos)
         
         self.particle_histories = total_particle_histories
         
-        # Clean up
+        # clean up
         del total_flags, total_dir, total_pos, total_photon_tracks
 
     def reset_nonterminal_flags(self, flag_list):
@@ -222,19 +237,8 @@ class run_manager:
             curr_tally = (photons.flags & (0x1 << value)).astype(bool).astype(int)
             self.particle_histories[key] += curr_tally
 
-    def repeatable_random(seed, num_numbers):
-        numbers = []
-        hash = str(seed).encode()  
-        while len(numbers) < num_numbers:
-            hash = hashlib.md5(hash).digest()
-            for c in hash:
-                numbers.append(c)
-                if len(numbers) >= num_numbers:
-                    break 
-        return numbers
     
-    
-        #store all the necessary information as photons that we use in analysis manager but not stored in GPU so they can be longer
+        #a new class to store all the necessary information as photons that we use in analysis manager. this is not stored in te GPU and has less information so it can accomodate a larger amount of photons
 class MyPhotons:
 
     def __init__(self,photon_pos,photon_dir, photon_flags):
