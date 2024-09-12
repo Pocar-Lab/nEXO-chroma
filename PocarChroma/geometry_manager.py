@@ -16,7 +16,6 @@ from .material_manager import material_manager
 from .surface_manager import surface_manager
 
 
-# all components, general geometry, manage surface and material
 class geometry_manager:
     """
     Manages the geometry of an experiment by reading component data from a CSV file,
@@ -117,7 +116,6 @@ class geometry_manager:
         Returns:
             list: Coordinates of the center of the solid.
         """
-        # this solid center is to define the centre of the photon source? Use it later?
         curr_mesh_triangles = self.solids[name].mesh.get_triangle_centers()
         return [
             np.mean(curr_mesh_triangles[:, 0]),

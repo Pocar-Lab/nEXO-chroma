@@ -81,7 +81,6 @@ class analysis_manager:
         photon_tracks,
         seed=0,
         histories=None,
-        write=False,
     ):
         """
         Initializes the analysis manager.
@@ -124,7 +123,6 @@ class analysis_manager:
         self.get_tallies()
         self.plots = selected_plots
         self.geometry_data_path = f"/workspace/data_files/data/{self.experiment_name}/geometry_components_{self.experiment_name}.csv"
-        self.write = write
 
         self.plot_functions = {
             "plot_all_tracks": self.plot_all_tracks_wrapper,
@@ -146,11 +144,6 @@ class analysis_manager:
         self.plot_dir = f"/workspace/results/{self.experiment_name}/plots"
         os.makedirs(self.plot_dir, exist_ok=True)
 
-        histogram_file_name = (
-            f"/workspace/results/{self.experiment_name}/histogram_data_seed_{self.seed}"
-        )
-        filename = f"/workspace/results/{self.experiment_name}/datapoints/hd3_data_test_seed_{self.seed}.csv"
-        # self.plot_photon_step_hist()
         if len(selected_plots) > 0:
             self.preprocess_tracks()
             self.end_time = time.time()
@@ -162,8 +155,6 @@ class analysis_manager:
         """
         Preprocesses the photon tracks and categorizes them.
         """
-        num_particles = self.num_particles
-
         self.all_tracks = []
         self.all_indices = []
 
@@ -253,17 +244,7 @@ class analysis_manager:
         axes = mplot3d.Axes3D(figure)
         num_tracks_to_plot = min(1000, len(tracks))  # Ensure not to exceed available tracks
         plotted_indices = np.random.choice(len(tracks), num_tracks_to_plot, replace=False)
-        # print("Number of photons plotted: " + str(num_tracks))
 
-        # num_tracks = self.num_tracks if self.num_tracks < len(tracks) else len(tracks)
-        # print(self.photon_tracks)
-        # print(self.detected_tracks)
-        # print(tracks)
-        # print(track_indices)
-        print(len(tracks))
-        print(len(self.detected_tracks))
-        print(len(track_indices))
-        print(len(self.reflected_tracks))
         for i in plotted_indices:
             track = tracks[i]
             idx = track_indices[i]
@@ -320,7 +301,6 @@ class analysis_manager:
         axes.set_ylabel("y position (mm)")
         axes.set_zlabel("z position (mm)")
         figure.suptitle(title)
-        # plt.show()
         plt.title(title)
         self.save_plot(plt, title.replace(" ", "_").lower())
 
@@ -369,15 +349,14 @@ class analysis_manager:
         self.tallies["BULK_ABSORB"] = (self.photons.flags & (0x1 << 1)).astype(bool)
         self.tallies["SURFACE_DETECT"] = (self.photons.flags & (0x1 << 2)).astype(bool)
         self.tallies["SURFACE_ABSORB"] = (self.photons.flags & (0x1 << 3)).astype(bool)
-        ##place holder below, the output value doesn't mean anything.
-        # self.tallies['RAYLEIGH_SCATTER'] = (self.photons.flags & (0x1 << 4)).astype(bool)
+        self.tallies['RAYLEIGH_SCATTER'] = (self.photons.flags & (0x1 << 4)).astype(bool)
         self.tallies["REFLECT_DIFFUSE"] = (self.photons.flags & (0x1 << 5)).astype(bool)
         self.tallies["REFLECT_SPECULAR"] = (self.photons.flags & (0x1 << 6)).astype(bool)
-        # self.tallies['SURFACE_REEMIT']   = (self.photons.flags & (0x1 << 7)).astype(bool)
-        # self.tallies['SURFACE_TRANSMIT'] = (self.photons.flags & (0x1 << 8)).astype(bool)
-        # self.tallies['BULK_REEMIT']      = (self.photons.flags & (0x1 << 9)).astype(bool)
-        # self.tallies['CHERENKOV']        = (self.photons.flags & (0x1 << 10)).astype(bool)
-        # self.tallies['SCINTILLATION']    = (self.photons.flags & (0x1 << 11)).astype(bool)
+        self.tallies['SURFACE_REEMIT']   = (self.photons.flags & (0x1 << 7)).astype(bool)
+        self.tallies['SURFACE_TRANSMIT'] = (self.photons.flags & (0x1 << 8)).astype(bool)
+        self.tallies['BULK_REEMIT']      = (self.photons.flags & (0x1 << 9)).astype(bool)
+        self.tallies['CHERENKOV']        = (self.photons.flags & (0x1 << 10)).astype(bool)
+        self.tallies['SCINTILLATION']    = (self.photons.flags & (0x1 << 11)).astype(bool)
         # self.tallies['NAN_ABORT']        = (self.photons.flags & (0x1 << 31)).astype(bool)
 
         print()
@@ -408,7 +387,6 @@ class analysis_manager:
         print("------------------------------------")
 
         self.detected_positions = self.photons.pos[self.tallies["SURFACE_DETECT"]]
-        # print('the detected positions in x, y, z is', self.detected_positions)
         self.detected_angles = self.incident_angle(
             self.photons.dir[self.tallies["SURFACE_DETECT"]]
         )
@@ -463,7 +441,6 @@ class analysis_manager:
         ) * (180.0 / np.pi)
         fig = plt.figure()
         plt.hist(angle, bins=[theta for theta in range(91)])
-        # hist is the height of the historgram
         hist, bin_edges = np.histogram(angle, bins=[theta for theta in range(91)])
         print(hist, bin_edges)
 
@@ -471,7 +448,6 @@ class analysis_manager:
         plt.xlabel("Shooting Angle [deg]")
         plt.title("Emission Angle Distribution")
         plt.tight_layout()
-        # plt.show()
         self.save_plot(plt, "emission_angle_distribution")
 
     # Sili: added on 02/07/2023 to plot the shooting angle and emission angle correlation of detected photons
@@ -506,7 +482,6 @@ class analysis_manager:
 
         if reflected_specular_only:
             mask &= self.particle_histories["REFLECT_SPECULAR"][0:len(mask)].astype(bool)
-            # print('reflect_specular_only')
 
         if reflected_diffuse_only:
             mask &= self.particle_histories["REFLECT_DIFFUSE"][0:len(mask)].astype(bool)
@@ -524,10 +499,6 @@ class analysis_manager:
             / np.sqrt(((x1 - x0) ** 2 + (y1 - y0) ** 2 + (z1 - z0) ** 2))
         ) * (180.0 / np.pi)
         print("emit angle", emit_angle)
-        # i = 1
-        # while set(filtered_tracks[-i,:,0]) == set(filtered_tracks[-(i+1),:,0]):
-        # 	i = i+1
-        # 	print(i)
 
         last_x = []
         last_y = []
@@ -537,13 +508,11 @@ class analysis_manager:
         second_last_z = []
         for j in range(np.shape(filtered_tracks)[1]):
             for i in range(len(filtered_tracks)):
-                # print(filtered_tracks[i,0,:])
                 if (
                     (filtered_tracks[i, j, 0] == filtered_tracks[i + 1, j, 0])
                     and (filtered_tracks[i, j, 1] == filtered_tracks[i + 1, j, 1])
                     and (filtered_tracks[i, j, 2] == filtered_tracks[i + 1, j, 2])
                 ):
-                    # print('the step where the position does not change is',i)
                     last_x.append(filtered_tracks[i, j, 0])
                     second_last_x.append(filtered_tracks[i - 1, j, 0])
                     last_y.append(filtered_tracks[i, j, 1])
@@ -577,35 +546,19 @@ class analysis_manager:
             norm=colors.LogNorm(),
         )
         plt.title("Incident vs. Emission angle of Detected & Reflected Photons")
-        # De_no,inci,emit = np.histogram2d(inci_angle,emit_angle,bins = [90,90])
-        # print('De_no',np.shape(De_no))
-
         plt.xlabel("Incident angle (deg)")
         plt.ylabel("Emission angle (deg)")
-        # plt.colorbar(boundaries = [-10] + [5], extend='both')
-        # plt.colorbar()
-
-        # #below is the scatter plot
-        # plt.figure()
-        # plt.scatter(inci_angle,emit_angle)
-        # plt.xlabel('Incident angle (deg)')
-        # plt.ylabel('Emission angle (deg)')
         plt.title("Incident vs. Emission angle of Detected Reflected Photons")
         plt.xlim(0, 90)
         plt.ylim(0, 90)
-        # plt.show()
         self.save_plot(plt, "incident_vs_emission_angle")
 
-    def plot_angle_hist(self, histogramfilename, showPlot=True):
+    def plot_angle_hist(self):
         """
         Plots a histogram of the detected photon angles and saves the data to a CSV file.
 
         Parameters
         ----------
-        histogramfilename : str
-            Path to the file where the histogram data will be saved.
-        showPlot : bool, optional
-            Whether to show the plot (default is True).
 
         Returns
         -------
@@ -613,9 +566,6 @@ class analysis_manager:
             Array of histogram values.
         """
 
-        lxe_refractive_index = self.gm.mat_manager.material_props["liquid xenon"][
-            "refractive_index"
-        ]
         fig = plt.figure()
 
         if self.num_particles < 20_000_000:
@@ -623,7 +573,6 @@ class analysis_manager:
         else:
             bins= [0.5 *theta for theta in range(181)]
         plt.hist(self.detected_angles, bins = bins )
-        # hist is the height of the historgram
         hist, bin_edges = np.histogram(
             self.detected_angles, bins = bins
         )
@@ -633,8 +582,6 @@ class analysis_manager:
         plt.xlabel("Incident Angle [deg]")
         plt.title("Incident Angle Distribution")
         plt.tight_layout()
-        # if showPlot:
-        #     plt.show()
         self.save_plot(plt, "incident_angle_distribution")
         return hist
 
@@ -654,7 +601,6 @@ class analysis_manager:
         plt.ylabel("z position (mm)")
         plt.title("Position Distribution")
         plt.tight_layout()
-        # plt.show()
         self.save_plot(plt, "position_distribution")
 
     def plot_refl_multiplicity(self, do_log=True, density=True):
@@ -670,10 +616,8 @@ class analysis_manager:
         """
         bins = [x for x in range(10)]
         spec_reflection_data = self.particle_histories["REFLECT_SPECULAR"]
-        # spec_reflection_data = spec_reflection_data[spec_reflection_data > 0]
         spec_reflection_data_det = spec_reflection_data[self.tallies["SURFACE_DETECT"]]
 
-        # plt.hist(spec_reflection_data, bins = bins, density = density, label = 'All Photons', histtype = 'step')
         plt.hist(
             spec_reflection_data_det,
             bins=bins,
@@ -688,7 +632,6 @@ class analysis_manager:
         if do_log:
             plt.yscale("log")
         plt.tight_layout()
-        # plt.show()
         self.save_plot(plt, "reflection_multiplicity")
 
     def plot_refl_angle(self, do_log=True, low_angle=0, high_angle=91):
@@ -708,7 +651,6 @@ class analysis_manager:
         bins_angle = [x for x in range(low_angle, high_angle)]
         spec_reflection_data = self.particle_histories["REFLECT_SPECULAR"]
         spec_reflection_data_det = spec_reflection_data[self.tallies["SURFACE_DETECT"]]
-        print("hmm")
         plt.figure()
         if do_log:
             plt.hist2d(
@@ -723,13 +665,11 @@ class analysis_manager:
                 spec_reflection_data_det,
                 bins=[bins_angle, bins_refl],
             )
-        print("wowie")
         print(self.detected_angles, spec_reflection_data_det)
         plt.xlabel("Incident Angle (deg)")
         plt.ylabel("Reflection Multiplicity")
         plt.colorbar()
         plt.tight_layout()
-        # plt.show()
         self.save_plot(plt, "reflection_angle_distribution")
 
     def plot_all_tracks_wrapper(self):
@@ -786,11 +726,8 @@ class analysis_manager:
             reflected_diffuse_only=False,
         )
 
-    def plot_angle_hist_wrapper(self, showPlot=True):
-        histogram_file_name = (
-            f"/workspace/results/{self.experiment_name}/histogram_seed:{self.seed}"
-        )
-        return self.plot_angle_hist(histogram_file_name, showPlot)
+    def plot_angle_hist_wrapper(self):
+        return self.plot_angle_hist()
 
     def plot_refl_angle_wrapper(self):
         self.plot_refl_angle(low_angle=12, do_log=False)

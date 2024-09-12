@@ -5,9 +5,6 @@ from chroma.geometry import Material
 import pandas as pd
 import random
 
-# read materials from database
-# randomize functionality
-
 class material_manager:
 	"""
     Manages materials by reading their properties from a CSV file and creating Material objects.

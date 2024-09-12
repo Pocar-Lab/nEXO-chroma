@@ -58,8 +58,6 @@ class run_manager:
         self.first_photon_tracks = []
         self.total_photons = []
 
-        # self.total_photon_tracks = np.zeros((self.num_steps + 1, self.num_particles, 3)) we dont need photon tracks for very large simulations
-
         self.interactions = {
             "RAYLEIGH_SCATTER": 4,
             "REFLECT_DIFFUSE": 5,
@@ -86,7 +84,6 @@ class run_manager:
                 self.photon_tracks,
                 self.seed,
                 self.particle_histories,
-                write,
             )
         else:
             self.run_batches(random_seed, num_particles)
@@ -96,11 +93,9 @@ class run_manager:
                 experiment_name,
                 plots,
                 myPhotons,  #8/6/2024 Changed from self.photons. This was in attempt to incorporate multiple simulations. If needed put it back.
-                # self.photon_tracks,
                 photon_tracks = self.first_photon_tracks, # photon tracks from just the first part of simulations
                 seed = self.seed,
                 histories = self.particle_histories,
-                write = write,
             )
 
         
@@ -180,7 +175,7 @@ class run_manager:
             total_flags.append(self.photons.flags)
             total_dir.append(self.photons.dir)
             total_pos.append(self.photons.pos)  
-            # total_photon_tracks.append(self.photon_tracks) we do not need all photon tracks for tens of millions of photons, we can only plot on hte roder of thousands.
+            # total_photon_tracks.append(self.photon_tracks) we do not need all photon tracks for tens of millions of photons, we can only plot on the order of thousands.
             
             # Update particle histories
             start_idx = i * batch_size
@@ -226,7 +221,6 @@ class run_manager:
         for key, value in self.interactions.items():
             curr_tally = (photons.flags & (0x1 << value)).astype(bool).astype(int)
             self.particle_histories[key] += curr_tally
-            # print(key, self.particle_histories[key])
 
     def repeatable_random(seed, num_numbers):
         numbers = []
@@ -451,20 +445,5 @@ class primary_generator:  # photon generator
         if not positive:
             curr_py *= -1
 
-        # print(np.vstack((curr_px, curr_py, curr_pz)).T)
         return np.vstack((curr_px, curr_py, curr_pz)).T
 
-    # for placement:
-    # -feed in specific geometry component name and use the center as the location for photons
-    # -feed in specific geometry component name and use entire surface (for a disk case)
-    # -feed in specific (x, y, z) point
-    # -feed in disk with center (x, y, z) and radius r
-    # -feed in cylinder with center (x, y, z) with radius r and height h
-
-    # for direction
-    # -isotropic (equal probability in all directions) half space?
-    # -cone defined by angle theta and mu direction
-    # -beam defined by mu direction
-    # -only simulate half space/reduced space?
-
-    # create Photons(position_array,direction_array,polarization_array,wavelengths_array)

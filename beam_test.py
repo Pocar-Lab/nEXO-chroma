@@ -22,7 +22,6 @@ def main():
 
     num_particles = 100000
     seed = 1042
-    visualize = False
     plots = [
             "plot_all_tracks",
              ]
@@ -39,12 +38,11 @@ def main():
     print(f"Experiment Name: {experiment_name}")
     print(f"Number of particles: {num_particles}")
     print(f"Random seed: {seed}")
-    print(f"Visualize: {visualize}")
     print(f"Plots: {plots}")
     print(f"Exclusions: {e}")
 
     gm = geometry_manager(
-        experiment_name=experiment_name, visualize=visualize, exclude=e
+        experiment_name=experiment_name, exclude=e
     )
 
     gen = primary_generator(

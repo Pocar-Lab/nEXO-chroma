@@ -13,13 +13,6 @@ import random
 
 # Manage the surface optical model (of the SiPM and other)? Mainly using model 0 which is the standard Fresnel
 
-# sipm_name = 'FBK HD3'
-# sipm = Surface(sipm_name, model = 0)
-# sipm.set('detect', 1) #?
-
-
-# self.surfaces = {} #
-# self.surfaces[sipm_name] = sipm #
 class surface_manager:
     """
     Manages the surfaces used in the simulation, including their properties and construction based on input data.
@@ -145,11 +138,6 @@ class surface_manager:
         sipmEmpirical_surface = Surface(name, model=5)
 
         self.SiPMreflctivity = pd.read_csv(self.SiPMAOIref_path)
-        # num_angle = 90
-
-        # inci_theta_deg = np.linspace(0,90,num_angle,dtype = np.float32)
-        # inci_theta = np.radians(inci_theta_deg)
-
         ref = []
         rela_PDE = []
         inci_theta_csv = self.SiPMreflctivity["AOI"].tolist()
@@ -159,24 +147,12 @@ class surface_manager:
         for i in range(0, len(inci_theta_csv)):
             r_SiPM = np.zeros((self.num_wavelengths, 2), dtype=np.float32)
             r_SiPM[:, 0] = self.wavelengths
-            # r_SiPM[:, 1] = random.random()
             r_SiPM[:, 1] = ref_csv[i]
             ref.append(r_SiPM)
             relative_PDE = np.zeros((self.num_wavelengths, 2), dtype=np.float32)
             relative_PDE[:, 0] = self.wavelengths
             relative_PDE[:, 1] = 1.0
             rela_PDE.append(relative_PDE)
-
-        # for i in range(0,num_angle):
-        # 	r_SiPM = np.zeros((self.num_wavelengths, 2), dtype = np.float32)
-        # 	r_SiPM[:, 0] = self.wavelengths
-        # 	# r_SiPM[:, 1] = random.random()
-        # 	r_SiPM[:,1] = abs(0.02*i)
-        # 	ref.append(r_SiPM)
-        # 	relative_PDE = np.zeros((self.num_wavelengths, 2), dtype = np.float32)
-        # 	relative_PDE[:, 0] = self.wavelengths
-        # 	relative_PDE[:, 1] =1.0
-        # 	rela_PDE.append(relative_PDE)
 
         SiPM_props = SiPMEmpiricalProps(inci_theta, ref, rela_PDE)
         sipmEmpirical_surface.sipmEmpirical_props = SiPM_props
@@ -297,5 +273,5 @@ class surface_manager:
         self.k2 = k2
         return (self.eta2, self.k2)
     
-    def overwrite_property(self, surface, property, value):
-        self.surfaces[surface].set(property, value)
+    def overwrite_property(self, surface, property, new_value):
+        self.surfaces[surface].set(property, new_value)
