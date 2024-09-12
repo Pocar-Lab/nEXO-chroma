@@ -158,9 +158,6 @@ class analysis_manager:
         else:
             self.end_time = time.time()
 
-        if self.write:
-            self.save_detected(filename)
-
     def preprocess_tracks(self):
         """
         Preprocesses the photon tracks and categorizes them.
@@ -415,78 +412,6 @@ class analysis_manager:
         self.detected_angles = self.incident_angle(
             self.photons.dir[self.tallies["SURFACE_DETECT"]]
         )
-
-    def save_detected(self, filename):
-        """
-        Saves the detected photon data to a CSV file.
-
-        Parameters
-        ----------
-        filename : str
-            Path to the file where the data will be saved.
-        """
-        # lxe_refractive_index = self.gm.mat_manager.get_material('liquid xenon').refractive_index[0, 1]
-        lxe_refractive_index = self.gm.mat_manager.material_props["liquid xenon"][
-            "refractive_index"
-        ]
-        # print(lxe_refractive_index,'in saved detected')
-
-        # silica_refractive_index = self.gm.mat_manager.material_props['silica']['refractive_index']
-        # Cu_eta_index = self.gm.mat_manager.material_props['copper']['eta']
-        # Cu_k_index = self.gm.mat_manager.material_props['copper']['k']
-        Si_eta_index = self.gm.mat_manager.material_props["silicon"]["eta"]
-        Si_k_index = self.gm.mat_manager.material_props["silicon"]["k"]
-        # al_eta = self.gm.mat_manager.material_props['aluminum']['eta']
-        # al_k = self.gm.mat_manager.material_props['aluminum']['k']
-        # Cu_spec_coefficient = self.gm.surf_manager.surface_props['Cu-Xe']
-
-        # store PTE for both 0 and non zero
-        if self.photon_transmission_efficiency != 0:
-            # print("self.efficiency is", self.efficiency)
-            x_detected_position = self.detected_positions[:, 0]
-            # print(len(x_detected_position))
-            # print(type(x_detected_position))
-            y_detected_position = self.detected_positions[:, 1]
-            z_detected_position = self.detected_positions[:, 2]
-            detected_angle = self.detected_angles
-        else:
-            x_detected_position = "none"
-            y_detected_position = "none"
-            z_detected_position = "none"
-            detected_angle = "none"
-        save_data = {
-            "x (mm)": x_detected_position,
-            "y (mm)": y_detected_position,
-            "z (mm)": z_detected_position,
-            "emission angle": self.emit_angle,
-            "angle": detected_angle,
-            "PTE": np.array(
-                [
-                    self.photon_transmission_efficiency
-                    for _ in range(len(detected_angle))
-                ]
-            ),
-            "PTE ST DEV": np.array(
-                [self.pte_st_dev for _ in range(len(detected_angle))]
-            ),
-            "LXe Index of Refraction": np.array(
-                [lxe_refractive_index for _ in range(len(detected_angle))]
-            ),
-            "Seed number": np.array([self.seed for _ in range(len(detected_angle))]),
-            "Si eta": np.array(
-                [Si_eta_index for _ in range(len(self.detected_angles))]
-            ),
-            "Si k": np.array([Si_k_index for _ in range(len(self.detected_angles))]),
-        }
-        # 'Cu spec coeff': np.array([Cu_spec_coefficient for _ in range(len(self.detected_angles))])}
-
-        # 'Fused Silica Index of Refraction': np.array([silica_refractive_index for _ in range(len(self.detected_angles))]),
-        # 'Cu eta': np.array([cu_eta for _ in range(len(self.detected_angles))]),
-        # 'Cu k': np.array([cu_k for _ in range(len(self.detected_angles))]),
-        # 'Al eta': np.array([al_eta for _ in range(len(self.detected_angles))]),
-        # 'Al k': np.array([al_k for _ in range(len(self.detected_angles))])
-        df = pd.DataFrame(save_data)
-        df.to_csv(filename)
 
     def photon_shooting_angle(
         self,
