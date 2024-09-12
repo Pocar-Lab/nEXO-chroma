@@ -271,7 +271,7 @@ class primary_generator:  # photon generator
 
     # C++: methods/functions
     # def __init__(self, num_particles, center_pos = [0, 0, 0], delta_placement = 0.0):
-    def __init__(self, num_particles, run_id, center_pos=[0, 0, 0], r=0, source_type = "isotropic"):
+    def __init__(self, num_particles, run_id, center_pos=[0, 0, 0], r=0, source_type = "isotropic", beam_theta = 0, beam_phi = 0):
         self.num_particles = num_particles
         self.center_pos = center_pos
 
@@ -288,47 +288,21 @@ class primary_generator:  # photon generator
                 r=r,
             )
 
-        # beam_dir = self.get_beam_dir(px = 0, py = 1, pz = 0)# The beam travel in y direction
-
-        # from 0705, try to define the angle of the beam_direction rather than just in y
-
-        # define the beam angle from run_id
-
-        # angle = np.pi * (61.5+0.1*(run_id)) / 180
-        # angle = np.pi * 60.5/ 180
-        # phi_angle = np.pi*45 / 180
-        angle = 0
-        beam_dir = self.get_beam_dir(angle)
-        # print("the beam angle in degree is", angle*180 / np.pi)
-
-        # x_cone_dir = self.get_x_cone_dir(angle = np.pi, positive = False)
-
-        y_cone_dir = self.get_y_cone_dir(angle = np.pi / 32.0, positive = True)
-
-        # curr_dir = y_cone_dir
-        isotropic_dir = self.get_isotropic_dir()
-        # self.directions = y_cone_dir
+        #directions
         if source_type == "isotropic":
+            isotropic_dir = self.get_isotropic_dir()
             self.directions = isotropic_dir
         elif source_type == "beam":
+            beam_dir = self.get_beam_dir(beam_theta,beam_phi)
             self.directions = beam_dir
+
         elif source_type == "y_cone":
+            cone_angle = (np.pi / 32.0)
+            y_cone_dir = self.get_y_cone_dir(angle = cone_angle, positive = True)
             self.directions = y_cone_dir
         else:
             raise Exception("Unknown Source Type. Currently supported source types are 'isotropic', 'beam', and 'y_cone'.")
 
-
-        # fig = plt.figure()
-        # ax = plt.axes(projection = '3d')
-
-        # ax.scatter(curr_dir[:, 0], curr_dir[:, 1], curr_dir[:, 2])
-        # ax.set_xlim(-1, 1)
-        # ax.set_ylim(-1, 1)
-        # ax.set_zlim(-1, 1)
-        # plt.xlabel('x')
-        # plt.ylabel('y')
-
-        # plt.show(block = True)
 
         # polarization
         self.polarization = np.cross(self.directions, self.get_isotropic_dir())
@@ -413,43 +387,34 @@ class primary_generator:  # photon generator
         :rtype: numpy.ndarray
         """
         phi = np.random.uniform(0, 2.0 * np.pi, self.num_particles)
-        # phi = np.random.uniform(0, np.pi, self.num_particles)
-        # mu = cos(theta)
         cos_theta = np.random.uniform(-1.0, 1.0, self.num_particles)
         sin_theta = np.sqrt(1.0 - cos_theta * cos_theta)
 
         curr_px = np.cos(phi) * sin_theta
         curr_py = np.sin(phi) * sin_theta
         curr_pz = cos_theta
-        # print(np.shape(curr_pz))
-        # theta = math.acos(curr_pz)
-        # emit_angle = (0.5 * np.pi) - theta
-        # self.get_emission_angle(emit_angle)
         return np.vstack((curr_px, curr_py, curr_pz)).T
 
-    # #07/11 get emission angle
-    # def get_emission_angle(self, emission_angle):
-    # 	self.emission_angle = emission_angle
-    # 	print("emission angle is", self.emission_angle)
-    # 	return self.emission_angle
 
-    # 07/05, get the beam move in xy plane in +/- x direction;
-    def get_beam_dir(self, angle):
+    def get_beam_dir(self, theta, phi):
         """
-        Generates beam directions at the specified angle.
+        Generates beam direction based on angles theta and phi. 
+        The SiPM has been located in the positive y direction so that is the axis we will use for the beam.
+        i.e. a azimuthal angle theta = 0 will correspond to the vector [0,1,0], hitting the detector.
 
-        :param angle: The angle of the beam direction.
-        :type angle: float
+        :param theta: The azimuthal angle of the beam direction.
+        :type theta: float
+        :param phi: The polar angle of the beam direction.
+        :type phi: float
         :return: The array of beam directions.
         :rtype: numpy.ndarray
         """
-        curr_py = np.cos(angle)
-        curr_px = np.sin(angle)
-        # # curr_pz = 0 shifting the beam in xy plane
-        curr_pz = 0
-        # curr_pz = np.sin(angle)*np.cos(phi_angle)
-        # curr_px = np.sin(angle)*np.sin(phi_angle)
-        return np.tile([curr_px, curr_py, curr_pz], (self.num_particles, 1))
+        px = np.sin(theta) * np.sin(phi)
+        py = np.cos(theta)
+        pz = np.sin(theta) * np.cos(phi)
+        
+        return np.tile([px, py, pz], (self.num_particles, 1))
+    
 
     def get_x_cone_dir(self, angle, positive=True):
         """
