@@ -32,13 +32,12 @@ class geometry_manager:
         solids (dict): Dictionary of solid objects.
     """
 
-    def __init__(self, experiment_name, visualize=False, exclude=None, surf_manager = None):
+    def __init__(self, experiment_name, exclude=None, surf_manager = None):
         """
         Initializes the geometry_manager with the given experiment name and run ID.
 
         Args:
             experiment_name (str): String used to identify each experiment.
-            visualize (bool): If True, visualize the geometry.
         """
         self.exclude = [] if exclude is None else exclude
         self.experiment_name = experiment_name
@@ -50,8 +49,6 @@ class geometry_manager:
         self.build_geometry()
 
         self.global_geometry.flatten()
-        if visualize:
-            view(self.global_geometry)
         self.global_geometry.bvh = load_bvh(self.global_geometry)
 
     def build_geometry(self):
