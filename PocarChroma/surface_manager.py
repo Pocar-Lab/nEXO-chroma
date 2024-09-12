@@ -28,16 +28,15 @@ class surface_manager:
     :type material_manager: MaterialManager
     :param experiment_name: The name of the experiment.
     :type experiment_name: str
-    :param run_id: The unique identifier for the run.
-    :type run_id: int
     """
 
-    def __init__(self, material_manager, experiment_name, run_id):
+    def __init__(self, material_manager, experiment_name):
         self.surfaces = {}
         self.surface_props = {}
         self.surface_data_path = f"/workspace/data_files/data/{experiment_name}/surface_props_{experiment_name}.csv"
-        self.run_id = run_id
 
+        #the sipm reflectivity was determined by another lab experimentally. The lab reported an upperbound and a lower bound for the reflectivites.
+        #the FBK.csv file was created by averaging the upper and lower bounds
         self.SiPMAOIref_path = "/workspace/data_files/FBK.csv"
         # self.SiPMAOIref_path = '/workspace/data_files/FBK reflectivity_upper_bound.csv'
         # self.SiPMAOIref_path ='/workspace/data_files/FBK reflectivity_lower_bound.csv'

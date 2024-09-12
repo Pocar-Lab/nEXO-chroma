@@ -28,8 +28,6 @@ class analysis_manager:
         Array of photons.
     photon_tracks : int
         Number of photon tracks.
-    run_id : int
-        ID of the run.
     seed : int
         Seed for random number generation.
     particle_histories : dict
@@ -81,7 +79,6 @@ class analysis_manager:
         selected_plots,
         photons,
         photon_tracks,
-        run_id=0,
         seed=0,
         histories=None,
         write=False,
@@ -101,8 +98,6 @@ class analysis_manager:
             Array of photons.
         photon_tracks : int, optional
             Number of photon tracks (default is 1000).
-        run_id : int, optional
-            ID of the run (default is 0).
         seed : int, optional
             Seed for random number generation (default is 0).
         histories : dict, optional
@@ -123,7 +118,6 @@ class analysis_manager:
         self.specular_reflected_tracks = None
         self.diffuse_reflected_tracks = None
         self.num_particles = len(self.photons)
-        self.run_id = run_id
         self.seed = seed
         self.particle_histories = histories
         self.selected_plots = selected_plots
@@ -447,7 +441,6 @@ class analysis_manager:
         # Cu_spec_coefficient = self.gm.surf_manager.surface_props['Cu-Xe']
 
         # store PTE for both 0 and non zero
-        self.emit_angle = self.run_id - 1
         if self.photon_transmission_efficiency != 0:
             # print("self.efficiency is", self.efficiency)
             x_detected_position = self.detected_positions[:, 0]
@@ -551,7 +544,7 @@ class analysis_manager:
 
         plt.ylabel("Counts")
         plt.xlabel("Shooting Angle [deg]")
-        plt.title("Emission Angle Distribution, Run " + str(self.run_id))
+        plt.title("Emission Angle Distribution")
         plt.tight_layout()
         # plt.show()
         self.save_plot(plt, "emission_angle_distribution")
@@ -713,7 +706,7 @@ class analysis_manager:
 
         plt.ylabel("Counts")
         plt.xlabel("Incident Angle [deg]")
-        plt.title("Incident Angle Distribution, Run " + str(self.run_id))
+        plt.title("Incident Angle Distribution")
         plt.tight_layout()
         # if showPlot:
         #     plt.show()
@@ -734,7 +727,7 @@ class analysis_manager:
         cbar.set_label("Counts")
         plt.xlabel("x position (mm)")
         plt.ylabel("z position (mm)")
-        plt.title("Position Distribution, Run " + str(self.run_id))
+        plt.title("Position Distribution")
         plt.tight_layout()
         # plt.show()
         self.save_plot(plt, "position_distribution")
@@ -815,40 +808,40 @@ class analysis_manager:
         self.save_plot(plt, "reflection_angle_distribution")
 
     def plot_all_tracks_wrapper(self):
-        title = f"Photon Tracks, Seed {self.seed}, Run {self.run_id}"
+        title = f"Photon Tracks, Seed {self.seed}"
         self.plot_tracks(self.all_tracks, self.all_indices, title, True)
 
     def plot_detected_tracks_wrapper(self):
-        title = f"Detected Photon Tracks, Seed {self.seed}, Run {self.run_id}"
+        title = f"Detected Photon Tracks, Seed {self.seed}"
         self.plot_tracks(self.detected_tracks, self.detected_indices,title, True)
 
     def plot_undetected_tracks_wrapper(self):
-        title = f" Undetected Photon Tracks, Seed {self.seed}, Run {self.run_id}"
+        title = f"Undetected Photon Tracks, Seed {self.seed}"
         self.plot_tracks(self.undetected_tracks, self.undetected_indices, title, False)
 
     def plot_reflected_tracks_wrapper(self):
-        title = f"Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}"
+        title = f"Reflected Photon Tracks, Seed {self.seed}"
         self.plot_tracks(self.reflected_tracks, self.reflected_indices, title, True)
 
     def plot_filtered_scattered_tracks_wrapper(self):
-        title = f"Filtered Scattered Photon Tracks, Seed {self.seed}, Run {self.run_id}"
+        title = f"Filtered Scattered Photon Tracks, Seed {self.seed}"
         self.plot_tracks(self.filtered_scattered_tracks, self.filtered_scattered_indices, title, False)
 
     def plot_detected_reflected_tracks_wrapper(self):
         title = (
-            f"Detected and Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}"
+            f"Detected and Reflected Photon Tracks, Seed {self.seed}"
         )
         self.plot_tracks(self.detected_reflected_tracks, self.detected_reflected_indices, title, True)
 
     def plot_specular_reflected_tracks_wrapper(self):
         title = (
-            f"Specularly Refelcted Photon Tracks, Seed {self.seed}, Run {self.run_id}"
+            f"Specularly Refelcted Photon Tracks, Seed {self.seed}"
         )
         self.plot_tracks(self.specular_reflected_tracks, self.specular_reflected_indices, title, False)
 
     def plot_diffuse_reflected_tracks_wrapper(self):
         title = (
-            f" Diffusively Reflected Photon Tracks, Seed {self.seed}, Run {self.run_id}"
+            f" Diffusively Reflected Photon Tracks, Seed {self.seed}"
         )
         self.plot_tracks(self.diffuse_reflected_tracks, self.diffuse_reflected_indices, title, False)
 
@@ -884,7 +877,7 @@ class analysis_manager:
         """
         Save the current plot as a PNG file.
         """
-        filename = f"{self.plot_dir}/{plot_name}_seed_{self.seed}_run_{self.run_id}.png"
+        filename = f"{self.plot_dir}/{plot_name}_seed_{self.seed}.png"
         plt.savefig(filename, dpi=300, bbox_inches="tight")
         plt.close()
         print(f"Plot saved as {filename}")

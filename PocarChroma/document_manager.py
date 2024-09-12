@@ -46,7 +46,6 @@ class document_manager:
 - Experiment Name: {self.escaped_experiment_name}
 - Number of Particles: {self.am.num_particles}
 - Random Seed: {self.am.seed}
-- Run ID: {self.am.run_id}
 - Excluded Geometry: {self.am.gm.exclude}
 - PTE: {self.am.photon_transmission_efficiency:.5g} $plus.minus$ {self.am.pte_st_dev:.2g}.
 

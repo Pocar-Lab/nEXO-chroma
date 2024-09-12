@@ -24,7 +24,6 @@ class geometry_manager:
 
     Attributes:
         experiment_name (str): String used to identify each experiment.
-        run_id (int): Identifier for the run.
         mat_manager (material_manager): Instance of the material_manager class.
         surf_manager (surface_manager): Instance of the surface_manager class.
         global_geometry (Detector): The global detector geometry.
@@ -33,20 +32,18 @@ class geometry_manager:
         solids (dict): Dictionary of solid objects.
     """
 
-    def __init__(self, experiment_name, run_id, visualize=False, exclude=None, surf_manager = None):
+    def __init__(self, experiment_name, visualize=False, exclude=None, surf_manager = None):
         """
         Initializes the geometry_manager with the given experiment name and run ID.
 
         Args:
             experiment_name (str): String used to identify each experiment.
-            run_id (int): Identifier for the run.
             visualize (bool): If True, visualize the geometry.
         """
         self.exclude = [] if exclude is None else exclude
         self.experiment_name = experiment_name
-        self.mat_manager = material_manager(self.experiment_name, run_id) if surf_manager is None else surf_manager.mat_manager
-        self.surf_manager = surface_manager(self.mat_manager, self.experiment_name, run_id) if surf_manager is None else surf_manager
-        self.run_id = run_id
+        self.mat_manager = material_manager(self.experiment_name) if surf_manager is None else surf_manager.mat_manager
+        self.surf_manager = surface_manager(self.mat_manager, self.experiment_name) if surf_manager is None else surf_manager
         self.global_geometry = Detector(self.mat_manager.global_material)
 
         self.geometry_data_path = f"/workspace/data_files/data/{experiment_name}/geometry_components_{experiment_name}.csv"

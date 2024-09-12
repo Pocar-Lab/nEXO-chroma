@@ -10,26 +10,23 @@ def getPTE(runlabel):
     experiment_name = None
     num_particles = 1_000_000
     seed = 1042
-    run_id = 1
     visualize = True
     plots = []
 
     print(f"Experiment Name:       {experiment_name }")
     print(f"Number of particles:   {str(num_particles) }")
     print(f"Random seed:           {str(seed) }")
-    print(f"Run ID:                {str(run_id) }")
     print(f"Visualize:             {str(visualize) }")
     print(f"Plots:                 {plots}")
 
     gm = geometry_manager(
-        experiment_name=experiment_name, run_id=run_id, visualize=visualize
+        experiment_name=experiment_name,  visualize=visualize
     )
     rm = run_manager(
         geometry_manager=gm,
         experiment_name=experiment_name,
         random_seed=seed,
         num_particles=num_particles,
-        run_id=run_id,
         plots=plots,
         write=False,
     )

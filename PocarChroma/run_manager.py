@@ -27,8 +27,6 @@ class run_manager:
     :type random_seed: int
     :param num_particles: The number of particles to simulate.
     :type num_particles: int
-    :param run_id: The unique identifier for the run.
-    :type run_id: int
     :param plots: The plots to be generated during analysis.
     :type plots: list
     :type write: boolean
@@ -40,14 +38,12 @@ class run_manager:
         experiment_name,
         random_seed,
         num_particles,
-        run_id,
         plots,
         write=False,
         pg=None,
         batches = False,
     ):
         self.num_steps = 15
-        self.run_id = run_id
         self.seed = random_seed
         self.gm = geometry_manager
         self.center_pos = self.gm.get_solid_center(name="source")
@@ -88,7 +84,6 @@ class run_manager:
                 plots,
                 self.photons,
                 self.photon_tracks,
-                self.run_id,
                 self.seed,
                 self.particle_histories,
                 write,
@@ -103,7 +98,6 @@ class run_manager:
                 myPhotons,  #8/6/2024 Changed from self.photons. This was in attempt to incorporate multiple simulations. If needed put it back.
                 # self.photon_tracks,
                 photon_tracks = self.first_photon_tracks, # photon tracks from just the first part of simulations
-                run_id = self.run_id,
                 seed = self.seed,
                 histories = self.particle_histories,
                 write = write,
@@ -158,7 +152,7 @@ class run_manager:
         )   
         if self.given_pg is None:
             self.pg = primary_generator(
-                batch_size, run_id=self.run_id, center_pos=self.center_pos
+                batch_size, center_pos=self.center_pos
             )
         else:
             self.pg = self.given_pg
@@ -263,15 +257,13 @@ class primary_generator:  # photon generator
 
     :param num_particles: The number of particles to generate.
     :type num_particles: int
-    :param run_id: The unique identifier for the run.
-    :type run_id: int
     :param center_pos: The center position of the photon source.
     :type center_pos: list
     """
 
     # C++: methods/functions
     # def __init__(self, num_particles, center_pos = [0, 0, 0], delta_placement = 0.0):
-    def __init__(self, num_particles, run_id, center_pos=[0, 0, 0], r=0, source_type = "isotropic", beam_theta = 0, beam_phi = 0):
+    def __init__(self, num_particles, center_pos=[0, 0, 0], r=0, source_type = "isotropic", beam_theta = 0, beam_phi = 0):
         self.num_particles = num_particles
         self.center_pos = center_pos
 
