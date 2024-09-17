@@ -19,8 +19,6 @@ def main():
 
     num_particles = 100_000_000
     seed = 1042
-    run_id = 1
-    visualize = False
     plots = [
             "plot_all_tracks" ,
             "plot_detected_tracks" ,
@@ -50,20 +48,17 @@ def main():
     print(f"Experiment Name: {experiment_name}")
     print(f"Number of particles: {num_particles}")
     print(f"Random seed: {seed}")
-    print(f"Run ID: {run_id}")
-    print(f"Visualize: {visualize}")
     print(f"Plots: {plots}")
     print(f"Exclusions: {e}")
 
     gm = geometry_manager(
-        experiment_name=experiment_name, run_id=run_id, visualize=visualize, exclude=e
+        experiment_name=experiment_name, exclude=e
     )
     rm = run_manager(
         geometry_manager=gm,
         experiment_name=experiment_name,
         random_seed=seed,
         num_particles=num_particles,
-        run_id=run_id,
         plots=plots,
         batches=True
     )

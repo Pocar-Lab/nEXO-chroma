@@ -10,9 +10,6 @@ from PocarChroma.surface_manager import surface_manager
 
 import time
 
-# -n number of particles
-# -s random seed
-# -v visualize
 def usage():
     print ("=====================================================================")
     print ("  The minimum paramaters the simulation needs are:")
@@ -20,10 +17,7 @@ def usage():
     print ("  Additional options can be chosen:")
     print ("  	(2) '-n' <#>	            number of photons to be simulated.") 
     print ("  	(3) '-s' <#>                choose the seed number")
-    print ("  	(4) '-r' <#>                run ID number")
-    print ("    (5) '-p' <Str1,Str2,...>    choose which plots to run")
-    print ("  	(6) '-v'          to view the setup before simulation.")
-    print ("  	(7) '-w'          to save simulation data from the run")
+    print ("    (4) '-p' <Str1,Str2,...>    choose which plots to run")
     print ("=====================================================================")
 
 def main():
@@ -85,5 +79,4 @@ def main():
 if __name__ == '__main__':
 	s = time.time()
 	e = main()
-	# e = time.time()
 	print(f'The simulation run time is: {e - s} s')

@@ -1,1 +1,0 @@
-singularity run --nv --bind ./:/workspace ../Chroma.sif
