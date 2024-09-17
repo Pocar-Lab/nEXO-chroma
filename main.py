@@ -23,14 +23,14 @@ def usage():
 def main():
     args = sys.argv[1:]
     try:
-        opts, args = getopt.getopt(args, "vn:s:r:e:p:w")
+        opts, args = getopt.getopt(args, "n:s:r:e:p:")
     except getopt.GetoptError as err:
         print(f"Error: {err}")
         usage()
         sys.exit()
 
     experiment_name = None
-    num_particles = 1000000
+    num_particles = 1_000_000
     seed = np.random.randint(0,1000000)
     run_id = 1
     visualize = False
@@ -44,14 +44,9 @@ def main():
             num_particles = int(arg)
         elif opt == '-s':
             seed = int(arg)
-        elif opt == '-r':
-            run_id = int(arg)
-        elif opt == '-v':
-            visualize = True
         elif opt == '-p':
             plots = [i.strip() for i in arg.split(',')]
-        elif opt == '-w':
-            write = True
+
 
     if not experiment_name:
         print("Please input an experiment name")
@@ -60,8 +55,7 @@ def main():
 
     print('Experiment Name:         ' + experiment_name)
     print('Number of particles:     ' + str(num_particles))
-    print('Random seed:             ' + str(seed))
-    print('Run ID:                  ' + str(run_id))
+    print('Seed:             ' + str(seed))
     print('Visualize:               ' + str(visualize))
     if(len(plots) > 0):
         print('Plots:                   ' + ', '.join(plots))
@@ -69,10 +63,10 @@ def main():
         print('Plots:                   ' + 'None')
     print('Saving Data:             ' + str(write))
 
-    mm = material_manager(experiment_name=experiment_name,run_id=run_id)
-    sm = surface_manager(material_manager = mm, experiment_name = experiment_name, run_id = run_id)
-    gm = geometry_manager(experiment_name=experiment_name, run_id=run_id, visualize=visualize, surf_manager = sm)
-    rm = run_manager(geometry_manager=gm, experiment_name=experiment_name, random_seed=seed, num_particles=num_particles, run_id=run_id, plots=plots, write = write)
+    mm = material_manager(experiment_name=experiment_name)
+    sm = surface_manager(material_manager = mm, experiment_name = experiment_name)
+    gm = geometry_manager(experiment_name=experiment_name,surf_manager = sm)
+    rm = run_manager(geometry_manager=gm, experiment_name=experiment_name, random_seed=seed, num_particles=num_particles,plots=plots)
     return rm.ana_man.get_end_time()
 
 
