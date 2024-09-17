@@ -4,14 +4,24 @@ import numpy as np
 import pandas as pd
 import shutil
 
+"""
+Document Manager class to generate documentation for each simulation run.
+
+TODO LIST:
+- Change it to, rather than load material data from .csvs, load from objects themselves.
+    Cases where this stops a bug should be rare but would be nice
+- Add image of geometry to title page
+
+"""
+
 class document_manager:
     def __init__(self, analysis_manager, label):
         print("Created document manager")
         self.workspace_path = "/workspace"
-        self.label = label
+        self.label = label.replace("_", r"\_").replace("*", r"\*")
         self.am = analysis_manager
         self.experiment_name = self.am.experiment_name
-        self.escaped_experiment_name = self.am.experiment_name.replace("_", r"\_")
+        self.escaped_experiment_name = self.am.experiment_name.replace("_", r"\_").replace("*", r"\*")
 
         os.makedirs(f"/workspace/results/{self.experiment_name}-{self.label}", exist_ok=True)
         os.makedirs(f"/workspace/results/{self.experiment_name}-{self.label}/plots", exist_ok=True)
@@ -38,7 +48,7 @@ class document_manager:
 #show: project.with(
   title: [Chroma Simulation \ {self.escaped_experiment_name} \ {self.label}],
   authors: ((name: "Pocar Lab", email: "Lab 21", affiliation: "nEXO Collaboration"),),
-  date: "2023-07-22",
+  date: [#datetime.today().display()],
 )
 
 = Experiment Details
@@ -207,3 +217,7 @@ The Photon Transmission Efficiency (PTE) for this experiment was
             print(
                 "Error: Typst compiler not found. Please install Typst and make sure it's in your PATH."
             )
+    def compile(self, output_file="report.pdf"):
+        self.generate_typst_file()
+        self.compile_to_pdf(output_file=output_file)
+      

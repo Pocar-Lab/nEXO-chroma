@@ -17,7 +17,7 @@ def main():
     experiment_name = "Sebastian_08.01.2023(liquefaction)_correctedSiPM" #define experiment
     LABEL = "8Silicon-NOREFLECTOR" # label configuration or properties
 
-    num_particles = 100_000_000
+    num_particles = 500_000
     seed = 1042
     plots = [
             "plot_all_tracks" ,
@@ -65,8 +65,7 @@ def main():
     print("Run manager complete")
 
     dm = document_manager(rm.ana_man, LABEL)
-    dm.generate_typst_file()
-    dm.compile_to_pdf()
+    dm.compile()
 
 if __name__ == "__main__":
     s = time.time()
