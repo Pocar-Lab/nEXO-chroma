@@ -17,7 +17,7 @@ def main():
     experiment_name = "Sebastian_08.01.2023(liquefaction)_correctedSiPM" #define experiment
     LABEL = "8Silicon-NOREFLECTOR" # label configuration or properties
 
-    num_particles = 100_000_000
+    num_particles = 500_000
     seed = 1042
     run_id = 1
     visualize = False
@@ -50,28 +50,27 @@ def main():
     print(f"Experiment Name: {experiment_name}")
     print(f"Number of particles: {num_particles}")
     print(f"Random seed: {seed}")
-    print(f"Run ID: {run_id}")
+    #print(f"Run ID: {run_id}")
     print(f"Visualize: {visualize}")
     print(f"Plots: {plots}")
     print(f"Exclusions: {e}")
 
     gm = geometry_manager(
-        experiment_name=experiment_name, run_id=run_id, visualize=visualize, exclude=e
+        experiment_name=experiment_name, exclude=e
     )
     rm = run_manager(
         geometry_manager=gm,
         experiment_name=experiment_name,
         random_seed=seed,
         num_particles=num_particles,
-        run_id=run_id,
+        #run_id=run_id,
         plots=plots,
         batches=True
     )
     print("Run manager complete")
 
     dm = document_manager(rm.ana_man, LABEL)
-    dm.generate_typst_file()
-    dm.compile_to_pdf()
+    dm.compile()
 
 if __name__ == "__main__":
     s = time.time()
