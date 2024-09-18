@@ -15,25 +15,25 @@ TODO LIST:
 """
 
 class document_manager:
-    def __init__(self, analysis_manager, label):
+    def __init__(self, analysis_manager, label, workspace_path = "/workspace"):
         print("Created document manager")
-        self.workspace_path = "/workspace"
+        self.workspace_path = workspace_path
         self.label = label.replace("_", r"\_").replace("*", r"\*")
         self.am = analysis_manager
         self.experiment_name = self.am.experiment_name
         self.escaped_experiment_name = self.am.experiment_name.replace("_", r"\_").replace("*", r"\*")
 
-        os.makedirs(f"/workspace/results/{self.experiment_name}-{self.label}", exist_ok=True)
-        os.makedirs(f"/workspace/results/{self.experiment_name}-{self.label}/plots", exist_ok=True)
-        shutil.copy2(f"/workspace/results/template.typ", f"/workspace/results/{self.experiment_name}-{self.label}")
-        self.am.plot_dir = f"/workspace/results/{self.experiment_name}-{self.label}/plots"
+        os.makedirs(f"{self.workspace_path}/results/{self.experiment_name}-{self.label}", exist_ok=True)
+        os.makedirs(f"{self.workspace_path}/results/{self.experiment_name}-{self.label}/plots", exist_ok=True)
+        shutil.copy2(f"{self.workspace_path}/results/template.typ", f"{self.workspace_path}/results/{self.experiment_name}-{self.label}")
+        self.am.plot_dir = f"{self.workspace_path}/results/{self.experiment_name}-{self.label}/plots"
         self.am.execute_plots()
 
     def generate_typst_file(self):
         """
         Generate a Typst file based on the analysis_manager data.
         """
-        filename = f"/workspace/results/{self.experiment_name}-{self.label}/report.typ"
+        filename = f"{self.workspace_path}/results/{self.experiment_name}-{self.label}/report.typ"
         content = self._create_typst_content()
 
         with open(filename, "w") as f:
@@ -186,7 +186,7 @@ The Photon Transmission Efficiency (PTE) for this experiment was
 
     def _get_plot_files(self):
         plot_dir = f"plots"  # Relative path from the Typst file location
-        full_plot_dir = f"/workspace/results/{self.experiment_name}-{self.label}/plots"
+        full_plot_dir = f"{self.workspace_path}/results/{self.experiment_name}-{self.label}/plots"
         plot_files = [f for f in os.listdir(full_plot_dir) if f.endswith(".png")]
         # Format as a Typst array with proper escaping
         return (
@@ -205,8 +205,8 @@ The Photon Transmission Efficiency (PTE) for this experiment was
         Compile the Typst file to PDF using the Typst compiler.
         """
         try:
-            typst_file = f"/workspace/results/{self.experiment_name}-{self.label}/report.typ"
-            output_file = f"/workspace/results/{self.experiment_name}-{self.label}/{self.experiment_name}-{self.label}.pdf"
+            typst_file = f"{self.workspace_path}/results/{self.experiment_name}-{self.label}/report.typ"
+            output_file = f"{self.workspace_path}/results/{self.experiment_name}-{self.label}/{self.experiment_name}-{self.label}.pdf"
             subprocess.run(["/workspace/typst", "compile", typst_file, output_file], check=True)
             print(f"PDF '{output_file}' has been generated.")
         except subprocess.CalledProcessError:
