@@ -80,7 +80,7 @@ class run_manager:
 
         #run the simulation either all at once or in batches depending on the value of 'batches'
         #running more than 2-3 million all at once will cause the program to crash unless your GPU has a lot of vram so be careful
-        if not batches:
+        if not batches or self.num_particles <= 2_000_000:
             self.run_single_simulation(random_seed, num_particles)
             self.ana_man = analysis_manager(
                 self.gm,
