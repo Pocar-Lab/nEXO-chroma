@@ -1,7 +1,0 @@
-name,stl_filepath,inner_mat,outer_mat,surface,color,displacement x,displacement y,displacement z,solid_type
-copper plate upper,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - APD Disk_wdrill_1-1.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
-copper plate lower,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - APD Disk_wdrill_1-2.STL,copper,liquid xenon,Cu-Xe,orange,0,0,0,solid
-sipm,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - sipm2-1 thin_sipm-1.STL,silicon,liquid xenon,FBK HD3,black,0,0,0,pmt
-source,/workspace/data_files/stl_files/25.6mm/newassemblystart_25.6_trianglesipm - Am-241_source-1 source_Am-241_part3-1.STL,steel,liquid xenon,None,red,0,0,0,none
-
-

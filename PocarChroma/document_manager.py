@@ -33,6 +33,7 @@ class document_manager:
         """
         Generate a Typst file based on the analysis_manager data.
         """
+        shutil.copyfile(f"{self.workspace_path}/template.typ", f"{self.workspace_path}/results/{self.experiment_name}-{self.label}/template.typ")
         filename = f"{self.workspace_path}/results/{self.experiment_name}-{self.label}/report.typ"
         content = self._create_typst_content()
 
