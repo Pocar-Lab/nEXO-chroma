@@ -54,6 +54,8 @@ class surface_manager:
             curr_model_id = row["model_id"]
             curr_reflect_specular = row["reflect_specular"]
             curr_reflect_diffuse = row["reflect_diffuse"]
+            curr_reflect_lobed = row["reflect_lobed"]
+            curr_sigma_alpha = row["sigma_alpha"]
 
             if curr_model_id == 0:
                 curr_surface = Surface(curr_name, model=curr_model_id)
@@ -68,6 +70,8 @@ class surface_manager:
                     curr_name, curr_inner_mat_name
                 )
 
+            elif curr_model_id == 6:
+                curr_surface = Surface(curr_name, model = 6)
             # Sili: added on 11/17/2022 to build a killing surface
             elif curr_model_id == 8:
                 curr_surface = Surface(curr_name, model=0)
@@ -86,6 +90,9 @@ class surface_manager:
             if curr_surface is not None:
                 curr_surface.set("reflect_specular", curr_reflect_specular)
                 curr_surface.set("reflect_diffuse", curr_reflect_diffuse)
+                curr_surface.set("reflect_lobed", curr_reflect_lobed)
+                curr_surface.set("backscatter", curr_backscatter)
+                curr_surface.set("sigma_alpha", curr_sigma_alpha)
 
             self.surfaces[curr_name] = curr_surface
 
