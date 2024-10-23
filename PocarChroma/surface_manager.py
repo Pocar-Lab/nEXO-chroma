@@ -54,7 +54,6 @@ class surface_manager:
         :return: None
         """
         self.surfaces_df = pd.read_csv(self.surface_data_path)
-
         for index, row in self.surfaces_df.iterrows():
             curr_name = row["name"]
             curr_inner_mat_name = row["inner_mat"]
@@ -63,7 +62,6 @@ class surface_manager:
             curr_reflect_specular = row["reflect_specular"]
             curr_reflect_diffuse = row["reflect_diffuse"]
             curr_reflect_lobed = row["reflect_lobed"]
-            curr_backscatter = row["backscatter"]
             curr_sigma_alpha = row["sigma_alpha"]
 
             if curr_model_id == 0:
@@ -82,6 +80,10 @@ class surface_manager:
             #Attempt at specular lobed surface
             elif curr_model_id == 6:
                 curr_surface = Surface(curr_name, model = 6)
+                eta2 = float(self.mat_manager.material_props[curr_inner_mat_name]["eta"])
+                k2 = float(self.mat_manager.material_props[curr_inner_mat_name]["k"])
+                curr_surface.set("eta", eta2)
+                curr_surface.set("k", k2)
 
             # Sili: added on 11/17/2022 to build a killing surface
             elif curr_model_id == 8:
@@ -102,7 +104,6 @@ class surface_manager:
                 curr_surface.set("reflect_specular", curr_reflect_specular)
                 curr_surface.set("reflect_diffuse", curr_reflect_diffuse)
                 curr_surface.set("reflect_lobed", curr_reflect_lobed)
-                curr_surface.set("backscatter", curr_backscatter)
                 curr_surface.set("sigma_alpha", curr_sigma_alpha)
 
             self.surfaces[curr_name] = curr_surface
@@ -309,4 +310,10 @@ class surface_manager:
         return (self.eta2, self.k2)
     
     def overwrite_property(self, surface, property, value):
-        self.surfaces[surface].set(property, value)
+        print(self.surfaces)
+        if "silicon-Xe" in self.surfaces:
+            print("setting property")
+            self.surfaces[surface].set(property, value)
+        else:
+            print("Surface 'silicon-Xe' not found")
+        # self.surfaces[surface].set(property, value)

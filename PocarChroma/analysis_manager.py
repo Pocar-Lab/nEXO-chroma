@@ -335,6 +335,10 @@ class analysis_manager:
         axes.set_xlabel("x position (mm)")
         axes.set_ylabel("y position (mm)")
         axes.set_zlabel("z position (mm)")
+
+        axes.set_xlim(15, 55)  # Replace with your desired limits for the x-axis
+        axes.set_ylim(15, 55)  # Replace with your desired limits for the y-axis
+        axes.set_zlim(15, 55)  
         figure.suptitle(title)
         # plt.show()
         plt.title(title)

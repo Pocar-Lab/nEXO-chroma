@@ -273,7 +273,7 @@ class primary_generator:  # photon generator
 
     # C++: methods/functions
     # def __init__(self, num_particles, center_pos = [0, 0, 0], delta_placement = 0.0):
-    def __init__(self, num_particles, run_id, center_pos=[0, 0, 0], r=0, source_type = "isotropic", angle = 0):
+    def __init__(self, num_particles, run_id, center_pos=[0, 0, 0], r=0, source_type = "beam", angle = 0):
         self.num_particles = num_particles
         self.center_pos = center_pos
 
