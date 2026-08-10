@@ -94,8 +94,8 @@ def plot_tracks(
     return axes
 
 
-def plot_chroma(geometry=None, tracks=None, photon_filters=None,
-                tracks_colors='black', tracks_num=1000, tracks_linewidth=1):
+def plot_geometry_tracks(geometry=None, tracks=None, photon_filters=None,
+                         tracks_colors='black', tracks_num=1000, tracks_linewidth=1):
     fig = plt.figure()
     axes = fig.add_subplot(111, projection='3d')
     plt.tight_layout()
