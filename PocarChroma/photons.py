@@ -294,3 +294,12 @@ class Filter():
                 interacted &= collision
             self.res |= set(np.flatnonzero(interacted) + self.batch_num*len(step.pos))
         self.batch_num += 1
+
+    def __and__(self, other):
+        return self.res & other.res
+    def __or__(self, other):
+        return self.res | other.res
+    def __xor__(self, other):
+        return self.res ^ other.res
+    def __sub__(self, other):
+        return self.res - other.res
