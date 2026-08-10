@@ -94,14 +94,14 @@ def plot_tracks(
     return axes
 
 
-def plot_geometry_tracks(geometry=None, tracks=None, photon_filters=None,
+def plot_geometry_tracks(geometry_manager=None, tracks=None, photon_filters=None,
                          tracks_colors='black', tracks_num=1000, tracks_linewidth=1):
     fig = plt.figure()
     axes = fig.add_subplot(111, projection='3d')
     plt.tight_layout()
     axes.view_init(elev=90, azim=-90) # Default view centered on XY plane
-    if geometry is not None:
-        plot_geometry(geometry, axes)
+    if geometry_manager is not None:
+        plot_geometry(geometry_manager.geometry_df, axes)
     if type(photon_filters) is list:
         if type(tracks_colors) is not list:
             raise ValueError("Need photon filter and tracks colors to both be lists")

@@ -1,7 +1,6 @@
 from PocarChroma import geometry_manager as gm
 from PocarChroma import plotter
 from PocarChroma import photons as ph
-from PocarChroma import save_load_sim as sls
 
 import pandas as pd
 import numpy as np
