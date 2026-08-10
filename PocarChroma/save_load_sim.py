@@ -2,7 +2,7 @@ import os
 import h5py
 import numpy as np
 import pandas as pd 
-
+from typing import Union
 
 
 
@@ -240,7 +240,7 @@ def create_empty_csv(
 
 
 def csv_append_rows(
-    data:dict | pd.DataFrame,
+    data: Union[dict, pd.DataFrame],
     csv_path:str
 ):
     if isinstance(data, dict):
