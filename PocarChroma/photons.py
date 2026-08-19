@@ -12,7 +12,7 @@ from typing import Optional
 
 from chroma import gpu
 import pycuda.tools
-from .analysis_manager import analysis_manager
+
 
 
 class Shape(Enum):
@@ -39,8 +39,8 @@ def photon_generator(
     source_axis: Axis = Axis.Y,
     source_location = [0,0,0],
     source_r: Optional[float] = None,
-    beam_azimuth: Optional[float] = None,
-    beam_declination: Optional[float] = None,
+    beam_azimuth: Optional[float] = 0.0,
+    beam_declination: Optional[float] = 0.0,
     cone_angle: Optional[float] = None
     ):
     '''
@@ -85,12 +85,12 @@ def photon_generator(
             direction_args['rng'] = rng
     elif direction == Emission.BEAM:
             direction_function = pg_beam_source
-            direction_args['rot_matrix'] = rot_mat
+            direction_args['rot_mat'] = rot_mat
             direction_args['beam_azimuth'] = beam_azimuth
             direction_args['beam_declination'] = beam_declination
     elif direction == Emission.CONE:
             direction_function = pg_cone_source
-            direction_args['rot_matrix'] = rot_mat
+            direction_args['rot_mat'] = rot_mat
             direction_args['rng'] = rng
             direction_args['cone_angle'] = cone_angle
 
@@ -138,17 +138,19 @@ def pg_point_source(n_photons, source_location):
     return np.tile(source_location, (n_photons, 1))
 
 def pg_disk_source(n_photons, source_location, source_r, rng, rot_mat):
+    offset = np.tile(source_location, (n_photons, 1))
     curr_sqrtr = np.sqrt(rng.uniform(0, source_r, n_photons))
     curr_theta = rng.uniform(0, 2.0 * np.pi, n_photons)
 
-    curr_x = np.ones(n_photons) * source_location[0]
-    curr_y = curr_sqrtr * np.sin(curr_theta) + source_location[1]
-    curr_z = curr_sqrtr * np.cos(curr_theta) + source_location[2]
+    curr_x = np.zeros(n_photons)
+    curr_y = curr_sqrtr * np.sin(curr_theta)
+    curr_z = curr_sqrtr * np.cos(curr_theta) 
 
     # make an array of the positions and then rotate it to make row-vectors
-    positions = np.vstack((curr_x, curr_y, curr_z)).T
     # rotate the positions into the appropriate reference frame
-    return positions @ rot_mat
+    positions_pre_offset = np.vstack((curr_x, curr_y, curr_z)).T @ rot_mat
+    positions = positions_pre_offset + offset
+    return positions 
 
 def pg_isotropic_source(n_photons, rng):
     '''Make spherically isotropic directions for the photons.'''
