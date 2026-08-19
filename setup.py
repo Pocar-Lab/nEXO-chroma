@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="PocarChroma",
-    version="4.0.0",
+    version="4.0.1",
     description="Run and analysis tools for Chroma simulations",
     author="Edryd van Bruggen, Sam Albury, Luc Barrett, Loick Marion",
     author_email="ed@edryd.org",
