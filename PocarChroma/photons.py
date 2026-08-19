@@ -77,7 +77,7 @@ def photon_generator(
     elif shape == Shape.DISK:
             position_function = pg_disk_source
             position_args['rng'] = rng
-            position_args['rot_matrix'] = rot_mat
+            position_args['rot_mat'] = rot_mat
             position_args['source_r'] = source_r
 
     if direction == Emission.ISOTROPIC:
@@ -162,15 +162,15 @@ def pg_isotropic_source(n_photons, rng):
     curr_pz = cos_theta
     return np.vstack((curr_px, curr_py, curr_pz)).T
 
-def pg_beam_source(n_photons, beam_declination, beam_azimuth, rot_matrix):
+def pg_beam_source(n_photons, beam_declination, beam_azimuth, rot_mat):
     '''Make a beam of particles in a given direction, as specified by declination and azimuth.'''
     px = np.cos(beam_declination)
     py = np.sin(beam_declination) * np.sin(beam_azimuth)
     pz = np.sin(beam_declination) * np.cos(beam_azimuth)
     directions = np.tile([px, py, pz], (n_photons, 1))
-    return  directions @ rot_matrix
+    return  directions @ rot_mat
 
-def pg_cone_source(n_photons, rng, cone_angle, rot_matrix):
+def pg_cone_source(n_photons, rng, cone_angle, rot_mat):
     '''Make a cone source, centered about the appropriate axis, with a given angle.'''
 
     phi = rng.uniform(0, 2.0 * np.pi, n_photons)
@@ -181,7 +181,7 @@ def pg_cone_source(n_photons, rng, cone_angle, rot_matrix):
     curr_py = np.cos(phi) * sin_theta
     curr_pz = np.sin(phi) * sin_theta
 
-    return np.vstack((curr_px, curr_py, curr_pz)).T @ rot_matrix
+    return np.vstack((curr_px, curr_py, curr_pz)).T @ rot_mat
 
 
 
